@@ -36,7 +36,7 @@ const NavbarTop = (props) => {
                     </NavbarToggler>
                     <Collapse isOpen={isOpen} navbar>
                         <Nav className="justify-content-end" navbar style={{width:'100%'}}>
-                            <NavItem className={'nav-item'}>
+                           {/* <NavItem className={'nav-item'}>
                                 <Link className={"nav-link"} to={'/'}>Home</Link>
                             </NavItem>
                             <NavItem className={'nav-item'}>
@@ -44,7 +44,7 @@ const NavbarTop = (props) => {
                             </NavItem>
                             <NavItem className={'nav-item'}>
                                 <Link className={"nav-link"} to={'/recover'}>Recover</Link>
-                            </NavItem>
+                            </NavItem>*/}
                         </Nav>
                     </Collapse>
                 </Navbar>
