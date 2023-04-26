@@ -1,0 +1,464 @@
+
+
+
+.homepageHero {
+    /*text-align: center;*/
+   /* background-color:#000;*/
+    display: flex;
+    flex-direction: column;
+    flex:1;
+
+
+    /*background-color: #f7f7f7;*/
+    /*background: #29BDD1;*/
+   /* background: -webkit-linear-gradient(to bottom, #2200FF, #1786ff);
+    background: linear-gradient(to bottom, #2200FF, #1786ff);
+*/
+}
+
+
+.homepageContainer {
+    position: relative;
+    z-index: 200;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+.homepageHero .homepageH1 .homepageH1pretitle {
+    font-size: 0.9rem;
+    line-height: 0.8rem;
+    color:#666;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: "Graphik", "Montserrat", "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    margin-top: 50px;
+
+}
+.homepageHero .homepageH1 {
+    font-size: 2.4rem !important;
+    font-family: "Graphik-Bold", "Montserrat", "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    line-height: 2.8rem !important;
+    /*color:#ddf5ff;*/
+    color:#2e2e2e;
+    margin:0px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+    text-align: center;
+
+  /*  background: -webkit-linear-gradient(45deg, #5B7EA9, #333 99%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;*/
+}
+.homepageHero .actualTitle {
+
+    z-index: 100;
+    background-color:#fff;
+    display: block;
+    text-shadow: 1px 1.5px 0px #fff;
+}
+.homepageHero .heroSubtitle {
+    font-family: "Graphik", "Montserrat", "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    color:#555;
+    font-size: 1.4rem;
+    line-height: 1.9rem;
+    margin-top:10px;
+    margin-bottom: 30px;
+    letter-spacing: -.5px;
+    font-weight: normal;;
+}
+
+
+
+.highlightedText {
+    /*color:#00EAFF;*/
+    color: #1260B3;
+    text-shadow: 1px 0px 2px #000;
+}
+.primaryActionButton {
+    background-color:#1786ff !important;
+    font-family: "Graphik-Medium", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    border-color: #fff !important;
+    border-width: 1px !important;
+    font-size: 1rem !important;
+    color:#fff !important;
+    min-width: 150px;
+    padding:12px 25px !important;
+    border-radius: 40px !important;
+}
+.primaryActionButton:hover {
+    background-color: #1260B3 !important;
+    -webkit-filter: drop-shadow(2px 0px 6px #fff);
+    filter: drop-shadow(2px 0px 6px #fff);
+}
+.homepageImageBG {
+    width:100%;
+    align-self: flex-end;
+}
+
+.pageLayout {
+    display: flex;
+    flex-direction: column;
+    flex:1;
+    padding-top: 40px;
+    padding-bottom: 100px;
+/*    background: #CC95C0;
+    background: -webkit-linear-gradient(to bottom, #CC95C0, #DBD4B4);
+    background: linear-gradient(to bottom, #CC95C0, #DBD4B4);*/
+}
+.flipImage {
+    -moz-transform: scale(-1, -1);
+    -o-transform: scale(-1, -1);
+    -webkit-transform: scale(-1, -1);
+    transform: scale(-1, -1);
+}
+
+
+.homepageThreeFeaturesRow {
+    background-color: #1786ff;
+    color:#fff;
+    padding:20px 0px 0px 0px;
+
+}
+
+.homepageUseCasesRow {
+    padding:0px 0px 50px 0px;
+    background-color: #1786ff;
+
+}
+
+.homepageUseCasesRow .rowTitle {
+    font-family: "Graphik-Bold", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.7rem !important;
+    text-align: center;
+    color:#fff !important;
+    margin-bottom: 50px;
+}
+
+.homepageUseCasesRow .useCase {
+    text-align: center;
+    color:#fff !important;
+    margin-bottom: 20px;
+}
+.homepageUseCasesRow .useCase span {
+    font-family: "Graphik", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size:1.3rem;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+.homepageThreeFeaturesRow .bigFeatureTitle {
+    font-family: "Graphik-Bold", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 2rem !important;
+    line-height: 2.5rem;
+    text-align: center;
+    color:#fff !important;
+    margin-bottom: 50px;
+    font-weight: 800;
+}
+
+.featureCol {
+    margin-bottom: 20px;
+}
+.featureClass {
+    display: flex;
+    flex:1;
+    flex-direction: column;
+    justify-content: start;
+    align-content: center;
+    height:100%;
+    padding:40px 20px;
+    background-color: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+
+}
+
+.featureClass .featureNumber {
+    font-family: "Montserrat", "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    background-color:#1260B3;
+    padding:4px 19px;
+    color:#fff;
+    font-size: 1.8rem;
+    line-height: 2.2rem;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: inline-block;
+    font-weight: 100;
+    /*border:1px solid #000;*/
+    /*box-shadow: 1px 1px 1px 1px #000;*/
+}
+.featureClass .featureTitle {
+    font-family: "Graphik-Bold", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.4rem;
+    color:#000;
+    margin-bottom: 10px;
+    letter-spacing: -.5px;
+}
+.featureClass .featureText {
+    font-family:  "Graphik", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.3rem;
+    line-height: 1.5rem;
+    color:#000;
+    letter-spacing: -.5px;
+}
+.featureClass .featureTextAdditional {
+    font-family:  "Graphik", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.9rem;
+    color:#2e2e2e;
+    margin-top:10px;
+    letter-spacing: -.5px;
+}
+
+
+.homepageReasonsRow {
+    background: #fff;
+    font-family:  "Graphik", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    z-index: 10;
+    padding:0px 0px;
+}
+.homepageReasonsRow .rowTitle {
+    text-align: center;
+    font-family: "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 2.5rem ;
+    color:#000;
+    margin: 20px 0px 20px 0px;
+
+}
+
+.homepageReasonsRow .homepageReason {
+    font-family: "Graphik-Medium", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.8rem;
+    color:#000;
+    font-weight: bold;
+    padding:20px 20px;
+}
+.homepageReasonsRow .homepageReason .homepageReasonImage {
+    display: flex;
+    flex:1;
+    align-items: center;
+    justify-content: end;
+    max-width: 300px;
+}
+.homepageReasonsRow .homepageReason .homepageReasonText {
+    display: flex;
+    flex-direction: column;
+    flex:1;
+    justify-content: center;
+    height:100%;
+    font-family: "Graphik-Bold", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 2.4rem;
+}
+.homepageReasonsRow .homepageReason .homepageReasonText p {
+    font-family: "Graphik", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 200;
+    color:#000;
+    letter-spacing: -.5px;
+}
+
+
+.homepageComparisonRow {
+    padding-bottom: 30px;
+    margin-top: -1px;
+    background: #fff;
+    z-index: 10;
+}
+.homepageComparisonRow .comparisonTitle {
+    text-align: center;
+    font-family: "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 2.5rem ;
+    color:#000;
+    margin: 10px 0px 40px 0px;
+}
+.homepageComparisonRow .comparisonTable {
+    /*background-color: #f7f7f7;*/
+}
+.homepageComparisonRow .comparisonTable .itemTitle {
+    font-family: "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.3rem;
+    color:#000;
+    text-align: right;
+    display: flex;
+    flex:1;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 90px;
+    flex-direction: column;
+    padding:20px 0px;
+}
+.homepageComparisonRow .comparisonTable .itemTitle p {
+    font-family: "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    color:#000;
+    margin-bottom: 10px;
+    text-align: right;
+    display: flex;
+    flex:1;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 90px;
+}
+.homepageComparisonRow .comparisonTable .itemFeature {
+    font-family: "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.2rem;
+    color:#000;
+    margin-bottom: 10px;
+    padding:10px 30px;
+    background-color: #ccc;
+
+    display: flex;
+    flex:1;
+    justify-content: center;
+    height: 100%;
+    flex-direction: column;
+    text-align: center;
+    border-bottom: 1px solid #999;
+}
+.homepageComparisonRow .comparisonTable .itemFeature a {
+    color:#1786ff;
+    font-weight: bold;
+    font-family: "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+}
+.homepageComparisonRow .ourFeature {
+    background-color: #1786ff;
+    padding:10px;
+
+    font-family: "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.9rem;
+    color:greenyellow;
+    text-align: center;
+    display: flex;
+    flex:1;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-bottom: 1px solid #999;
+}
+.featureHeading {
+    text-align: center;
+    font-family: "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.3rem;
+    color:#000;
+    padding: 20px;
+    background-color: #ccc;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    display: flex;
+    flex:1;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-bottom: 1px solid #999;
+}
+.highlightedFeatureHeading {
+    background-color: #1786ff;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    color:#fff;
+    padding-top:20px;
+}
+.comparisonRow {
+
+}
+
+.bottomActionButton {
+    background-color:#1786ff !important;
+    font-family: "Graphik-Medium", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    border-color: #1786ff !important;
+    border-width: 4px !important;
+    font-size: 1.4rem !important;
+    color:#fff !important;
+    border-radius: 50px !important;
+    padding: 10px 40px !important;
+    height:70px;
+    width:300px;
+}
+.bottomActionButton:hover {
+    color:#fff !important;
+    background: #1260B3 !important;
+    padding: 10px 40px !important;
+}
+
+.accordionItem {
+    border:0px !important;
+    padding:0px !important;
+
+}
+.accordionItem .accordion-header {
+    line-height: 1.4rem !important;
+    border-bottom:1px solid #000;
+}
+.accordionItem .accordion-button {
+    padding-left:0px !important;
+}
+.accordionItem .accordion-button:not(.collapsed) {
+    background: none !important;
+    border:none !important;
+}
+.accordionItem .accordion-body {
+    padding-left:0px !important;
+}
+.accordion-button:focus {
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+
+.marqueeContainer {
+    height: 300px;
+    overflow: hidden;
+    padding:10px;
+}
+
+.scrollBox {
+    border: 3px solid #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding:1px;
+    margin-right:20px;
+
+}
+.scrollBox:hover {
+    box-shadow: 4px 4px 0px 3px #eee;
+}
+
+
+
+@keyframes slide {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-1500px, 0, 0); /* The image width */
+    }
+}
+
+
+
+
+
+/* large devices */
+
+@media (min-width: 768px) {
+
+
+}
+
+/* Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+
+}
