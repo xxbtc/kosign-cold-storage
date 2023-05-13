@@ -1,4 +1,4 @@
-import React, {  } from 'react'
+import React, {useEffect} from 'react'
 import { Link } from 'react-router-dom'
 
 import Row from 'react-bootstrap/Row';
@@ -8,6 +8,9 @@ import "../style/footer.css";
 import {FaTwitter, FaMedium} from 'react-icons/fa';
 
 export default function Footer() {
+
+
+
     return (
         <div className="footerContainer">
             <Container>
@@ -15,11 +18,14 @@ export default function Footer() {
 
                     <Row>
                         <Col>
-
                             <ul className="footerlist">
                                 <li>
-                                    <a href={'https://github.com/xxbtc/kosign-coldstorage'}>https://github.com/xxbtc/kosign-coldstorage</a>
+                                    <Link to={'/legal'}>Terms of Service</Link>
                                 </li>
+                                <li>
+                                    <Link to={'/privacy'}>Privacy Policy</Link>
+                                </li>
+
                             </ul>
                         </Col>
                     </Row>

@@ -302,7 +302,213 @@
 .PDFDocument .pageNavWrapper {
     display: block;
 }
+.progressIcon {
+    font-size:1.2rem;
+    line-height: 1.2rem;
+}
+.progress-bar {
+    font-size: 1rem;
+    font-weight: normal;
+    font-family: "Graphik", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    color:#999 !important;
+    line-height: 1.6rem;
+}
+.progressBarWrapper .progressBarDefault{
+    background-color: #fff;
+    position: relative;
+}
+.progressBarWrapper .progressBarSuccess {
+    background-color: #d1e7dd;
+    color:#0f5132 !important;
+    position: relative;
 
+}
+.progressBarWrapper .progressBarActive {
+    position: relative;
+    font-weight: bold;
+    background-color: #cfe2ff;
+    color:#0f5132 !important;
+}
+.progressBarWrapper  {
+    display:block;
+    color:#000;
+    border:1px solid #ccc;
+    border-bottom:0px;
+}
+.progressBarWrapper .progress {
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    -moz-border-radius-bottomleft: 0px;
+    -moz-border-radius-bottomright: 0px;
+}
+
+
+.createPageWrapper {
+    border: 1px solid #ccc;
+    padding:20px;
+    background: #fff;
+
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-top-right-radius: 0px;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright: 0px;
+}
+.centerLoading {
+    text-align:center;
+    flex:1;
+    display: flex;
+    width:100%;
+    flex-direction: column;
+    align-items: center;
+   margin-bottom:30px;
+}
+.loadingStepWrapper {
+    display: flex;
+    flex:1;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+
+.downloadSection {
+    padding:15px;
+    border: 1px solid #333;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+
+}
+
+.unlockrow {
+    display: block;
+    flex-direction: row;
+}
+.unlockrowItem {
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    padding:6px 10px;
+    margin-bottom:10px;
+    background-color: #f7f7f7;
+    font-size: 12px;
+    text-align: center;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    display:inline-block;
+}
+.unlockrowItemSuccess {
+    background-color: #d1e7dd;
+}
+.qrIcon {
+    font-size: 30px;
+}
+.keyIcon {
+    font-size:18px;
+    margin-right: 4px;
+}
+.activeQR {
+    animation: flashing 2s ease-in-out infinite;
+    border: 1px solid steelblue;
+}
+
+.unlockInstruction {
+    margin: 10px 0px 10px 0px;
+    font-size:1rem;
+}
+.unlockIcon {
+    font-size:1.5rem;
+    margin-right:10px;
+}
+.space-between-row {
+    display: flex;
+    flex-direction: row;
+    flex:1;
+    justify-content: space-between;
+}
+.noWrap {
+    white-space: nowrap;
+}
+.formTotalCost {
+    font-size:1.2rem;
+    font-weight: bold;
+}
+
+.pdfViewer {
+    min-height: 300px;
+}
+
+.securityTips {
+    margin-top:10px;
+    font-size: 0.9rem;
+    color:#0f5132;
+}
+.securityTips ul {
+    margin:0px;
+    padding:0px 0px 0px 15px;
+}
+.securityTips li {
+    margin-top:4px;
+}
+
+.btn-download {
+    width:100%;
+}
+.numberSpan {
+    padding:4px 10px;
+    margin-right: 4px;
+    color:#fff;
+    background-color: #333;
+    -webkit-border-radius: 15%;
+    -moz-border-radius: 15%;
+    border-radius: 15%;
+}
+
+.invoiceTotalWrapper {
+    font-size: 1.2rem;
+    padding:0px 0px 20px 0px;
+    margin-bottom:10px;
+}
+
+.invoiceDetails {
+
+    padding:6px 10px;
+    border-bottom:1px solid #ccc;
+}
+.invoiceRow {
+    display: flex;
+    flex:1;
+    flex-direction: row;
+    justify-content: space-between;
+    padding:6px 10px;
+}
+
+.costSummary {
+    padding-left: 20px;
+}
+.pagebreak {
+    page-break-after: always;
+    /*margin-top: 100px;*/
+}
+
+@media screen {
+    .contentToPrint {
+        display:none;
+    }
+}
+
+@media print {
+    .printable {
+        width: 210mm;
+        height: 297mm;
+    }
+    /* ... the rest of the rules ... */
+}
 
 
 
@@ -320,5 +526,7 @@
 
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
-
+    .progressBarWrapper {
+        display:none;
+    }
 }

@@ -15,6 +15,7 @@ import { MdMenu } from "react-icons/md";
 import {SiMeteor} from 'react-icons/si';
 
 import '../style/navbar.css';
+import logoIMG from "../images/iceqr.jpg";
 
 const NavbarTop = (props) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +28,8 @@ const NavbarTop = (props) => {
                 <Navbar expand="md" className={'navbarCustom'} >
                     <NavbarBrand href="/" className={'nav-brand'}>
                         <div className='navbarLogo'>
-                            <SiMeteor className={'navbarLogoIcon'} />
+                            {/*<SiMeteor className={'navbarLogoIcon'} />*/}
+                            <img src={logoIMG} />
                             Kosign
                         </div>
                     </NavbarBrand>
@@ -36,6 +38,15 @@ const NavbarTop = (props) => {
                     </NavbarToggler>
                     <Collapse isOpen={isOpen} navbar>
                         <Nav className="justify-content-end" navbar style={{width:'100%'}}>
+                            <NavItem className={'nav-item'}>
+                                <Link className={"nav-link"} to={'/create'}>Create</Link>
+                            </NavItem>
+                            <NavItem className={'nav-item'}>
+                                <Link className={"nav-link"} to={'/unlock'}>Unlock</Link>
+                            </NavItem>
+                            <NavItem className={'nav-item'}>
+                                <Link className={"nav-link"} to={'/pricing'}>Pricing</Link>
+                            </NavItem>
                            {/* <NavItem className={'nav-item'}>
                                 <Link className={"nav-link"} to={'/'}>Home</Link>
                             </NavItem>

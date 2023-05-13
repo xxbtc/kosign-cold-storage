@@ -2,8 +2,50 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e36f5e0d-1caf-41cb-a904-a639fae54339" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Global.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/animations/paper-tray.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/animations/using-key-to-unlock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CreateVault.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/HomepageFAQ.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/HomepageReasons.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/HomepageTestimonials.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/HomepageUseCases.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PaymentCheckoutForm.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PaymentComponent.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/1243732864404983808.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/1366031922120585217.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/1446533482998484992.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/1514376453768441858.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/1552492518209687552.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/1557826172267937792.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/layer-waves.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/wave-haikei.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/CreatePage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/LegalPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/PricingPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/PrivacyPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/TestPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/PaymentService.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/style/pricing.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CreateLoading.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CreateLoading.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CreateMintKeys.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CreateMintKeys.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Footer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/KeyshareSecret.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/KeyshareSecret.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavbarTop.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavbarTop.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PDFKeyBackup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PDFKeyBackup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PDFVaultBackup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PDFVaultBackup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ShareKeyshare.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ShareKeyshare.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/CreatePage.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/HomePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/RecoverPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/UnlockPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/EncryptionService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/EncryptionService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/dashboardPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/dashboardPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/forms.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/forms.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/homepage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/homepage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/style/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/style/index.css" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/node_modules/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,12 +57,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/pages/HomePage.js">
+        <entry file="file://$PROJECT_DIR$/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="39" column="28" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+            <state relative-caret-position="390">
+              <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
               <folding>
-                <element signature="e#0#38#0" expanded="true" />
+                <element signature="e#0#30#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -31,7 +73,35 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>padding-left:4</find>
+      <find>formL</find>
+      <find>icons</find>
+      <find>progressBarWrapper</find>
+      <find>homepageH1pretitle</find>
+      <find>anima</find>
+      <find>fac</find>
+      <find>2</find>
+      <find>toJ</find>
+      <find>undrawVault</find>
+      <find>formGroup</find>
+      <find>pricin</find>
+      <find>pricingdiv</find>
+      <find>listener</find>
+      <find>packageTitle</find>
+      <find>packageSubtitle</find>
+      <find>pricing</find>
+      <find>gopricing</find>
+      <find>pricingFeature</find>
+      <find>homepagereasoni</find>
+      <find>per va</find>
+      <find>form</find>
+      <find>skip</find>
+      <find>qrre</find>
     </findStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/src/style</dir>
+      <dir>$PROJECT_DIR$/src/components</dir>
+      <dir>$PROJECT_DIR$/src</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,25 +109,45 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/style/homepage.css" />
         <option value="$PROJECT_DIR$/src/components/ShareKeySplashScreen.jsx" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/components/NavbarTop.jsx" />
+        <option value="$PROJECT_DIR$/src/pages/CreatePage.js" />
+        <option value="$PROJECT_DIR$/src/pages/CreateVault.js" />
+        <option value="$PROJECT_DIR$/src/services/PaymentService.jsx" />
+        <option value="$PROJECT_DIR$/src/components/PaymentCheckoutForm.jsx" />
+        <option value="$PROJECT_DIR$/src/components/CreateVault.js" />
+        <option value="$PROJECT_DIR$/src/components/PaymentComponent.jsx" />
+        <option value="$PROJECT_DIR$/src/pages/LegalPage.js" />
+        <option value="$PROJECT_DIR$/src/style/forms.css" />
+        <option value="$PROJECT_DIR$/src/pages/PrivacyPage.js" />
+        <option value="$PROJECT_DIR$/src/components/Footer.jsx" />
+        <option value="$PROJECT_DIR$/src/pages/UnlockPage.js" />
+        <option value="$PROJECT_DIR$/src/Global.js" />
+        <option value="$PROJECT_DIR$/src/style/pricing.css" />
+        <option value="$PROJECT_DIR$/src/pages/PricingPage.jsx" />
+        <option value="$PROJECT_DIR$/src/style/homepage.css" />
         <option value="$PROJECT_DIR$/src/pages/HomePage.js" />
+        <option value="$PROJECT_DIR$/src/style/dashboardPage.css" />
+        <option value="$PROJECT_DIR$/src/components/CreateMintKeys.jsx" />
+        <option value="$PROJECT_DIR$/src/components/HomepageReasons.jsx" />
+        <option value="$PROJECT_DIR$/src/components/CreateVault.jsx" />
+        <option value="$PROJECT_DIR$/src/components/HomepageFAQ.jsx" />
+        <option value="$PROJECT_DIR$/src/App.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="862" />
-    <option name="y" value="45" />
-    <option name="width" value="1682" />
-    <option name="height" value="1349" />
+    <option name="x" value="288" />
+    <option name="y" value="35" />
+    <option name="width" value="1376" />
+    <option name="height" value="991" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -65,21 +155,11 @@
               <item name="quorum-web" type="b2602c69:ProjectViewProjectNode" />
               <item name="quorum-web" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="quorum-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="quorum-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="quorum-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="quorum-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="pages" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -87,6 +167,15 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -115,17 +204,18 @@
       <workItem from="1679144465112" duration="619000" />
       <workItem from="1679145865744" duration="6019000" />
       <workItem from="1682494431994" duration="2533000" />
+      <workItem from="1682497317699" duration="12459000" />
+      <workItem from="1683996987543" duration="10593000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10902000" />
+    <option name="totallyTimeSpent" value="33954000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="862" y="45" width="1682" height="1349" extended-state="0" />
-    <editor active="true" />
+    <frame x="288" y="35" width="1376" height="991" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12560976" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15817091" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -137,9 +227,10 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.19664268" />
+      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.20380738" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TypeScript" order="12" weight="0.17745803" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -150,16 +241,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/style/homepage.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/services/EncryptionService.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/logo192.png" />
     <entry file="file://$PROJECT_DIR$/public/logo512.png" />
     <entry file="file://$PROJECT_DIR$/public/kosignogimg.png">
@@ -192,16 +273,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/CreatePage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="761">
-          <caret line="256" column="54" selection-start-line="256" selection-start-column="41" selection-end-line="256" selection-end-column="54" />
-          <folding>
-            <element signature="e#0#57#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -212,12 +283,216 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react-bootstrap/esm/ProgressBar.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="13" column="14" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/style/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1273">
+          <caret line="185" column="33" selection-start-line="185" selection-start-column="22" selection-end-line="185" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="35" column="29" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/style/footer.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="15" lean-forward="true" selection-start-line="22" selection-start-column="15" selection-end-line="22" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/services/PaymentService.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CreateVault.js" />
+    <entry file="file://$PROJECT_DIR$/src/components/PaymentComponent.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="47" column="41" lean-forward="true" selection-start-line="47" selection-start-column="41" selection-end-line="47" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/LegalPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="439">
+          <caret line="239" column="28" lean-forward="true" selection-start-line="239" selection-start-column="28" selection-end-line="239" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#49#0" expanded="true" />
+            <element signature="e#387#437#0" expanded="true" />
+            <element signature="e#591#630#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/PaymentCheckoutForm.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="185" column="31" lean-forward="true" selection-start-line="185" selection-start-column="31" selection-end-line="185" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/style/forms.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/PrivacyPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-764">
+          <caret line="63" column="54" lean-forward="true" selection-start-line="63" selection-start-column="54" selection-end-line="63" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Footer.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="25" column="55" selection-start-line="25" selection-start-column="55" selection-end-line="25" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/CreatePage.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="42" lean-forward="true" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/PricingPage.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="130" column="57" selection-start-line="130" selection-start-column="56" selection-end-line="130" selection-end-column="57" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+            <element signature="e#425#475#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/NavbarTop.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="45" column="67" selection-start-line="45" selection-start-column="67" selection-end-line="45" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/style/pricing.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="66" column="11" selection-start-line="66" selection-start-column="11" selection-end-line="66" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Global.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="23" selection-start-line="11" selection-start-column="7" selection-end-line="11" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/style/homepage.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="287" selection-start-line="287" selection-end-line="287" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/style/dashboardPage.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="593">
+          <caret line="529" column="21" selection-start-line="529" selection-start-column="21" selection-end-line="529" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/HomepageReasons.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="78" column="13" lean-forward="true" selection-start-line="78" selection-start-column="13" selection-end-line="78" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CreateMintKeys.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="96" selection-start-line="96" selection-end-line="96" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CreateVault.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="436" column="98" selection-start-line="436" selection-start-column="98" selection-end-line="436" selection-end-column="98" />
+          <folding>
+            <element signature="e#0#68#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/UnlockPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="41" selection-start-line="13" selection-start-column="26" selection-end-line="13" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/HomepageFAQ.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="870">
+          <caret line="67" column="49" lean-forward="true" selection-start-line="67" selection-start-column="49" selection-end-line="67" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/pages/HomePage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="39" column="28" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+        <state relative-caret-position="490">
+          <caret line="227" column="21" selection-start-line="227" selection-start-column="21" selection-end-line="227" selection-end-column="21" />
           <folding>
-            <element signature="e#0#38#0" expanded="true" />
+            <element signature="e#0#46#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/services/EncryptionService.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1035" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
           </folding>
         </state>
       </provider>

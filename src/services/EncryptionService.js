@@ -1,5 +1,6 @@
 import secrets from 'secrets.js'; //TODO:fix to secrets.js-grempe
 const CryptoJS = require("crypto-js");
+const bip39 = require('bip39');
 
 export  class EncryptionService  {
 
@@ -24,8 +25,10 @@ export  class EncryptionService  {
 
         const encryptionOptions = {
             iv      : iv,
-            mode    : CryptoJS.mode.CBC,
-            padding : CryptoJS.pad.Pkcs7,
+            /*mode    : CryptoJS.mode.CBC,
+            padding : CryptoJS.pad.Pkcs7,*/
+            mode    : CryptoJS.mode.CTR,
+            padding : CryptoJS.pad.NoPadding,
             hasher  : CryptoJS.algo.SHA256
         };
 
@@ -44,8 +47,8 @@ export  class EncryptionService  {
     static decrypt = async (dataToDecrypt, secretKey, iv) => {
         const encryptionOptions = {
             iv      : CryptoJS.enc.Hex.parse(iv),
-            mode    : CryptoJS.mode.CBC,
-            padding : CryptoJS.pad.Pkcs7,
+            mode    : CryptoJS.mode.CTR,
+            padding : CryptoJS.pad.NoPadding,
             hasher  : CryptoJS.algo.SHA256
         };
 
@@ -60,8 +63,8 @@ export  class EncryptionService  {
     static decryptDeterministic = async (dataToDecrypt, secretKey, iv) => {
         const encryptionOptions = {
             iv      : CryptoJS.enc.Hex.parse(iv),
-            mode    : CryptoJS.mode.CBC,
-            padding : CryptoJS.pad.Pkcs7,
+            mode    : CryptoJS.mode.CTR,
+            padding : CryptoJS.pad.NoPadding,
             hasher  : CryptoJS.algo.SHA256
         };
 
@@ -83,6 +86,57 @@ export  class EncryptionService  {
     static combineShares = async (shares) => {
         let comb = secrets.combine(shares);
         return secrets.hex2str(comb);
+    };
+
+
+
+    static generateListOfCombinedWords =  (amount) => {
+
+        let  mnemonic = [];
+        let entropy;
+        for (let i = 0; i < 4; i++) {
+            // Generate a random 128-bit entropy
+            entropy = CryptoJS.lib.WordArray.random(16);
+
+            // Convert the entropy to a mnemonic phrase
+            mnemonic.push(bip39.entropyToMnemonic(entropy.toString()).split(' '));
+
+            //console.log('Mnemonic phrase', i + 1, ':', mnemonic);
+        }
+        console.log('asking for this amount of words:', amount);
+        let cleanWords = [];
+
+        mnemonic.forEach((row) => {
+            row.forEach((word) => {
+
+                    cleanWords.push((word));
+
+
+            });
+        });
+
+       // console.log('clearn words ', cleanWords);
+
+
+        let returnArray = [];
+        let c = 0;
+        for (let i = 0; i < cleanWords.length; i += 2) {
+            const word1 = cleanWords[i];
+            const word2 = cleanWords[i + 1];
+
+            const combined = word1+'-' + word2;
+          //  console.log('combined is now ', combined);
+
+            if (c<amount) {
+                returnArray.push(combined);
+                c++;
+            }
+        }
+
+        console.log('returning words: ', returnArray);
+
+        return returnArray;
     }
+
 }
 

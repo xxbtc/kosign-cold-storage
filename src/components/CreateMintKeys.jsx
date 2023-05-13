@@ -32,66 +32,69 @@ function CreateMintKeys(props) {
 
     return (
         <div>
+
+           {/* <Lottie
+                options={{
+                    animationData: LottieAnimationKey,
+                    loop: false
+                }}
+                width={350}
+                height={350}
+            />
+
+            */}
             <Row style={{ height:'100%'}}>
-                <Col xs={{span:12}} md={{span:5, offset:0}} lg={{span:5, offset:0}}>
-                    <div className={'animationWrapper'}>
-                        <Lottie
-                            options={{
-                                animationData: LottieAnimationKey,
-                                loop: false
-                            }}
-                            width={350}
-                            height={350}
-                        />
-                    </div>
-                </Col>
-                <Col xs={{span:12}} md={{span:7, offset:0}} lg={{span:7, offset:0}}>
+                <Col xs={{span:12}} md={{span:12, offset:0}} lg={{span:12, offset:0}}>
 
-
-                    <Form>
                         <div className={'createSectionWrapper'}>
 
                             {/*<AddUserToVault addUser={(user) => this.addUser(user)}/>*/}
-                            <div style={{fontSize: 40}}>
-                                <h2>Quorum Settings</h2>
-                            </div>
+
                             <FormGroup className={'formGroup'} controlId="formThreshold">
-                                <FormLabel className={'formLabel'}>Total keys including yours:</FormLabel>
+{/*
+                                <FormLabel className={'formLabel'}>How many keys?</FormLabel>
+*/}
                                 <div style={{marginTop:10}}>
                                     <select className={'formSelect'} value={totalShareholders} onChange={(e) => setShareholders(e.target.value)}>
-                                        {Array.apply(2, Array(19)).map((member, i) => (
-                                            <option key={'selectoptionkey_'+i+2} value={i+2}>{i+2}</option>
+                                        {Array.apply(2, Array(20)).map((member, i) => (
+                                            <option key={'selectoptionkey_'+i+1} value={i+1}>{i+1} key{i>0?'s':null}</option>
                                         ))}
                                     </select>
                                 </div>
-                                <div className={'text-muted'}>{totalShareholders===1 ? <div>&nbsp;</div> : <div>You + {totalShareholders-1} others</div>}</div>
+                                <div className={'text-muted'} style={{marginTop:5}}>Each key is unique. Distribute one per person.</div>
                             </FormGroup>
 
-                            <FormGroup className={'formGroup'} controlId="formThreshold" style={{marginTop:20}}>
-                                <FormLabel className={'formLabel'}>How many keys are required to unlock?</FormLabel>
+                            {totalShareholders>1?
+                            <FormGroup className={'formGroup'} controlId="formThreshold">
+                                {/*<FormLabel className={'formLabel'}>How many keys are needed to unlock?</FormLabel>*/}
                                 <div style={{marginTop:10}}>
                                     <select className={'formSelect'} value={consensus} onChange={(e) => updateConsensus( e.target.value)}>
-                                        {Array.apply(1, Array(parseInt(totalShareholders)-1)).map((member, i) => (
-                                            <option key={'selectoptionkey_'+i+2} value={i+2}>{i+2}</option>
+                                        {Array.apply(2, Array(parseInt(totalShareholders)-1)).map((member, i) => (
+                                            <option key={'selectoptionkey_'+i+2} value={i+2}>Require {i+2} keys to unlock</option>
                                         ))}
                                     </select>
-                                </div>
-                                <div className={'text-muted'}>{consensus===1 ? <div>&nbsp;</div> : <div>You + {consensus-1} others</div>}</div>
-                            </FormGroup>
+                                    <div className={'text-muted'} style={{marginTop:5}}>Set the minimum amount of keys needed to unlock the vault.</div>
 
-                            <FormGroup className={'formGroup'} controlId="formSubmit" style={{marginTop:50}}>
+                                </div>
+{/*
+                                <div className={'text-muted'}>{consensus===1 ? <div>&nbsp;</div> : <div>You + {consensus-1} others will be required to unlock</div>}</div>
+*/}
+                            </FormGroup>
+                            : null}
+
+                            {/*<FormGroup className={'formGroup'} controlId="formSubmit" style={{marginTop:50}}>
                                 <div>
                                     <Button
                                         variant = {'primary'}
                                         size    = {'lg'}
-                                        onClick = {()=>props.createVault()}
+                                        onClick = {()=>props.continue()}
                                     >
                                         Continue
                                     </Button>
                                 </div>
-                            </FormGroup>
+                            </FormGroup>*/}
                         </div>
-                    </Form>
+
                 </Col>
 
             </Row>
