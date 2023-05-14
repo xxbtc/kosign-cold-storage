@@ -272,7 +272,6 @@ function CreateVault(props) {
         setHasPressedKeyPrint(true);
     };
 
-
     const downloadVault = async () => {
         const printElement = ReactDOMServer.renderToString(
             <PDFVaultBackup
@@ -443,9 +442,6 @@ function CreateVault(props) {
                                                         </div>
                                                     </div>
                                                 </FormGroup>
-
-
-
                                             </div>
                                         </Form>
                                     </Col>
@@ -527,7 +523,7 @@ function CreateVault(props) {
                     <div>
                         <Row>
                             <Col xs={{span: 12}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
-                                <div class="alert alert-warning">
+                                <div className="alert alert-warning">
                                     <b>This page will only be visible once. </b>
                                     Do not browse away before you've printed both your vault and keys
                                 </div>
@@ -633,10 +629,10 @@ function CreateVault(props) {
                                                 id={'keyshare'+i}
                                                 key={'share'+i}
                                                 vaultIdent={vaultIdent}
-                                                threshold={share.consensus}
+                                                threshold={consensus}
                                                 vaultName={vaultName}
                                                 description={description}
-                                                createdTimestamp={share.createdTimestamp}
+                                                createdTimestamp={createdTimestamp}
                                                 myDecryptedKey={share}
                                                 qrtype={'printable'}
                                                 keyAlias={keyAliasArray[i]}

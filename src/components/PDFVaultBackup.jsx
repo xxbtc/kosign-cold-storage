@@ -61,7 +61,7 @@ const PDFVaultBackup = (props) => {
                 data: props.cipherText.substr(i, maxLengthPerQRCode)
             });
             QRCode2.toCanvas(canvas, QRText);
-            tmpQRArray.push({qrCode:canvas.toDataURL(), id:c, raw:props.cipherText.substr(i, maxLengthPerQRCode)});
+            tmpQRArray.push({qrCode:canvas.toDataURL(), id:c, raw:(JSON.stringify({id:i+2, data:props.cipherText.substr(i, maxLengthPerQRCode) } ))});
         }
 
         //console.log('prechunked array is ',tmpQRArray);
@@ -70,7 +70,7 @@ const PDFVaultBackup = (props) => {
         for (let i = 0; i < tmpQRArray.length; i += qrPerRow) {
             chunkedArray.push(tmpQRArray.slice(i, i + qrPerRow));
         }
-       // console.log('chunked array is ', chunkedArray);
+       console.log('chunked array is ', chunkedArray);
 
         //setCipherArray(result);
        // setQRArray(chunkedArray);
@@ -176,8 +176,8 @@ const PDFVaultBackup = (props) => {
             marginBottom:20,
         },
         QRImage: {
-            width:200,
-            height:200,
+            width:230,
+            height:230,
         },
         vaultText: {
             marginBottom:10,
@@ -269,9 +269,9 @@ const PDFVaultBackup = (props) => {
 
     const renderVaultHeader = (page, forceShowFullHeader) => {
         pageNumber++;
-        console.log('xxPAGE IS ', page);
+        //console.log('xxPAGE IS ', page);
       return (
-          <div style={styles.sectionTop}>
+          <div key={'rowvaultheader_'+pageNumber} style={styles.sectionTop}>
               <div style={{height:60,display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
                     <div style={styles.vaultTitle}>
                         Kosign Data Vault
@@ -285,7 +285,7 @@ const PDFVaultBackup = (props) => {
               </div>
               {forceShowFullHeader?
               <div className={'alert alert-default'} style={{margin:0, padding:10, paddingLeft:0}}>
-                  Unlock at <Link className={'linkage'} to={'https://kosign.xyz/unlock'}>https://kosign.xyz/unlock</Link>
+                  Unlock at <a className={'linkage'} href={'https://kosign.xyz/unlock'}>https://kosign.xyz/unlock</a>
               </div>
               :null}
               <div style={styles.detailWrapper}>
@@ -347,7 +347,7 @@ const PDFVaultBackup = (props) => {
             <div style={styles.sectionBottom}>
                 <div style={styles.QRWrapper}>
                     {qrArray.map((row, i) =>
-                        <div style={styles.QRWrapperMiddle}>
+                        <div key={'anotherkey'+i} style={styles.QRWrapperMiddle}>
                             {i % 2 === 1?
                                 <div>
                                     <div className={'pagebreak'}></div>

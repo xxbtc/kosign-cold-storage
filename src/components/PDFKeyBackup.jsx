@@ -36,6 +36,7 @@ const PDFKeyBackup = (props) => {
             width:'100%',
             height:'100%',
             padding:50,
+            paddingBottom:0,
         },
         sectionTop: {
             padding: 30,
@@ -179,13 +180,13 @@ const PDFKeyBackup = (props) => {
                         </div>
                     </div>
                     <div style={styles.QRWrapper}>
-                        {props.qrtype==='printable'?<QRCode id='qrcodekey' value={qrdata} size={200} />:null}
+                        {props.qrtype==='printable'?<QRCode id='qrcodekey' value={qrdata} size={400} />:null}
                         {props.qrtype==='downloadable'?<Image src={qr} />:null}
 
                     </div>
                 </div>
             </div>
-            <div className={'pagebreak'}></div>
+            {/*<div className={'pagebreak'}></div>*/}
         </div>
     )
 
