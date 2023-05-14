@@ -40,9 +40,10 @@
     /*border-radius:10px;
     border:1px solid #ccc;
     padding:4px;*/
+    text-align: center;
 }
 .rightHomepageInner img {
-    width:100%;
+    width:80%;
     flex:1;
 
 }
@@ -167,7 +168,7 @@
 .homepageUseCasesRow {
     padding:0px 0px 50px 0px;
     background-color: #1786ff;
-
+    z-index: 10;
 }
 
 .homepageUseCasesRow .rowTitle {

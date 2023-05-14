@@ -193,6 +193,7 @@ const PDFVaultBackup = (props) => {
         vaultTitle: {
             fontFamily: "Helvetica-BoldOblique",
             fontSize:30,
+
         },
         vaultTextBold: {
             fontFamily: "Helvetica-Bold",
@@ -271,20 +272,22 @@ const PDFVaultBackup = (props) => {
         console.log('xxPAGE IS ', page);
       return (
           <div style={styles.sectionTop}>
-              <div style={{height:60,display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between'}}>
-                  <div style={styles.vaultTitle}>
-                      Kosign Data Vault
-                      <span className={'alert alert-danger'} style={{display:'inline-block', fontSize:20, padding:10, marginLeft:20}}>
-                          <b>!! IMPORTANT !!</b>
-                      </span>
-                  </div>
-                  <div>
-                    <div style={{display:'inline-block', marginTop:15}}>
+              <div style={{height:60,display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
+                    <div style={styles.vaultTitle}>
+                        Kosign Data Vault
+                        <span className={'alert alert-danger'} style={{display:'inline-block', fontSize:20, padding:4, paddingTop:0, paddingBottom:0, paddingLeft:10, paddingRight:10, marginLeft:20, marginBottom:0}}>
+                            <b>!! IMPORTANT !!</b>
+                        </span>
+                    </div>
+                    <div style={{display:'inline-block'}}>
                         Page {pageNumber}-of-{totalPages}
                     </div>
-                  </div>
               </div>
-
+              {forceShowFullHeader?
+              <div className={'alert alert-default'} style={{margin:0, padding:10, paddingLeft:0}}>
+                  Unlock at <Link className={'linkage'} to={'https://kosign.xyz/unlock'}>https://kosign.xyz/unlock</Link>
+              </div>
+              :null}
               <div style={styles.detailWrapper}>
                   <div>
                       <div>

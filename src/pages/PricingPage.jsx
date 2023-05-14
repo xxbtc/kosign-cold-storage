@@ -122,7 +122,7 @@ function PricingPage() {
                                                 <div className={'pricingFeature'}>
                                                     <div><FaCheck className={'pricingCheck'}/> No signup </div>
                                                     {/*<div className={'text-muted'}>&nbsp;</div>*/}
-                                                </div>sud
+                                                </div>
                                                 <div className={'pricingFeature'}>
                                                     <div><FaCheck className={'pricingCheck'}/> Cold data storage</div>
                                                 </div>

@@ -164,12 +164,6 @@ function CreateVault(props) {
         };
     }, []);
 
-    // Listen to the online status
-
-
-    // Listen to the offline status
-
-
     const continueWizard = (forcepage) => {
         // console.log('continuing with secret', secretValue);
         if (!agreeToTerms) {

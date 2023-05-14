@@ -34,9 +34,8 @@ function App () {
             <Route exact path="/unlock" element={<UnlockPage/>}/>
             <Route exact path="/pricing" element={<PricingPage />}/>
 
-{/*
             <Route exact path="/test" element={<TestPage showPricing={true}/>}/>
-*/}
+
             <Route exact path="/legal" element={<LegalPage />}/>
 
 
