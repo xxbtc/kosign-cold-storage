@@ -181,8 +181,13 @@ function CreateVault(props) {
     useEffect(()=> {
        let cookieVaultName          = cookies.get('kosign_vaultname');
        let cookieVaultDescription   = cookies.get('kosign_vaultdescription');
+       let cookieShares             = cookies.get('kosign_shares');
+       let cookieThreshold          = cookies.get('kosign_threshold');
+
        if (cookieVaultDescription) setDescription(cookieVaultDescription);
        if (cookieVaultName) setVaultName(cookieVaultName);
+       if (cookieShares) setTotalShareholders(cookieShares);
+       if (cookieThreshold) setConsensus(cookieThreshold);
 
     }, []);
 

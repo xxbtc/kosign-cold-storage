@@ -46,11 +46,8 @@ function CreatePage() {
         const product_permalink     = params.get('product_permalink');
         const sale_id               = params.get('sale_id');
         if (!productId || !sale_id) {
-            console.log('wno prodicut id or saleid...');
-            cookies.remove('kosign_vaultname');
-            cookies.remove('kosign_threshold');
-            cookies.remove('kosign_shares');
-            cookies.remove('kosign_vaultdescription');
+            //console.log('wno prodicut id or saleid...');
+
             setIsLoading(false);
             return;
         }

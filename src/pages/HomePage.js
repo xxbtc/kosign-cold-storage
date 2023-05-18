@@ -32,11 +32,13 @@ import HomepageFAQ from '../components/HomepageFAQ';
 import HomepageReasons from '../components/HomepageReasons';
 import HomepageTestimonials from '../components/HomepageTestimonials';
 import {FaCheck} from 'react-icons/fa';
+import Cookies from "universal-cookie";
 
 
 function Homepage(props) {
 
     const navigate = useNavigate();
+    const cookies   = new Cookies();
 
 
     const pricingRef = useRef(null);
@@ -68,6 +70,12 @@ function Homepage(props) {
             return;
         }
         window.scrollTo(0, 0);
+
+        cookies.remove('kosign_vaultname');
+        cookies.remove('kosign_threshold');
+        cookies.remove('kosign_shares');
+        cookies.remove('kosign_vaultdescription');
+
     }, [props]);
 
     return (

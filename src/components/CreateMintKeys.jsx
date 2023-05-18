@@ -24,8 +24,18 @@ function CreateMintKeys(props) {
     useEffect(()=>{
         let cookieShares          = cookies.get('kosign_shares');
         let cookieThreshold       = cookies.get('kosign_threshold');
-        if (cookieShares) setShareholders(cookieShares);
-        if (cookieThreshold) updateConsensus(cookieThreshold);
+        console.log('thecookiesare', cookieShares, cookieThreshold);
+        if (cookieShares) {
+            setShareholders(cookieShares);
+            setTotalShareholders(cookieShares);
+        }
+        if (cookieThreshold) {
+            updateConsensus(cookieThreshold);
+            setTotalShareholders(cookieShares);
+        }
+
+
+
     },[]);
 
     const setShareholders = (val) => {
@@ -33,6 +43,8 @@ function CreateMintKeys(props) {
         props.setShareholders(val);
         setConsensus(val);
         setCookie('kosign_shares', val);
+        setCookie('kosign_threshold', val);
+        //console.log('setting the cookie to ', val);
     };
 
     const updateConsensus = (val) => {
