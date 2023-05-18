@@ -46,13 +46,9 @@ function CreatePage() {
         const product_permalink     = params.get('product_permalink');
         const sale_id               = params.get('sale_id');
         if (!productId || !sale_id) {
-            //we are not redirected from gumroad but maybe we purchased before but didnt complete making the vualt?
-            let cookie_sale_id       = cookies.get('kosign_sale_id');
-            let cookie_product_id    = cookies.get('kosign_product_id');
-            if (!cookie_sale_id || !cookie_product_id) {
-                setIsLoading(false);
-                return;
-            }
+            setIsLoading(false);
+            return;
+
             //console.log('wno prodicut id or saleid...');
         }
         //we are here because we were redirected from gumroad after a payment

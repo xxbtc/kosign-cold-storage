@@ -35,6 +35,7 @@ import {useReactToPrint} from 'react-to-print';
 import Html2PDF from 'html2pdf.js';
 import PaymentGumRoadComponent from "./PaymentGumRoadComponent";
 import {Oval} from "react-loading-icons";
+import {PaymentService} from "../services/PaymentService";
 
 function CreateVault(props) {
 
@@ -220,9 +221,34 @@ function CreateVault(props) {
             return;
         }
 
+        //we already paid but didnt complete making th evault...
+        let cookie_sale_id       = cookies.get('kosign_sale_id');
+        let cookie_product_id    = cookies.get('kosign_product_id');
+        if (cookie_sale_id && cookie_product_id) {
+            //make sure our cookies are actually valid and authentic
+            console.log('VERIFYING COOKIE');
+            PaymentService.setupGumroadPayment(cookie_product_id, cookie_sale_id).then((response)=>{
+                //console.log('setupGumroadPayment', response);
+                onPaymentComplete();
+                return;
+                //alert ('apyment succeeded');
+            }).catch(error => {
+                alert ('Payment Error');
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            });
+            //onPaymentComplete();
+            return;
+        }
+        console.log('no cookies', cookie_sale_id, cookie_product_id);
+
         if (wizardStep>2 && !isPaymentComplete){
             return;
         }
+
+
+
         /*if (wizardStep + 1 === 5) {
             setPageTitle('Key Ceremony');
         }*/

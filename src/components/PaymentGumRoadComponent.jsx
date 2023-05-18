@@ -29,7 +29,7 @@ function PaymentGumRoadComponent(props) {
     // let [stripeIntentID, setStripeIntentID] = useState();
     let [clientSecret, setStripeClientSecret] = useState('');
     let [stripePubKey, setStripePubKey]     = useState();
-    let [isLoading, setIsLoading]           = useState(false);
+    let [isLoading, setIsLoading]           = useState(true);
     let [isOnline, setIsOnline]             = useState(props.isOnline);
     let [totalCost, setTotalCost]           = useState(props.totalCost);
     let [couponApplied, setCouponApplied]   = useState(false);
@@ -63,7 +63,13 @@ function PaymentGumRoadComponent(props) {
         }
     }, [props.isOnline]);
 
-
+    useEffect(()=>{
+        if (props.quantity){
+            console.log('redirecting to ', props.quantity);
+            window.location='https://kosignxyz.gumroad.com/l/kosign'+props.quantity+'?wanted=true&clear_cart=true';
+            return;
+        }
+    })
 
  /*   useEffect(()=>{
         if (!clientSecret) return;
