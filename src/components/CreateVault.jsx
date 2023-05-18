@@ -224,11 +224,13 @@ function CreateVault(props) {
         //we already paid but didnt complete making th evault...
         let cookie_sale_id       = cookies.get('kosign_sale_id');
         let cookie_product_id    = cookies.get('kosign_product_id');
+        console.log('VERIFYING COOKIE', cookie_product_id, cookie_sale_id);
+
         if (cookie_sale_id && cookie_product_id) {
             //make sure our cookies are actually valid and authentic
-            console.log('VERIFYING COOKIE');
+
             PaymentService.setupGumroadPayment(cookie_product_id, cookie_sale_id).then((response)=>{
-                //console.log('setupGumroadPayment', response);
+                console.log('setupGumroadPayment', response);
                 onPaymentComplete();
                 return;
                 //alert ('apyment succeeded');
@@ -239,20 +241,18 @@ function CreateVault(props) {
                 console.log(error.response.headers);
             });
             //onPaymentComplete();
-            return;
+
+        } else {
+            if (wizardStep > 2 && !isPaymentComplete) {
+                return;
+            }
+            setWizardStep(wizardStep + 1);
         }
-        console.log('no cookies', cookie_sale_id, cookie_product_id);
-
-        if (wizardStep>2 && !isPaymentComplete){
-            return;
-        }
-
-
 
         /*if (wizardStep + 1 === 5) {
             setPageTitle('Key Ceremony');
         }*/
-        setWizardStep(wizardStep + 1);
+
     };
     /*useEffect(() => {
         //hide key every time tab is changed;
