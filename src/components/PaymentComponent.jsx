@@ -52,9 +52,9 @@ function PaymentComponent(props) {
     }, [props.isOnline]);
 
     const setupStripe = (coupon) => {
-        console.log('setting up payment with coupon ', coupon);
+        //console.log('setting up payment with coupon ', coupon);
         PaymentService.setupPayment(props.quantity, coupon).then((response)=>{
-            console.log('SETUPPYAMENTRESPONSE', response);
+            //console.log('SETUPPYAMENTRESPONSE', response);
             setStripePubKey(response.stripePubkey);
             setStripeClientSecret(response.clientSecret);
             setIsLoading(false);
@@ -69,7 +69,7 @@ function PaymentComponent(props) {
             // setStripeIntentID(response.setup_intent_id);
             //stripePromise = loadStripe(response.stripe_pubkey);
         }).catch(error => {
-            console.log('payment intent ERROR');
+            //console.log('payment intent ERROR');
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
@@ -101,7 +101,7 @@ function PaymentComponent(props) {
             //console.log('COUPON SETUP', response);
         }).catch(error => {
             alert ('invalid coupon code');
-            console.log('coupon setup ERROR');
+            //console.log('coupon setup ERROR');
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);

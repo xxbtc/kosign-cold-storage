@@ -52,9 +52,9 @@ function CreatePage() {
             return;
         }
         //we are here because we were redirected from gumroad after a payment
-        console.log('welcome back from gumroad...');
+        //console.log('welcome back from gumroad...');
         PaymentService.setupGumroadPayment(productId, product_permalink, sale_id).then((response)=>{
-            console.log('setupGumroadPayment', response);
+            //console.log('setupGumroadPayment', response);
             setPaymentComplete(true);
             setIsLoading(false);
             //alert ('apyment succeeded');
@@ -63,7 +63,7 @@ function CreatePage() {
             setPaymentComplete(false);
             setIsLoading(false);
             navigate('/');
-            console.log('payment intent ERROR');
+            //console.log('payment intent ERROR');
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);

@@ -273,7 +273,7 @@ function CreateVault(props) {
     const onPaymentComplete = () => {
         setWizardStep(3);
         setIsPaymentComplete(true);
-        console.log('total shareholders are ', totalShareholders);
+        //console.log('total shareholders are ', totalShareholders);
         setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
     };
 

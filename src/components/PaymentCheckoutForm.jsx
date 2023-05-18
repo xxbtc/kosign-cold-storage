@@ -64,9 +64,9 @@ function PaymentCheckoutForm(props) {
     }, [stripe]);
 
     const payNow = async () => {
-        console.log('paying...');
+        //console.log('paying...');
         if (!stripe || !elements) {
-            console.log('error: stripe not loaded...');
+            //console.log('error: stripe not loaded...');
             // Stripe.js has not yet loaded.
             // Make sure to disable form submission until Stripe.js has loaded.
             return;
@@ -109,10 +109,10 @@ function PaymentCheckoutForm(props) {
             },
             redirect: 'if_required'
         }).then((result)=>{
-            console.log('payment confirmed ....',result);
+            //console.log('payment confirmed ....',result);
             props.onPaymentComplete();
         }).catch((e)=>{
-            console.log('payment error ', e);
+            //console.log('payment error ', e);
         });
 
         /*stripe.confirmCardSetup(props.clientSecret,{

@@ -70,7 +70,7 @@ const PDFVaultBackup = (props) => {
         for (let i = 0; i < tmpQRArray.length; i += qrPerRow) {
             chunkedArray.push(tmpQRArray.slice(i, i + qrPerRow));
         }
-       console.log('chunked array is ', chunkedArray);
+       //console.log('chunked array is ', chunkedArray);
 
         //setCipherArray(result);
        // setQRArray(chunkedArray);

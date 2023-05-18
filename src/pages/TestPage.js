@@ -32,7 +32,7 @@ function TestPage() {
 
     useEffect(()=>{
         let result = EncryptionService.generateListOfCombinedWords();
-        console.log('mnemonic is ', result);
+        //console.log('mnemonic is ', result);
     }, []);
 
 

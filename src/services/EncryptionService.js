@@ -103,7 +103,7 @@ export  class EncryptionService  {
 
             //console.log('Mnemonic phrase', i + 1, ':', mnemonic);
         }
-        console.log('asking for this amount of words:', amount);
+        //console.log('asking for this amount of words:', amount);
         let cleanWords = [];
 
         mnemonic.forEach((row) => {
@@ -133,7 +133,7 @@ export  class EncryptionService  {
             }
         }
 
-        console.log('returning words: ', returnArray);
+        //console.log('returning words: ', returnArray);
 
         return returnArray;
     }

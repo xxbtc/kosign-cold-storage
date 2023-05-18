@@ -24,7 +24,7 @@ function CreateMintKeys(props) {
     useEffect(()=>{
         let cookieShares          = cookies.get('kosign_shares');
         let cookieThreshold       = cookies.get('kosign_threshold');
-        console.log('thecookiesare', cookieShares, cookieThreshold);
+        //console.log('thecookiesare', cookieShares, cookieThreshold);
         if (cookieShares) {
             setShareholders(cookieShares);
             setTotalShareholders(cookieShares);

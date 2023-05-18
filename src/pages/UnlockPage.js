@@ -74,7 +74,7 @@ function UnlockPage() {
 
     useEffect(() => {
         if (!metadata) return;
-        console.log('metadata ', metadata, numOfQRKEYSsScanned);
+        //console.log('metadata ', metadata, numOfQRKEYSsScanned);
         if (numOfQRKEYSsScanned>=metadata.threshold) {
             unlockVault();
             return;
@@ -83,7 +83,7 @@ function UnlockPage() {
 
     const scannedVault = (data) => {
         let jsonObject  = JSON.parse(data);
-        console.log('scanned something ', jsonObject);
+        //console.log('scanned something ', jsonObject);
         // console.log('numofqrscanned is currently ', numOfQRsScanned);
 
         if ((numOfQRsScanned===0) && (jsonObject.id !==1)) {
@@ -103,7 +103,7 @@ function UnlockPage() {
             }
 
             setCipherData(cipherData+jsonObject.data);
-            console.log('cipherdata is now', cipherData+jsonObject.data);
+            //console.log('cipherdata is now', cipherData+jsonObject.data);
         }
         setNumOfQRsScanned(jsonObject.id);
         setIsProcessing(false);
@@ -111,7 +111,7 @@ function UnlockPage() {
 
     const scannedKey= (data) => {
        // console.log('scanned key ', data);
-        console.log('scanned a key', data);
+        //console.log('scanned a key', data);
         //let jsonObject  = JSON.parse(data);
         //setCipherData(cipherData+data);
         if (unlockShares.includes(data.key)) {
@@ -133,7 +133,7 @@ function UnlockPage() {
 
 
     const scannedSomething = (data) => {
-        console.log('scanned SOMETHING', data);
+        //console.log('scanned SOMETHING', data);
        // console.log('processing is ', isProcessing, scanType);
         if (isProcessing) return;
         //isProcessing = true;
@@ -148,7 +148,7 @@ function UnlockPage() {
 
 
     const unlockVault = ()=> {
-        console.log('unlock data is', unlockShares, cipherData, metadata.cipherIV);
+        //console.log('unlock data is', unlockShares, cipherData, metadata.cipherIV);
         if (metadata.threshold===1) {
             EncryptionService.decrypt(
                 cipherData,
@@ -189,7 +189,7 @@ function UnlockPage() {
 
         if (scanType==='key' && rowType==='key') {
             let returnClass = 'unlockrowItem';
-            console.log('does ',metadata.keys[index].alias, 'equal ', scannedKeys);
+            //console.log('does ',metadata.keys[index].alias, 'equal ', scannedKeys);
             if (scannedKeys.includes(metadata.keys[index].alias)) {
                 return returnClass + ' unlockrowItemSuccess';
             }
@@ -212,7 +212,7 @@ function UnlockPage() {
 
     const getKeyClass = (keyname) => {
         let returnClass = 'unlockrowItem';
-        console.log('getting key class for ', keyname);
+        //console.log('getting key class for ', keyname);
         if (scannedKeys.includes(keyname)) {
             return returnClass + ' unlockrowItemSuccess';
         }
