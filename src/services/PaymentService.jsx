@@ -53,13 +53,12 @@ export class PaymentService  {
             });
     };
 
-    static setupGumroadPayment = async (productId, product_permalink, sale_id) => {
+    static setupGumroadPayment = async (productId, sale_id) => {
         const cookies   = new Cookies();
         //  const apikey    =  cookies.get('quorum');
 
         let params      = new FormData();
         params.append('productId', productId );
-        params.append('product_permalink', product_permalink );
         params.append('sale_id', sale_id );
 
         //console.log('[requestUnlock] ', params);

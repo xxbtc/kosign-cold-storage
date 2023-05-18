@@ -145,6 +145,7 @@ function CreateVault(props) {
                         EncryptionService.splitKey(encryptionResult.cipherKey, parseInt(totalShareholders), parseInt(consensus)).then((xshares) => {
                            // console.log('split OK....', xshares);
                             setShares(xshares);
+
                             //console.log('wizard step is ', wizardStep+1);
                             // setWizardStep(5);
                         });
@@ -194,9 +195,10 @@ function CreateVault(props) {
 
     useEffect (()=>{
         if (props.paymentComplete) {
-            setIsPaymentComplete(true);
+           /* setIsPaymentComplete(true);
             setWizardStep(3);
-            setAgreeToTerms(true);
+            setAgreeToTerms(true);*/
+            onPaymentComplete();
             return;
         }
     }, [props.paymentComplete]);
@@ -271,6 +273,8 @@ function CreateVault(props) {
     };
 
     const onPaymentComplete = () => {
+        cookies.remove('kosign_sale_id');
+        cookies.remove('kosign_product_id');
         setWizardStep(3);
         setIsPaymentComplete(true);
         //console.log('total shareholders are ', totalShareholders);

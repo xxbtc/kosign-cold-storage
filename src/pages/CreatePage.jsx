@@ -46,17 +46,23 @@ function CreatePage() {
         const product_permalink     = params.get('product_permalink');
         const sale_id               = params.get('sale_id');
         if (!productId || !sale_id) {
+            //we are not redirected from gumroad but maybe we purchased before but didnt complete making the vualt?
+            let cookie_sale_id       = cookies.get('kosign_sale_id');
+            let cookie_product_id    = cookies.get('kosign_product_id');
+            if (!cookie_sale_id || !cookie_product_id) {
+                setIsLoading(false);
+                return;
+            }
             //console.log('wno prodicut id or saleid...');
-
-            setIsLoading(false);
-            return;
         }
         //we are here because we were redirected from gumroad after a payment
         //console.log('welcome back from gumroad...');
-        PaymentService.setupGumroadPayment(productId, product_permalink, sale_id).then((response)=>{
+        PaymentService.setupGumroadPayment(productId, sale_id).then((response)=>{
             //console.log('setupGumroadPayment', response);
             setPaymentComplete(true);
             setIsLoading(false);
+            setCookie('kosign_sale_id', sale_id);
+            setCookie('kosign_product_id', productId);
             //alert ('apyment succeeded');
         }).catch(error => {
             alert ('Payment Error');
@@ -69,6 +75,16 @@ function CreatePage() {
             console.log(error.response.headers);
         });
     },[]);
+
+    const setCookie = (cookieName, cookieValue) => {
+        const expirationTime = 120 * 60 * 1000; // 120 minutes in milliseconds
+
+        const cookieOptions = {
+            maxAge: expirationTime,
+        };
+
+        cookies.set(cookieName, cookieValue, cookieOptions);
+    };
 
     return (
         <Layout>
