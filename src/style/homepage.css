@@ -477,13 +477,13 @@
 }
 
 .homepagePricingRow {
-    font-family: "Graphik-Bold", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-family: "Graphik", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
     font-size: 2rem !important;
     line-height: 2.5rem;
     text-align: center;
     color:#000 !important;
     margin-bottom: 50px;
-    font-weight: 800;
+
 }
 
 

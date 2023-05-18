@@ -39,14 +39,15 @@ const NavbarTop = (props) => {
                     <Collapse isOpen={isOpen} navbar>
                         <Nav className="justify-content-end" navbar style={{width:'100%'}}>
                             <NavItem className={'nav-item'}>
-                                <Link className={"nav-link"} to={'/create'}>Create</Link>
+                                <Link className={"nav-link"} to={'/pricing'}>Pricing</Link>
                             </NavItem>
                             <NavItem className={'nav-item'}>
                                 <Link className={"nav-link"} to={'/unlock'}>Unlock</Link>
                             </NavItem>
                             <NavItem className={'nav-item'}>
-                                <Link className={"nav-link"} to={'/pricing'}>Pricing</Link>
+                                <Link className={"nav-link"} to={'/create'}>Create</Link>
                             </NavItem>
+
                            {/* <NavItem className={'nav-item'}>
                                 <Link className={"nav-link"} to={'/'}>Home</Link>
                             </NavItem>

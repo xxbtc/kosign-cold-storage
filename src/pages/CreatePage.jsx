@@ -25,9 +25,53 @@ import {Oval} from 'react-loading-icons';
 import CreateVault from "../components/CreateVault";
 import {PaymentService} from "../services/PaymentService";
 import Footer from "../components/Footer";
+import Cookies from 'universal-cookie';
 
 
 function CreatePage() {
+
+    const navigate = useNavigate();
+    const cookies   = new Cookies();
+
+    const [paymentComplete, setPaymentComplete] = useState(false);
+    const [isLoading, setIsLoading]             = useState(true);
+
+    useEffect(()=>{
+        const queryString = window.location.search;
+
+        // Create a new URLSearchParams object from the query string
+        const params = new URLSearchParams(queryString);
+        // Retrieve the values using the parameter names
+        const productId             = params.get('product_id');
+        const product_permalink     = params.get('product_permalink');
+        const sale_id               = params.get('sale_id');
+        if (!productId || !sale_id) {
+            console.log('wno prodicut id or saleid...');
+            cookies.remove('kosign_vaultname');
+            cookies.remove('kosign_threshold');
+            cookies.remove('kosign_shares');
+            cookies.remove('kosign_vaultdescription');
+            setIsLoading(false);
+            return;
+        }
+        //we are here because we were redirected from gumroad after a payment
+        console.log('welcome back from gumroad...');
+        PaymentService.setupGumroadPayment(productId, product_permalink, sale_id).then((response)=>{
+            console.log('setupGumroadPayment', response);
+            setPaymentComplete(true);
+            setIsLoading(false);
+            //alert ('apyment succeeded');
+        }).catch(error => {
+            alert ('Payment Error');
+            setPaymentComplete(false);
+            setIsLoading(false);
+            navigate('/');
+            console.log('payment intent ERROR');
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+        });
+    },[]);
 
     return (
         <Layout>
@@ -47,7 +91,7 @@ function CreatePage() {
 
                     <Row>
                         <Col xs={{span: 12, offset: 0}} md={{span: 12, offset: 0}} lg={{span: 8, offset: 2}}>
-                            <CreateVault paymentComplete={true} />
+                            <CreateVault isLoading={isLoading} paymentComplete={paymentComplete} />
                         </Col>
                     </Row>
                 </Container>

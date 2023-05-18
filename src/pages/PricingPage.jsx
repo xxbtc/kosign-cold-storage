@@ -91,7 +91,7 @@ function PricingPage() {
                                 </div>
                             </Col>*/}
 
-                            <Col xs={{span:12}} md={{span:8, offset:0}} lg={{span:8, offset:2}} style={{paddingTop:10}}>
+                            <Col xs={{span:12}} md={{span:10, offset:1}} lg={{span:8, offset:2}} style={{paddingTop:10}}>
                                 <div className={'highlightColumn '}>
                                     <div style={{textAlign:'center', fontWeight:'bold', paddingTop:4, paddingBottom:4, color:'#fff'}}>One-time payment</div>
                                     <div className={'pricingColumn'}>

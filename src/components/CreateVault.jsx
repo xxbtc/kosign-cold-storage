@@ -11,6 +11,8 @@ import { TbCircleNumber1, TbCircleNumber2, TbCircleNumber3, TbCircleNumber4 } fr
 import '../style/index.css';
 import '../style/createPage.css';
 import '../style/forms.css';
+import Cookies from 'universal-cookie';
+
 //import ShareKeyshare from "../components/ShareKeyshare";
 
 import Lottie from 'lottie-react-web'
@@ -31,8 +33,12 @@ import {PDFDownloadLink, PDFViewer} from "@react-pdf/renderer";
 import PDFKeyBackup from "../components/PDFKeyBackup";
 import {useReactToPrint} from 'react-to-print';
 import Html2PDF from 'html2pdf.js';
+import PaymentGumRoadComponent from "./PaymentGumRoadComponent";
+import {Oval} from "react-loading-icons";
 
 function CreateVault(props) {
+
+    const cookies   = new Cookies();
 
     const [secretValue, setSecretValue] = useState('');
     const [cipherText, setCiphertext] = useState(null);
@@ -54,8 +60,6 @@ function CreateVault(props) {
     const [hasPressedVaultPrint, setHasPressedVaultPrint]   = useState(false);
     const [hasPressedKeyPrint, setHasPressedKeyPrint]       = useState(false);
     const [agreeToTerms, setAgreeToTerms] = useState(false);
-
-
     const [description, setDescription] = useState('');
 
     const [pageTitle, setPageTitle] = useState('Create a vault');
@@ -82,7 +86,7 @@ function CreateVault(props) {
         const totalPages = 1 + Math.ceil(remainingQRs / qrPerPage);
 
         return totalPages;
-    }
+    };
 
     const setSecret = (newSecretValue) => {
         if (newSecretValue.length > secretValue.length) {
@@ -101,6 +105,7 @@ function CreateVault(props) {
             }
         }
         setDescription(newDescription);
+        setCookie('kosign_vaultdescription', newDescription);
     };
 
     const setVaultNameValue = (newVaultName) => {
@@ -110,6 +115,17 @@ function CreateVault(props) {
             }
         }
         setVaultName(newVaultName);
+        setCookie('kosign_vaultname', newVaultName);
+    };
+
+    const setCookie = (cookieName, cookieValue) => {
+        const expirationTime = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+        const cookieOptions = {
+            maxAge: expirationTime,
+        };
+
+        cookies.set(cookieName, cookieValue, cookieOptions);
     };
 
     useEffect(()=>{
@@ -142,7 +158,6 @@ function CreateVault(props) {
     }, [wizardStep]);
 
     useEffect(()=>{
-
        setTotalCost((totalShareholders*global.costPerKey) + (global.setupCost));
     }, [totalShareholders]);
 
@@ -150,9 +165,8 @@ function CreateVault(props) {
      //   console.log('NAVIGATOR IS ', navigator.onLine);
     }, [navigator.onLine]);
 
-
     useEffect(() => {
-        const handleOnline = () => setIsOnline(navigator.onLine);
+        const handleOnline  = () => setIsOnline(navigator.onLine);
         const handleOffline = () => setIsOnline(navigator.onLine);
 
         window.addEventListener('online', handleOnline);
@@ -163,6 +177,24 @@ function CreateVault(props) {
             window.removeEventListener('offline', handleOffline);
         };
     }, []);
+
+    useEffect(()=> {
+       let cookieVaultName          = cookies.get('kosign_vaultname');
+       let cookieVaultDescription   = cookies.get('kosign_vaultdescription');
+       if (cookieVaultDescription) setDescription(cookieVaultDescription);
+       if (cookieVaultName) setVaultName(cookieVaultName);
+
+    }, []);
+
+
+    useEffect (()=>{
+        if (props.paymentComplete) {
+            setIsPaymentComplete(true);
+            setWizardStep(3);
+            setAgreeToTerms(true);
+            return;
+        }
+    }, [props.paymentComplete]);
 
     const continueWizard = (forcepage) => {
         // console.log('continuing with secret', secretValue);
@@ -314,6 +346,12 @@ function CreateVault(props) {
         await exporter.getPdf(true);
     };
 
+    if (props.isLoading) {
+        return (
+            <div className={'centerLoading'}><Oval stroke="#1786ff" strokeWidth={10} strokeOpacity={1} speed={1} style={{width:25}} /></div>
+        )
+    }
+
     return (
 
         <div style={{marginBottom:100}}>
@@ -455,7 +493,11 @@ function CreateVault(props) {
                 {wizardStep === 2 ?
                     <div>
                         {/*<CreateLoading/>*/}
+{/*
                         <PaymentComponent isOnline={isOnline} totalCost={totalCost} quantity={totalShareholders} onPaymentComplete={()=>onPaymentComplete()}/>
+*/}
+                        <PaymentGumRoadComponent isOnline={isOnline} totalCost={totalCost} quantity={totalShareholders} onPaymentComplete={()=>onPaymentComplete()}/>
+
                     </div>
                     : null
                 }

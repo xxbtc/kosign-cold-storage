@@ -209,7 +209,10 @@ function Homepage(props) {
             <HomepageTestimonials/>
 
             <div  className={'homepagePricingRow'} style={{paddingTop:40, paddingLeft:70, paddingRight:70}}>
-                <div ref={pricingRef}>${global.setupCost} per vault + ${global.costPerKey} per key</div>
+                <div ref={pricingRef} style={{fontWeight:'bold'}}>${global.setupCost} per vault + ${global.costPerKey} per key</div>
+               {/* <div style={{marginTop:20}}>
+                    <span className={'alert alert-info'} style={{fontSize:18}}><b>FREE</b> beta</span>
+                </div>*/}
             </div>
 
             <Row>

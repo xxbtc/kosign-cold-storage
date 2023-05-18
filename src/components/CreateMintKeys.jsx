@@ -11,24 +11,45 @@ import {Form, FormGroup, FormLabel, Button} from 'react-bootstrap';
 
 import Lottie from "lottie-react-web";
 import LottieAnimationKey from "../animations/6370-keys";
+import Cookies from 'universal-cookie';
 
 
 function CreateMintKeys(props) {
 
+    const cookies   = new Cookies();
+
     const [totalShareholders, setTotalShareholders]  = useState(2);
     const [consensus, setConsensus]                  = useState(2);
+
+    useEffect(()=>{
+        let cookieShares          = cookies.get('kosign_shares');
+        let cookieThreshold       = cookies.get('kosign_threshold');
+        if (cookieShares) setShareholders(cookieShares);
+        if (cookieThreshold) updateConsensus(cookieThreshold);
+    },[]);
 
     const setShareholders = (val) => {
         setTotalShareholders(val);
         props.setShareholders(val);
         setConsensus(val);
+        setCookie('kosign_shares', val);
     };
 
     const updateConsensus = (val) => {
         setConsensus(val);
         props.setConsensus(val);
+        setCookie('kosign_threshold', val);
     };
 
+    const setCookie = (cookieName, cookieValue) => {
+        const expirationTime = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+        const cookieOptions = {
+            maxAge: expirationTime,
+        };
+
+        cookies.set(cookieName, cookieValue, cookieOptions);
+    };
 
     return (
         <div>

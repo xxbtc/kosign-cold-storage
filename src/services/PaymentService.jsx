@@ -53,6 +53,28 @@ export class PaymentService  {
             });
     };
 
+    static setupGumroadPayment = async (productId, product_permalink, sale_id) => {
+        const cookies   = new Cookies();
+        //  const apikey    =  cookies.get('quorum');
+
+        let params      = new FormData();
+        params.append('productId', productId );
+        params.append('product_permalink', product_permalink );
+        params.append('sale_id', sale_id );
+
+        //console.log('[requestUnlock] ', params);
+        return axios.post(global.apiURL+'pay/setupGumroad', params,
+            {
+                headers: {
+                    //   'Authorization': 'Bearer '+ apikey,
+                    'Content-Type': `multipart/form-data; charset=utf-8; boundary=${params._boundary}`,
+                }
+            })
+            .then(res => {
+                //console.log(res);
+                return res.data;
+            });
+    };
 
 
 
