@@ -13,7 +13,7 @@ import ReactGA from 'react-ga4';
 
 function App () {
     let location = useLocation();
-    ReactGA.initialize('G-SP2H0SLS82');
+    ReactGA.initialize('G-HXKJB4FB7L');
 
     useEffect(() => {
         let pageTitle = 'Multi-signature paper vaults';
