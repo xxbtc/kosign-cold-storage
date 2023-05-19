@@ -15,7 +15,7 @@ import { MdMenu } from "react-icons/md";
 import {SiMeteor} from 'react-icons/si';
 
 import '../style/navbar.css';
-import logoIMG from "../images/iceqr.jpg";
+import logoIMG from "../images/paperlock_small.jpg";
 
 const NavbarTop = (props) => {
     const [isOpen, setIsOpen] = useState(false);

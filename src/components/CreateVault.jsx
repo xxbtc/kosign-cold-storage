@@ -224,13 +224,13 @@ function CreateVault(props) {
         //we already paid but didnt complete making th evault...
         let cookie_sale_id       = cookies.get('kosign_sale_id');
         let cookie_product_id    = cookies.get('kosign_product_id');
-        console.log('VERIFYING COOKIE', cookie_product_id, cookie_sale_id);
+       // console.log('VERIFYING COOKIE', cookie_product_id, cookie_sale_id);
 
         if (cookie_sale_id && cookie_product_id) {
             //make sure our cookies are actually valid and authentic
 
             PaymentService.setupGumroadPayment(cookie_product_id, cookie_sale_id).then((response)=>{
-                console.log('setupGumroadPayment', response);
+              //  console.log('setupGumroadPayment', response);
                 onPaymentComplete();
                 return;
                 //alert ('apyment succeeded');

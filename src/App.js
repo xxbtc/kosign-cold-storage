@@ -16,7 +16,7 @@ function App () {
     ReactGA.initialize('G-HXKJB4FB7L');
 
     useEffect(() => {
-        let pageTitle = 'Multi-signature paper vaults';
+        let pageTitle = 'cold storage data vaults';
         if (location.pathname.split("/")[1]) {
             let tmpTitle = location.pathname.split("/")[1]; //without the "/"
             pageTitle = tmpTitle.charAt(0).toUpperCase() + tmpTitle.slice(1)
@@ -33,11 +33,9 @@ function App () {
 
             <Route exact path="/unlock" element={<UnlockPage/>}/>
             <Route exact path="/pricing" element={<PricingPage />}/>
-
-            <Route exact path="/test" element={<TestPage showPricing={true}/>}/>
-
             <Route exact path="/legal" element={<LegalPage />}/>
 
+           {/* <Route exact path="/test" element={<TestPage showPricing={true}/>}/>*/}
 
         </Routes>
     );
