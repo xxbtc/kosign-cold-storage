@@ -199,6 +199,7 @@ function CreateVault(props) {
            /* setIsPaymentComplete(true);
             setWizardStep(3);
             setAgreeToTerms(true);*/
+            setAgreeToTerms(true);
             onPaymentComplete();
             return;
         }
