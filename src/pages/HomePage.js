@@ -90,7 +90,7 @@ function Homepage(props) {
                             <div className={'homepageH1Inner'}>
                                 <div className={'homepageH1pretitle'}>Multi-signature cold storage</div>
                                 <div className={'actualTitle'}>
-                                    <div>The paper data vault</div>
+                                    <div>Backup your passwords on a paper data vault</div>
                                 </div>
                                 <div className={'heroSubtitle'}>
                                     <div>

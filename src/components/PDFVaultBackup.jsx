@@ -292,18 +292,18 @@ const PDFVaultBackup = (props) => {
                   <div>
                       <div>
                           <div style={styles.vaultText}>
-                              <div style={styles.vaultTextBold}>Vault </div>
+                              <div style={styles.vaultTextBold}>Vault Name:</div>
                               <div style={styles.vaultVariable}>{props.vaultName}</div>
                           </div>
 
                           {forceShowFullHeader?
                               <div>
                                   <div style={styles.vaultText}>
-                                      <div style={styles.vaultTextBold}>Description </div>
+                                      <div style={styles.vaultTextBold}>Description:</div>
                                       <div style={styles.vaultVariable}>{props.description}</div>
                                   </div>
                                   <div style={styles.vaultText}>
-                                      <div style={styles.vaultTextBold}>Keys: </div>
+                                      <div style={styles.vaultTextBold}>Keys:</div>
                                       <div style={styles.vaultVariable}>
                                           {props.keyAliasArray.map((val,i)=>
                                               <div key={'aliaskey_'+i} style={styles.keyAlias}>
@@ -314,17 +314,16 @@ const PDFVaultBackup = (props) => {
                                   </div>
                                   <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
                                       <div style={styles.vaultText}>
-                                          <div style={styles.vaultTextBold}>Threshold</div>
+                                          <div style={styles.vaultTextBold}>Threshold:</div>
                                           <div style={styles.vaultVariable}>{props.threshold} of {props.shares.length}</div>
                                       </div>
                                       <div style={{marginLeft:20}}>
                                           <div style={styles.vaultText}>
-                                              <div style={styles.vaultTextBold}>Created</div>
+                                              <div style={styles.vaultTextBold}>Created:</div>
                                               <div style={styles.vaultVariable}>{formatTime(props.createdTimestamp)}</div>
                                           </div>
                                       </div>
                                   </div>
-
                               </div>
                               : null
                           }
@@ -339,35 +338,64 @@ const PDFVaultBackup = (props) => {
       )
     };
 
+
+
     return (
-        <div style={styles.page}>
+        <div>
 
-            {renderVaultHeader(1, true)}
+            {qrArray.map((row, i) =>
+                <div className={i%2===1?'printPage':null}>
+                    <div style={styles.page}>
+                        {i===0?renderVaultHeader(i, true):null}
 
-            <div style={styles.sectionBottom}>
-                <div style={styles.QRWrapper}>
-                    {qrArray.map((row, i) =>
-                        <div key={'anotherkey'+i} style={styles.QRWrapperMiddle}>
-                            {i % 2 === 1?
-                                <div>
-                                    <div className={'pagebreak'}></div>
-                                    <div style={{marginTop:50}}>
-                                        {renderVaultHeader(i, false)}
-                                    </div>
-                                </div>
-                                :null
-                            }
+                        {i % 2 === 1?
                             <div>
+                                <div style={{marginTop:0}}>
+                                    {renderVaultHeader(i, false)}
+                                </div>
+                            </div>
+                            :null
+                        }
+                        <div key={'anotherkey'+i} style={styles.QRWrapperMiddle}>
+                            <div key={'qrrowid'+i} style={styles.QRRow}>
+                                {row.map((qrData, ii) => renderQR(qrData, ii, i))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+    /*
+    return (
+        <div className={'printable'}>
+            <div style={styles.page}>
+
+                {renderVaultHeader(1, true)}
+
+                <div style={styles.sectionBottom}>
+                    <div style={styles.QRWrapper}>
+                        {qrArray.map((row, i) =>
+                            <div key={'anotherkey'+i} style={styles.QRWrapperMiddle}>
+                                {i % 2 === 1?
+                                    <div>
+                                        <div className={'pagebreak'}></div>
+                                        <div style={{marginTop:50}}>
+                                            {renderVaultHeader(i, false)}
+                                        </div>
+                                    </div>
+                                    :<div style={{background:'red'}}>x<br/>sdfsfsfs<br/>xxxxxxxx</div>
+                                }
                                 <div key={'qrrowid'+i} style={styles.QRRow}>
                                     {row.map((qrData, ii) => renderQR(qrData, ii, i))}
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
-    );
+    );*/
 
    /* return (
         <Document

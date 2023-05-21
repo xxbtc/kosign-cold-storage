@@ -342,7 +342,8 @@ function CreateVault(props) {
 
     const downloadVault = async () => {
         const printElement = ReactDOMServer.renderToString(
-            <PDFVaultBackup
+            <div style={{padding:40}}>
+                <PDFVaultBackup
                 vaultIdent          = {vaultIdent}
                 cipherText          = {cipherText}
                 shares              = {shares}
@@ -355,6 +356,7 @@ function CreateVault(props) {
                 keyAliasArray       = {keyAliasArray}
                 maxLengthPerQRCode  = {maxLengthPerQRCode}
             />
+            </div>
         );
         const exporter = new Html2PDF(printElement, {filename:"Kosign - Vault.pdf"}).set({
             pagebreak: { before:'.pagebreak', mode: ['avoid-all', 'css', 'legacy'] }
@@ -364,20 +366,22 @@ function CreateVault(props) {
 
     const downloadKey = async (share, i) => {
         const printElement = ReactDOMServer.renderToString(
-            <PDFKeyBackup
-                vaultIdent={vaultIdent}
-                threshold={consensus}
-                vaultName={vaultName}
-                description={description}
-                createdTimestamp={createdTimestamp}
-                myDecryptedKey={share}
-                qrtype={'downloadable'}
-                keyAlias={keyAliasArray[i]}
-            />
+
+                <PDFKeyBackup
+                    vaultIdent={vaultIdent}
+                    threshold={consensus}
+                    vaultName={vaultName}
+                    description={description}
+                    createdTimestamp={createdTimestamp}
+                    myDecryptedKey={share}
+                    qrtype={'downloadable'}
+                    keyAlias={keyAliasArray[i]}
+                />
+
         );
 
-        const exporter = new Html2PDF(printElement, {filename:"Kosign - Key.pdf"}).set({
-            pagebreak: { before:'.pagebreak', mode: ['avoid-all', 'css', 'legacy'] }
+        const exporter = new Html2PDF(printElement, {filename:"Kosign-key-"+keyAliasArray[i]+".pdf"}).set({
+           
         });
         await exporter.getPdf(true);
     };

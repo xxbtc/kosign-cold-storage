@@ -19,7 +19,6 @@ const PDFKeyBackup = (props) => {
 
     useEffect(()=>{
 
-
     },[]);
 
 
@@ -30,24 +29,31 @@ const PDFKeyBackup = (props) => {
 
     const styles = StyleSheet.create({
         page: {
-            flexDirection: 'column',
             backgroundColor: '#fff',
-            flex:1,
-            width:'100%',
-            height:'100%',
-            padding:50,
-            paddingBottom:0,
+
         },
         sectionTop: {
-            padding: 30,
-            paddingTop:20,
-            paddingBottom:30,
+            marginTop:0,
+            padding: 40,
+            paddingBottom:0,
+            paddingTop:40,
             backgroundColor:'#fff',
-            borderWidth:1,
-            borderColor:'#ccc',
-            marginBottom:0,
+            marginBottom:20,
             whiteSpace:'normal',
             overflowWrap:'break-word',
+           /* borderWidth:4,
+            borderColor:'gold',
+            borderStyle:'solid',*/
+        },
+        sectionMiddle: {
+            display:'flex',
+            flexDirection:'row',
+            flex:1,
+            paddingTop:0,
+            padding:40,
+           /* borderWidth:4,
+            borderColor:'blue',
+            borderStyle:'solid',*/
         },
         sectionBottom: {
             textAlign:'center',
@@ -57,11 +63,18 @@ const PDFKeyBackup = (props) => {
             fontSize:20,
             color:'red',
         },
+        sectionRight: {
+            textAlign:'center',
+            marginBottom:0,
+            fontFamily: "Helvetica-Oblique",
+            fontSize:20,
+            color:'red',
+            width:'60%',
+        },
         QRWrapper: {
             display:'block',
             paddingTop:60,
             paddingBottom:60,
-            marginTop:20,
             marginLeft:'auto',
             marginRight:'auto',
             borderWidth: 4,
@@ -73,6 +86,7 @@ const PDFKeyBackup = (props) => {
             fontFamily: "Helvetica",
             fontSize:20,
             display:'block',
+            overflowWrap:'break-word',
         },
         detailWrapper: {
             borderWidth:1,
@@ -80,12 +94,13 @@ const PDFKeyBackup = (props) => {
             borderColor:'#ccc',
             borderStyle:'solid',
             padding:20,
+            width:'40%'
         },
         vaultTitleWrapper: {
             borderBottomWidth:1,
             borderBottomColor:'#ccc',
             borderBottomStyle:'solid',
-            marginBottom:20,
+            marginBottom:0,
             position:'relative',
         },
         vaultTitle: {
@@ -137,14 +152,13 @@ const PDFKeyBackup = (props) => {
 
 //console.log('qr  is ', qr);
     return (
-        <div className={'printable'}>
+        <div className={props.qrtype==='printable'?'printPage':null}>
             <div style={styles.page}>
-                <div style={styles.sectionTop}>
-
-                    <div style={{height:60,display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between'}}>
+                 <div style={styles.sectionTop}>
+                    <div style={{display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between'}}>
                         <div style={styles.vaultTitle}>
                             Kosign Vault Key
-                            <span className={'alert alert-danger'} style={{display:'inline-block', fontSize:20, padding:10, marginLeft:20}}>
+                            <span className={'alert alert-danger'} style={{display:'inline-block', fontSize:20, padding:8, marginLeft:40, marginBottom:0}}>
                           <b>!! IMPORTANT !!</b>
                       </span>
                         </div>
@@ -154,6 +168,9 @@ const PDFKeyBackup = (props) => {
                             </div>
                         </div>
                     </div>
+                 </div>
+
+                 <div style={styles.sectionMiddle}>
                     <div style={styles.detailWrapper}>
                         <div style={styles.vaultText}>
                             <div style={styles.vaultTextBold}>Vault Name:</div>
@@ -172,19 +189,17 @@ const PDFKeyBackup = (props) => {
                             <div>{formatTime(props.createdTimestamp)}</div>
                         </div>
                     </div>
-                </div>
-                <div style={styles.sectionBottom}>
-                    <div>
-                        <div>
-                            Keep secure away from cameras.
+                    <div style={styles.sectionRight}>
+                        <div style={styles.QRWrapper}>
+                            <div style={{marginBottom:40}}>
+                                Keep secure away from cameras.
+                            </div>
+                            {props.qrtype==='printable'?<QRCode id='qrcodekey' value={qrdata} size={250} />:null}
+                            {props.qrtype==='downloadable'?<Image src={qr} style={{maxHeight:350, maxWidth:350}}/>:null}
                         </div>
                     </div>
-                    <div style={styles.QRWrapper}>
-                        {props.qrtype==='printable'?<QRCode id='qrcodekey' value={qrdata} size={400} />:null}
-                        {props.qrtype==='downloadable'?<Image src={qr} />:null}
-
-                    </div>
                 </div>
+
             </div>
             {/*<div className={'pagebreak'}></div>*/}
         </div>
