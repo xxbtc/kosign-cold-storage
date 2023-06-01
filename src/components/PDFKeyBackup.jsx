@@ -1,17 +1,8 @@
 import React, { useEffect } from 'react'
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Layout from "../components/Layout";
-import '../style/index.css';
-import '../style/forms.css';
-import '../style/dashboardPage.css';
-
 import moment from 'moment-timezone';
 import QRCode from 'qrcode.react';
 import QRCode2 from 'qrcode'
-
-import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
+import {StyleSheet, Image } from '@react-pdf/renderer';
 
 const PDFKeyBackup = (props) => {
 
