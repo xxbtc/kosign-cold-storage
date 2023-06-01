@@ -11,6 +11,7 @@ import { TbCircleNumber1, TbCircleNumber2, TbCircleNumber3, TbCircleNumber4 } fr
 import '../style/index.css';
 import '../style/createPage.css';
 import '../style/forms.css';
+import '../style/dashboardPage.css';
 import Cookies from 'universal-cookie';
 
 //import ShareKeyshare from "../components/ShareKeyshare";
