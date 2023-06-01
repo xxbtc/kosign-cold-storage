@@ -381,7 +381,7 @@ function CreateVault(props) {
         );
 
         const exporter = new Html2PDF(printElement, {filename:"Kosign-key-"+keyAliasArray[i]+".pdf"}).set({
-           
+
         });
         await exporter.getPdf(true);
     };
@@ -462,8 +462,7 @@ function CreateVault(props) {
                                                     </FormText>
                                                 </FormGroup>
 
-                                                <FormGroup className={'formGroup'} controlId="formBasicDescription">
-                                                    {/*<FormLabel className={'formLabel'}>Description</FormLabel>*/}
+                                               {/* <FormGroup className={'formGroup'} controlId="formBasicDescription">
                                                     <textarea
                                                         value={description}
                                                         onChange={(e) => setDescriptionValue(e.target.value)}
@@ -473,7 +472,6 @@ function CreateVault(props) {
                                                     />
                                                     <FormText className="text-muted space-between-row">
                                                         <div style={{marginTop:5, paddingRight:10}}>
-                                                            {/*<FaLockOpen style={{color:'#777', marginRight:4, fontSize:12}} />*/}
                                                             Description or instructions that will be visible on your vault
                                                         </div>
                                                         {((description.length)>=(maxDescriptionChars*0.25))?
@@ -482,7 +480,7 @@ function CreateVault(props) {
                                                         </div>
                                                         : null}
                                                     </FormText>
-                                                </FormGroup>
+                                                </FormGroup>*/}
 
                                                 <CreateMintKeys setShareholders={(val) => setTotalShareholders(val)}
                                                                 setConsensus={(val) => setConsensus(val)}

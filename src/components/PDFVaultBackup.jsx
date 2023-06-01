@@ -298,10 +298,10 @@ const PDFVaultBackup = (props) => {
 
                           {forceShowFullHeader?
                               <div>
-                                  <div style={styles.vaultText}>
+                                 {/* <div style={styles.vaultText}>
                                       <div style={styles.vaultTextBold}>Description:</div>
                                       <div style={styles.vaultVariable}>{props.description}</div>
-                                  </div>
+                                  </div>*/}
                                   <div style={styles.vaultText}>
                                       <div style={styles.vaultTextBold}>Keys:</div>
                                       <div style={styles.vaultVariable}>
