@@ -289,7 +289,7 @@ const PDFVaultBackup = (props) => {
               </div>
               {forceShowFullHeader?
               <div style={{marginTop:10,marginBottom:20}}>
-                  Unlock at <a className={'linkage'} href={'https://kosign.xyz/unlock'}>https://kosign.xyz/unlock</a>
+                  Unlock at <a href={'https://kosign.xyz/unlock'}>https://kosign.xyz/unlock</a>
               </div>
               :null}
               <div style={styles.detailWrapper}>
@@ -345,7 +345,7 @@ const PDFVaultBackup = (props) => {
 
 
     return (
-        <div>
+        <div style={{size: 'A4', margin: 0, height:'initial', width:'210mm'}}>
 
             {qrArray.map((row, i) =>
                 <div style={i%2===1?styles.printPage:null}>
