@@ -289,7 +289,7 @@ const PDFVaultBackup = (props) => {
               </div>
               {forceShowFullHeader?
               <div style={{marginTop:10,marginBottom:20}}>
-                  Unlock at <a href={'https://kosign.xyz/unlock'}>https://kosign.xyz/unlock</a>
+                  Unlock at <a href={'https://kosign.xyz/unlock'} style={{color:'#1786ff'}}>https://kosign.xyz/unlock</a>
               </div>
               :null}
               <div style={styles.detailWrapper}>
