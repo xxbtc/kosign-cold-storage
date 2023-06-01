@@ -6,17 +6,9 @@ import {StyleSheet, Image } from '@react-pdf/renderer';
 
 const PDFKeyBackup = (props) => {
 
-
-
-    useEffect(()=>{
-
-    },[]);
-
-
     const formatTime = (timestamp) => {
         return moment.tz(new Date(timestamp*1000), 'YYYY-MM-DD', moment.tz.guess()).format('YYYY-MM-DD HH:mm:ss')
     };
-
 
     const styles = StyleSheet.create({
         page: {
