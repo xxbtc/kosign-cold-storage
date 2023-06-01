@@ -32,6 +32,11 @@ const PDFKeyBackup = (props) => {
             backgroundColor: '#fff',
 
         },
+        printPage: {
+            pageBreakBefore: 'always',
+            height: 'auto !important',
+            overflow: 'initial !important',
+        },
         sectionTop: {
             marginTop:0,
             padding: 40,
@@ -133,6 +138,22 @@ const PDFKeyBackup = (props) => {
             backgroundColor:'#ddd',
             borderRadius:15,
             webkitBorderRadius:15,
+        },
+        alertDanger: {
+            backgroundColor:'#f8d7da',
+            color: '#721c24',
+            borderWidth:1,
+            borderColor:'#f5c6cb',
+            borderStyle:'solid',
+            display:'inline-block',
+            fontSize:20,
+            padding:4,
+            paddingTop:0,
+            paddingBottom:0,
+            paddingLeft:10,
+            paddingRight:10,
+            marginLeft:20,
+            marginBottom:10
         }
     });
 
@@ -152,13 +173,13 @@ const PDFKeyBackup = (props) => {
 
 //console.log('qr  is ', qr);
     return (
-        <div className={props.qrtype==='printable'?'printPage':null}>
+        <div style={props.qrtype==='printable'?styles.printPage:null}>
             <div style={styles.page}>
                  <div style={styles.sectionTop}>
                     <div style={{display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between'}}>
                         <div style={styles.vaultTitle}>
                             Kosign Vault Key
-                            <span className={'alert alert-danger'} style={{display:'inline-block', fontSize:20, padding:8, marginLeft:40, marginBottom:0}}>
+                            <span style={styles.alertDanger}>
                           <b>!! IMPORTANT !!</b>
                       </span>
                         </div>
@@ -199,224 +220,10 @@ const PDFKeyBackup = (props) => {
                         </div>
                     </div>
                 </div>
-
             </div>
-            {/*<div className={'pagebreak'}></div>*/}
         </div>
     )
 
-    /*return (
-        <Document>
-            <Page size="A4" style={styles.page}>
-                <View style={styles.sectionTop}>
-                    <View style={styles.vaultTitleWrapper}>
-                        <Text style={styles.vaultTitle}>Kosign - Key</Text>
-                        <Text style={styles.timestamp}>
-                            {formatTime(props.createdTimestamp)}
-                        </Text>
-                    </View>
-                    <View style={styles.vaultText}><Text style={styles.vaultTextBold}>Vault Name:</Text><Text>{props.vaultName}</Text></View>
-                    <View style={styles.vaultText}><Text style={styles.vaultTextBold}>Description:</Text><Text>{props.description}</Text></View>
-                    {/!*<View><Text>{props.threshold} of {props.shares}</Text></View>*!/}
-                </View>
-                <View style={styles.sectionBottom}>
-                    <View>
-                        <Text>
-                            Keep secure away from cameras.
-                        </Text>
-                    </View>
-                    <View style={styles.QRWrapper}>
-                        <Image src={qr} />
-                    </View>
-                </View>
-            </Page>
-        </Document>
-    );*/
-
-    /**
-     *
-     *
-     *
-     *
-
-
-     <div className={'pageWrapper PDFDocument'}>
-
-     <Container>
-     <div className={'pageNavWrapper'}>
-     <Row>
-     <Col xs={{span: 12}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-     <h2 className={'pageTitle'}>Kosign Vault Key: {props.vaultName}</h2>
-     </Col>
-     <Col xs={{span: 12}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-     <div className={'PDFInstructions'}>
-     Important! Please keep this document secure.
-     </div>
-     </Col>
-     </Row>
-     </div>
-
-     <Row>
-     <Col xs={{span: 12}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
-     <div className={'vaultPageInnerWrapper'}>
-     <div className={'vaultBodyRow'}>
-     <Row>
-     <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-     <div className={'tableTitle'}>Vault Name</div>
-     </Col>
-     <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-     <div className={'longHash'}>{props.vaultName}</div>
-     </Col>
-     </Row>
-     </div>
-     <div className={'vaultBodyRow'}>
-     <Row>
-     <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-     <div className={'tableTitle'}>Vault ID</div>
-     </Col>
-     <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-     <div className={'longHash'}>{props.vaultIdent}</div>
-     </Col>
-     </Row>
-     </div>
-     <div className={'vaultBodyRow'}>
-     <Row>
-     <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-     <div className={'tableTitle'}>Key ID</div>
-     </Col>
-     <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-     <div className={'longHash'}>{props.keyId}</div>
-     </Col>
-     </Row>
-     </div>
-     <div className={'vaultBodyRow'}>
-     <Row>
-     <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-     <div className={'tableTitle'}>Description</div>
-     </Col>
-     <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-     <div className={'longHash'}>{props.description}</div>
-     </Col>
-     </Row>
-     </div>
-     {/!*<div className={'vaultBodyRow'}>
-                                    <Row>
-                                        <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-                                            <div className={'tableTitle'}>Owner
-                                            </div>
-                                        </Col>
-                                        <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-                                            <div style={{display: 'inline-block'}}>
-                                                <Avatar name={owner.username} size={40} round="60px"
-                                                    color={'#999'}/>
-                                                <span>{props.owner.username}</span>
-                                            </div>
-                                        </Col>
-
-                                    </Row>
-                                </div>*!/}
-     <div className={'vaultBodyRow'}>
-     <Row>
-     <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-     <div className={'tableTitle'}>Created</div>
-     </Col>
-     <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-     <div style={{display: 'inline-block'}}>
-     {formatTime(props.createdTimestamp)}
-     </div>
-     </Col>
-     </Row>
-     </div>
-
-
-     {/!* <div className={'vaultBodyRow'}>
-                                    <Row>
-                                        <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-                                            <div className={'tableTitle'}>Threshold</div>
-                                        </Col>
-                                        <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-                                            <div style={{display: 'inline-block'}}>{props.threshold} of {props.shares}</div>
-                                        </Col>
-                                    </Row>
-                                </div>*!/}
-
-     {/!*<div className={'vaultBodyRow'} style={{borderBottom:0}}>
-                                    <Row>
-                                        <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-                                            <div className={'tableTitle'}>Key Guardians</div>
-                                        </Col>
-                                        <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-                                            <div>
-                                                <div className={'keyholdersSectionWrapper'} >
-                                                    {props.unlockShares.map((share, i) => {
-                                                        if (props.vaultUsers[i]) {
-                                                            return (
-                                                                <div key={'share_' + i} className={'keyholderWrapper alert-success'}>
-                                                                    <span className={'avatarWrapper'}>
-                                                                        {props.vaultUsers[i].hasKeys ?
-                                                                            <FaLock className={'avatarBadge hasKeys'}/> :
-                                                                            <BiError className={'avatarBadge noKeys'}/>}
-                                                                    </span>
-                                                                    {props.vaultUsers[i].username}
-                                                                    <div className={'keyStatusAlertWrapper'}>{props.vaultUsers[i].hasKeys ?
-                                                                        <div className={'text-success keyStatusAlert'}>Accepted</div> :
-                                                                        <div className={'text-danger keyStatusAlert'}>Pending</div>}
-                                                                    </div>
-                                                                </div>
-                                                            );
-                                                        } else {
-                                                            return (
-                                                                <div key={'share_' + i} className={'keyholderWrapper alert-danger'}>
-                                                                    <span className={'avatarWrapper'}>
-                                                                        <BiError className={'avatarBadge noKeys'}/>
-                                                                    </span>
-                                                                    <i>?????</i>
-                                                                    <div className={'keyStatusAlertWrapper'}>
-                                                                        <div className={'text-danger keyStatusAlert'}>Pending</div>
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        }
-                                                    })}
-                                                </div>
-
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </div>*!/}
-     </div>
-     </Col>
-     </Row>
-
-     <Row>
-     <Col xs={{span: 12}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
-     <div className={'PDFQRWrapper'} style={{paddingTop:0}}>
-     <div className="alert alert-danger">Unencrypted key. Keep secure. Keep away from cameras.</div>
-     <div style={{marginTop:50}}>
-     <QRCode id='qrcodekey' value={props.myDecryptedKey} size={300} />
-     </div>
-     </div>
-     </Col>
-     {/!*<Col xs={{span: 12}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                            <div className={'PDFQRWrapper'}>
-                                <div><h3>Cipher IV</h3></div>
-                                <QRCode id='qrcodecipheriv' value={props.cipherIV} size={300}/>
-                            </div>
-                        </Col>*!/}
-     </Row>
-
-
-
-
-     </Container>
-     </div>
-
-
-
-     *
-     *
-     *
-     */
 };
 
 export default PDFKeyBackup;

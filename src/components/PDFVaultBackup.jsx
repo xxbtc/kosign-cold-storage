@@ -1,24 +1,8 @@
 import React, { Component, useState, useEffect } from 'react'
-import { Link, useNavigate} from 'react-router-dom'
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Layout from "../components/Layout";
-import {Button, Carousel, CarouselItem, Form, FormGroup, FormLabel, FormText} from 'react-bootstrap';
-import '../style/index.css';
-import '../style/forms.css';
-import '../style/dashboardPage.css';
-import {BiError} from 'react-icons/bi';
-import {FaLock} from 'react-icons/fa';
-
 import moment from 'moment-timezone';
-
-import { jsPDF } from "jspdf";
-
 import QRCode from 'qrcode.react';
-
 import QRCode2 from 'qrcode';
-import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
+import {StyleSheet, Image } from '@react-pdf/renderer';
 
 const PDFVaultBackup = (props) => {
      //   console.log(props);
@@ -99,6 +83,11 @@ const PDFVaultBackup = (props) => {
     };
 
     const styles = StyleSheet.create({
+        printPage: {
+            pageBreakBefore: 'always',
+            height: 'auto !important',
+            overflow: 'initial !important',
+        },
         page: {
             flexDirection: 'column',
             backgroundColor: '#fff',
@@ -213,7 +202,6 @@ const PDFVaultBackup = (props) => {
             right:0,
             top:6,
         },
-
         alert: {
             backgroundColor:'#cfe2ff',
             color:'#084298',
@@ -240,6 +228,22 @@ const PDFVaultBackup = (props) => {
             backgroundColor:'#ddd',
             borderRadius:15,
             webkitBorderRadius:15,
+        },
+        alertDanger: {
+            backgroundColor:'#f8d7da',
+            color: '#721c24',
+            borderWidth:1,
+            borderColor:'#f5c6cb',
+            borderStyle:'solid',
+            display:'inline-block',
+            fontSize:20,
+            padding:4,
+            paddingTop:0,
+            paddingBottom:0,
+            paddingLeft:10,
+            paddingRight:10,
+            marginLeft:20,
+            marginBottom:10
         }
     });
 
@@ -275,7 +279,7 @@ const PDFVaultBackup = (props) => {
               <div style={{height:60,display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
                     <div style={styles.vaultTitle}>
                         Kosign Data Vault
-                        <span className={'alert alert-danger'} style={{display:'inline-block', fontSize:20, padding:4, paddingTop:0, paddingBottom:0, paddingLeft:10, paddingRight:10, marginLeft:20, marginBottom:0}}>
+                        <span style={styles.alertDanger}>
                             <b>!! IMPORTANT !!</b>
                         </span>
                     </div>
@@ -284,7 +288,7 @@ const PDFVaultBackup = (props) => {
                     </div>
               </div>
               {forceShowFullHeader?
-              <div className={'alert alert-default'} style={{margin:0, padding:10, paddingLeft:0}}>
+              <div style={{marginTop:10,marginBottom:20}}>
                   Unlock at <a className={'linkage'} href={'https://kosign.xyz/unlock'}>https://kosign.xyz/unlock</a>
               </div>
               :null}
@@ -344,7 +348,7 @@ const PDFVaultBackup = (props) => {
         <div>
 
             {qrArray.map((row, i) =>
-                <div className={i%2===1?'printPage':null}>
+                <div style={i%2===1?styles.printPage:null}>
                     <div style={styles.page}>
                         {i===0?renderVaultHeader(i, true):null}
 
@@ -366,241 +370,7 @@ const PDFVaultBackup = (props) => {
             )}
         </div>
     );
-    /*
-    return (
-        <div className={'printable'}>
-            <div style={styles.page}>
 
-                {renderVaultHeader(1, true)}
-
-                <div style={styles.sectionBottom}>
-                    <div style={styles.QRWrapper}>
-                        {qrArray.map((row, i) =>
-                            <div key={'anotherkey'+i} style={styles.QRWrapperMiddle}>
-                                {i % 2 === 1?
-                                    <div>
-                                        <div className={'pagebreak'}></div>
-                                        <div style={{marginTop:50}}>
-                                            {renderVaultHeader(i, false)}
-                                        </div>
-                                    </div>
-                                    :<div style={{background:'red'}}>x<br/>sdfsfsfs<br/>xxxxxxxx</div>
-                                }
-                                <div key={'qrrowid'+i} style={styles.QRRow}>
-                                    {row.map((qrData, ii) => renderQR(qrData, ii, i))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );*/
-
-   /* return (
-        <Document
-            author      = {'kosign.xyz'}
-            producer    = {'kosign.xyz'}
-            creator     = {'kosign.xyz'}
-            subject     = {props.vaultName}
-            title       = {'Kosign Vault'}
-        >
-            <Page size="A4" style={styles.page}>
-
-                <View style={styles.vaultTitleWrapper} fixed>
-                    <Text style={styles.vaultTitle}>Kosign - Vault</Text>
-                    <View style={styles.timestamp}>
-                            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (
-                                `page ${pageNumber} of ${totalPages}`
-                            )} fixed />
-                    </View>
-
-                    <View style={styles.vaultText} render={({ pageNumber, totalPages }) => {
-                        return(<View>{pageNumber > 1 ? <Text>{props.vaultName}</Text> : null}</View>)
-                    }}>
-                        <Text style={styles.vaultTextBold}>Vault Name:</Text>
-
-                    </View>
-
-                </View>
-
-                <View style={styles.sectionTop}>
-                    <View style={styles.vaultText}>
-                        <Text>
-                            <Text style={styles.vaultTextBold}>Vault Name: </Text>
-                            <Text>{props.vaultName}</Text>
-                        </Text>
-                    </View>
-                    <View style={styles.vaultText}>
-                        <Text>
-                            <Text style={styles.vaultTextBold}>Description: </Text>
-                            <Text>{props.description}</Text>
-                        </Text>
-                    </View>
-                    <View style={styles.vaultText}>
-                        <Text>
-                            <Text style={styles.vaultTextBold}>Threshold: </Text>
-                            <Text>{props.threshold} of {props.shares.length}</Text>
-                        </Text>
-                    </View>
-                    <View style={styles.vaultText}>
-                        <Text>
-                            <Text style={styles.vaultTextBold}>Created: </Text>
-                            <Text>{formatTime(props.createdTimestamp)}</Text>
-                        </Text>
-                    </View>
-
-                    {/!*<View><Text>{props.threshold} of {props.shares}</Text></View>*!/}
-                </View>
-
-                <View style={styles.sectionBottom}>
-                    <View style={styles.alert} fixed>
-                        <Text>
-                            Keep secure and away from cameras.
-                        </Text>
-                    </View>
-                    <View style={styles.QRWrapper}>
-                        {qrArray.map((row) =>
-                            <View style={styles.QRRow} wrap={false}>
-                                {row.map((qrData) => renderQR(qrData))}
-                            </View>
-                        )}
-                    </View>
-                </View>
-            </Page>
-        </Document>
-    );*/
-
-
-
-    /*return (
-        <Layout>
-
-            <div className={'pageWrapper PDFDocument'}>
-
-                <Container>
-                    <div className={'pageNavWrapper'}>
-                        <Row>
-                            <Col xs={{span: 12}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                                <h2 className={'pageTitle'}>Kosign Vault: {props.vaultName}</h2>
-                            </Col>
-                            <Col xs={{span: 12}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                                {/!*<div className={'PDFInstructions'}>
-                                    Recover at: <Link to={'/recover'}>https://kosign.xyz/recover</Link>
-                                </div>*!/}
-                            </Col>
-                        </Row>
-                    </div>
-
-                    <Row>
-                        <Col xs={{span: 12}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
-                            <div className={'vaultPageInnerWrapper'}>
-                                <div className={'vaultBodyRow'}>
-                                    <Row>
-                                        <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-                                            <div className={'tableTitle'}>Vault Name</div>
-                                        </Col>
-                                        <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-                                            <div className={'longHash'}>{props.vaultName}</div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                                <div className={'vaultBodyRow'}>
-                                    <Row>
-                                        <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-                                            <div className={'tableTitle'}>Vault ID</div>
-                                        </Col>
-                                        <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-                                            <div className={'longHash'}>{props.vaultIdent}</div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                                <div className={'vaultBodyRow'}>
-                                    <Row>
-                                        <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-                                            <div className={'tableTitle'}>Description</div>
-                                        </Col>
-                                        <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-                                            <div className={'longHash'}>{props.description}</div>
-                                        </Col>
-                                    </Row>
-                                </div>
-                               {/!* <div className={'vaultBodyRow'}>
-                                    <Row>
-                                        <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-                                            <div className={'tableTitle'}>Owner
-                                            </div>
-                                        </Col>
-                                        <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-                                            <div style={{display: 'inline-block'}}>
-                                                <Avatar name={owner.username} size={40} round="60px"
-                                                    color={'#999'}/>
-                                                <span>{props.owner.username}</span>
-                                            </div>
-                                        </Col>
-
-                                    </Row>
-                                </div>*!/}
-                                <div className={'vaultBodyRow'}>
-                                    <Row>
-                                        <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-                                            <div className={'tableTitle'}>Created</div>
-                                        </Col>
-                                        <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-                                            <div style={{display: 'inline-block'}}>
-                                                {formatTime(props.createdTimestamp)}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </div>
-
-
-                                <div className={'vaultBodyRow'}>
-                                    <Row>
-                                        <Col xs={{span: 12}} md={{span: 4, offset: 0}} lg={{span: 2, offset: 0}}>
-                                            <div className={'tableTitle'}>Threshold</div>
-                                        </Col>
-                                        <Col xs={{span: 12}} md={{span: 8, offset: 0}} lg={{span: 10, offset: 0}}>
-                                            <div style={{display: 'inline-block'}}>{props.threshold} of {props.shares.length}</div>
-                                        </Col>
-                                    </Row>
-                                </div>
-
-
-                            </div>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col xs={{span: 6}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                            <div className={'PDFQRWrapper'} style={{paddingTop:0}}>
-                                <div className="alert alert-success">Encrypted</div>
-                                <div><h3>Vault Contents</h3></div>
-                                <QRCode id='qrcodeciphertext' value={props.cipherText} size={350}/>
-                            </div>
-                        </Col>
-                        <Col xs={{span: 6}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                            <div className={'PDFQRWrapper'} style={{paddingTop:0}}>
-                                <div className="alert">&nbsp;</div>
-                                <div><h3>Metadata</h3></div>
-                                <QRCode id='qrcodemetadata' value={metadata} size={350}/>
-                            </div>
-                        </Col>
-                        {/!*<Col xs={{span: 12}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                            <div className={'PDFQRWrapper'}>
-                                <div><h3>Cipher IV</h3></div>
-                                <QRCode id='qrcodecipheriv' value={props.cipherIV} size={300}/>
-                            </div>
-                        </Col>*!/}
-                    </Row>
-
-
-
-
-                </Container>
-            </div>
-        </Layout>
-    )*/
 };
 
 export default PDFVaultBackup;
