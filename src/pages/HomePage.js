@@ -236,6 +236,32 @@ function Homepage(props) {
                 </Col>
             </Row>
 
+
+            <div style={{position:'relative', marginTop:-50}}>
+                <img src={layerPeaks} style={{width:'100%', marginBottom:-2}}  />
+            </div>
+
+
+            <Row  style={{backgroundColor:'#1786ff'}}>
+                <div className={'homepageUseCasesRow'}>
+                    <div className={'rowTitle'} style={{color:'#fff'}}>See a demo</div>
+                    <Col xs={{span:12, offset:0}} md={{span:12, offset:0}} lg={{span:12, offset:0}} style={{textAlign:'center', marginTop:30, marginBottom:60}}>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/3gF414HSJFQ"
+                                title="YouTube video player" frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen></iframe>
+                    </Col>
+                </div>
+            </Row>
+
+            <div style={{position:'relative', marginTop:-70, marginBottom:-3}}>
+                <img src={layerPeaks} style={{width:'100%'}} className={'flipImage'} />
+            </div>
+
+
+
+
+
             <HomepageFAQ/>
 
             <Footer />
