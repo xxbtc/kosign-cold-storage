@@ -33,6 +33,7 @@ import HomepageReasons from '../components/HomepageReasons';
 import HomepageTestimonials from '../components/HomepageTestimonials';
 import {FaCheck} from 'react-icons/fa';
 import Cookies from "universal-cookie";
+import {FaTwitter, FaMedium} from 'react-icons/fa';
 
 
 function Homepage(props) {
@@ -221,6 +222,14 @@ function Homepage(props) {
                {/* <div style={{marginTop:20}}>
                     <span className={'alert alert-info'} style={{fontSize:18}}><b>FREE</b> beta</span>
                 </div>*/}
+
+                <div className={'alert alert-warning'} style={{marginTop:20, fontSize:'1.2rem', display:'inline-block'}}>
+                    <b><FaTwitter style={{color:'#00acee'}} /> We're building our twitter account!</b>
+                    <div>
+                        Follow and DM&nbsp;<a href={'https://twitter.com/kosign_xyz'} target={'_blank'} className={'linkage'}>@kosign_xyz</a>&nbsp;
+                        to get a free $50 coupon code.
+                    </div>
+                </div>
             </div>
 
             <Row>

@@ -18,6 +18,7 @@ import Footer from '../components/Footer';
 import {MdCancel} from 'react-icons/md';
 import {FaCheck} from 'react-icons/fa';
 import Cookies from 'universal-cookie';
+import {FaTwitter, FaMedium} from 'react-icons/fa';
 
 
 
@@ -92,6 +93,7 @@ function PricingPage() {
                             </Col>*/}
 
                             <Col xs={{span:12}} md={{span:10, offset:1}} lg={{span:8, offset:2}} style={{paddingTop:10}}>
+
                                 <div className={'highlightColumn '}>
                                     <div style={{textAlign:'center', fontWeight:'bold', paddingTop:4, paddingBottom:4, color:'#fff'}}>One-time payment</div>
                                     <div className={'pricingColumn'}>
@@ -151,6 +153,15 @@ function PricingPage() {
 
                                     </div>
                                 </div>
+
+                                <div className={'alert alert-warning'} style={{marginTop:20}}>
+                                    <b><FaTwitter style={{color:'#00acee', fontSize:22}} /> We're building our twitter account!</b>
+                                    <div>
+                                        Follow and DM&nbsp;<a href={'https://twitter.com/kosign_xyz'} target={'_blank'} className={'linkage'}>@kosign_xyz</a>&nbsp;
+                                        to get a free $50 coupon code.
+                                    </div>
+                                </div>
+
                             </Col>
 
                             {/* <Col xs={{span:12}} md={{span:4, offset:0}} lg={{span:4, offset:0}} style={{paddingTop:40}}>
