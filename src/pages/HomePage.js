@@ -224,11 +224,10 @@ function Homepage(props) {
                 </div>*/}
 
                 <div className={'alert alert-warning'} style={{marginTop:20, fontSize:'1.2rem', display:'inline-block'}}>
-                    <b><FaTwitter style={{color:'#00acee'}} /> We're building our twitter account!</b>
-                    <div>
-                        Follow and DM&nbsp;<a href={'https://twitter.com/kosign_xyz'} target={'_blank'} className={'linkage'}>@kosign_xyz</a>&nbsp;
-                        to get a free $50 coupon code.
-                    </div>
+                    <b>
+                        <FaTwitter style={{color:'#00acee'}} />
+                        &nbsp;Follow and DM&nbsp;<a href={'https://twitter.com/kosign_xyz'} target={'_blank'} className={'linkage'}>@kosign_xyz</a>&nbsp; for a free $50 coupon code
+                    </b>
                 </div>
             </div>
 
