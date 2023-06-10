@@ -132,7 +132,10 @@ function UnlockPage() {
     }
 
 
-    const scannedSomething = (data) => {
+    const scannedSomething = (data, error) => {
+        if (error) {
+            return;
+        }
         //console.log('scanned SOMETHING', data);
        // console.log('processing is ', isProcessing, scanType);
         if (isProcessing) return;
@@ -277,8 +280,7 @@ function UnlockPage() {
                         </Col>
                     </Row>
 
-                    <Row>
-                        <Col xs={{span: 12, offset: 0}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
+
                             <div className={'pageWrapperInner'}>
                                 <Row style={{alignItems: 'center', position:'relative'}}>
                                     <Col xs={{span: 12, offset: 0}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
@@ -346,41 +348,26 @@ function UnlockPage() {
                                             {wizardStep === 2 ?
                                                 <Row>
                                                     <Col xs={{span: 12, offset: 0}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-
-
-                                                        {isProcessing ? null :
-                                                            <QrReader
-
-                                                                onResult={(result, error) => {
-                                                                    if (!!result) {
-                                                                        try {
-                                                                            scannedSomething(result?.text);
-                                                                        } catch (e) {
-                                                                            //  console.log('errrrrr',e);
-                                                                        }
-                                                                    }
-                                                                    if (!!error) {
-                                                                        //   console.info('scan error', error);
-                                                                    }
-                                                                }}
-                                                                containerStyle={{
-                                                                    width: '100%',
-                                                                    borderRadius: 15,
-                                                                    height: 'auto',
-                                                                    margin: 'auto',
-                                                                    padding: 0,
-                                                                    marginTop: 0,
-                                                                    background: '#fff'
-                                                                }}
-                                                                videoStyle={{
-                                                                    width: '100%',
-                                                                    height: 'auto',
-                                                                    borderRadius: 15,
-                                                                    margin: 0,
-                                                                    padding: 0
-                                                                }}
-                                                            />
-                                                        }
+                                                        {isProcessing?null:<QrReader
+                                                            key={'qrreaderkey_'+numOfQRsScanned+'_'+scanType+'_'+numOfQRKEYSsScanned}
+                                                            onResult={(result, error) => scannedSomething(result?.text, error)}
+                                                            containerStyle={{
+                                                                width: '100%',
+                                                                borderRadius: 15,
+                                                                height: 'auto',
+                                                                margin: 'auto',
+                                                                padding: 0,
+                                                                marginTop: 0,
+                                                                background: '#fff'
+                                                            }}
+                                                            videoStyle={{
+                                                                width: '100%',
+                                                                height: 'auto',
+                                                                borderRadius: 15,
+                                                                margin: 0,
+                                                                padding: 0
+                                                            }}
+                                                        />}
                                                     </Col>
                                                     <Col xs={{span: 12, offset: 0}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
 
@@ -441,8 +428,10 @@ function UnlockPage() {
                                     </Col>
                                 </Row>
                             </div>
-                        </Col>
-                    </Row>
+                            <div style={{textAlign:'center'}}>
+                                The unlock tool is also available <a href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>on Github</a>
+                            </div>
+
                 </Container>
             </div>
         </Layout>

@@ -73,6 +73,16 @@ function HomepageFAQ(props) {
                                     Kosign vaults are secured by AES 256 bits
                                 </Accordion.Body>
                             </Accordion.Item>
+                            <Accordion.Item eventKey="4" className={'accordionItem'}>
+                                <Accordion.Header>Can I unlock my vault if the website is down?</Accordion.Header>
+                                <Accordion.Body>
+                                    Yes! The unlock tool can run locally on your computer.
+                                    Get the <a href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>source code on Github</a>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+
+
 
                         </Accordion>
                     </Col>
