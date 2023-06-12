@@ -57,9 +57,9 @@ h4 {
 }
 
 .layoutWrapper {
-    display: flex;
+    /*display: flex;
     flex:1;
-    flex-direction: column;
+    flex-direction: column;*/
 }
 
 .linkage {
