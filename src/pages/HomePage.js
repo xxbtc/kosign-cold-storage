@@ -38,12 +38,9 @@ import {FaTwitter, FaMedium} from 'react-icons/fa';
 
 function Homepage(props) {
 
-    const navigate = useNavigate();
-    const cookies   = new Cookies();
-
-
-    const pricingRef = useRef(null);
-
+    const navigate      = useNavigate();
+    const cookies       = new Cookies();
+    const pricingRef    = useRef(null);
 
     /* const navigate = useNavigate();
      const location = useLocation();
@@ -95,7 +92,7 @@ function Homepage(props) {
                                 </div>
                                 <div className={'heroSubtitle'}>
                                     <div>
-                                        Backup your passwords on a paper-based cold storage
+                                        Backup passwords on a paper-based cold storage
                                         vault with distributed keys and social recovery.
                                         {/*Secure enough that you can frame it on your wall.*/}
                                     </div>
