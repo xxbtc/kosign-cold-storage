@@ -254,6 +254,7 @@ function CreateVault(props) {
             }
             if (totalCost===0) {
                 setIsPaymentComplete(true);
+                setMaxChars(global.maxCharsPerVaultFree);
                 setWizardStep(wizardStep +2);
                 return;
             }

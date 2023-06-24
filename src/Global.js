@@ -10,7 +10,7 @@ global.stripePubKey = 'pk_test_I4rOTLfBxkIH2dqZ1c8iTr2400Pjy6dJbv';
 global.costPerKey = 10;
 global.setupCost  = 0;
 global.freeKeys   = 2;
-global.maxCharsPerVaultFree = 1000;
+global.maxCharsPerVaultFree = 300;
 global.maxCharsPerVault = 5000;
 //global.regularURL = 'http://xxxxxx.localhost/api/index.php/';
 
