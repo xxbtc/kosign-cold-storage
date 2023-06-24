@@ -77,16 +77,19 @@ export class PaymentService  {
 
 
 
-    static getIntent = async (clientSecret) => {
+    static notification = async (data) => {
         const cookies   = new Cookies();
-     //   const apikey    =  cookies.get('quorum');
+        //  const apikey    =  cookies.get('quorum');
+
         let params      = new FormData();
-        params.append('clientSecret', clientSecret );
+        params.append('data', data );
+
+
         //console.log('[requestUnlock] ', params);
-        return axios.post(global.apiURL+'pay/getIntent', params,
+        return axios.post(global.apiURL+'pay/notification', params,
             {
                 headers: {
-                    //'Authorization': 'Bearer '+ apikey,
+                    //   'Authorization': 'Bearer '+ apikey,
                     'Content-Type': `multipart/form-data; charset=utf-8; boundary=${params._boundary}`,
                 }
             })

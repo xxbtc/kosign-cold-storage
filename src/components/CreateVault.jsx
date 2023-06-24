@@ -253,9 +253,16 @@ function CreateVault(props) {
                 return;
             }
             if (totalCost===0) {
-                setIsPaymentComplete(true);
-                setMaxChars(global.maxCharsPerVaultFree);
-                setWizardStep(wizardStep +2);
+                PaymentService.notification(JSON.stringify({type:'freevault',vaultName:vaultName,keys:totalShareholders,threshold:consensus})).then((response)=>{
+                    setIsPaymentComplete(true);
+                    setMaxChars(global.maxCharsPerVaultFree);
+                    setWizardStep(wizardStep +2);
+                }).catch(error => {
+                    alert ('Error, please check your connection and try again');
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                });
                 return;
             }
             setWizardStep(wizardStep + 1);
