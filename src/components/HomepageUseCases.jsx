@@ -22,7 +22,7 @@ function HomepageUseCases(props) {
     return (
         <div className={'homepageUseCasesRow'}>
             <Container style={{zIndex:100, position:'relative'}}>
-                <div className={'rowTitle'}>Long term backup for critical data</div>
+                <div className={'rowTitle'}>Your emergency backup for critical data</div>
                 <Row>
                     <Col xs={{span:12, offset:0}} md={{span:4, offset:0}} lg={{span:4, offset:0}}>
                         <div  className={'useCase'}>

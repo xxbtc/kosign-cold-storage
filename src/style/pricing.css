@@ -57,14 +57,13 @@
     color:#00CC00;
     margin-right: 6px;
     align-self: start;
+
 }
 .pricingFeature {
-    padding:10px 0px;
+
     font-family: "Graphik", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
     letter-spacing: -.5px;
-    display: flex;
-    flex-direction: column;
-    flex:1;
+    padding:4px 0px;
 }
 
 .highlightColumn {
@@ -77,6 +76,7 @@
 .pricingFeature .text-muted {
     display: block;
     font-size:0.8rem;
+
 }
 
 .pricingActionWrapper {

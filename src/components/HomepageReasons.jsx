@@ -103,11 +103,11 @@ function HomepageReasons(props) {
                     <Row>
                         <Col xs={{span:12, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
                             <div className={'homepageReasonText'}>
-                                <div>Print your vault</div>
+                                <div>1. Create a vault</div>
                                 <p>
-                                    Create your vault 100% offline.
-                                    Print it out and store it trustlessly.
-                                    Keep copies of your vault in different locations, just in case!
+                                    Create your encrypted vault securely (100% offline!).
+                                    Print it out and keep copies in different locations.
+                                    Don't worry, nobody can open the vault without the keys.
                                 </p>
                             </div>
                         </Col>
@@ -135,11 +135,12 @@ function HomepageReasons(props) {
                     <Row>
                         <Col xs={{span:12, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}  className={'order-sm-last'}>
                             <div className={'homepageReasonText'}>
-                                <div>Delegate keys</div>
+                                <div>2. Mint keys</div>
                                 <p>
-                                    Distribute paper keys to trusted individuals,
+                                    Distribute up to 20 keys to trusted individuals,
                                     and set how many are needed to unlock the vault,
                                     e.g. 5-out-of-20.
+                                    Social recovery ensures you can access your vault even if you lost your key.
                                 </p>
                             </div>
                         </Col>

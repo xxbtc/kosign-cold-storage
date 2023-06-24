@@ -161,7 +161,11 @@ function CreateVault(props) {
     }, [wizardStep]);
 
     useEffect(()=>{
-       setTotalCost((totalShareholders*global.costPerKey) + (global.setupCost));
+        let tmpTotalCost = (totalShareholders * global.costPerKey) + (global.setupCost) - (global.freeKeys*global.costPerKey);
+        if (tmpTotalCost<0) {
+            tmpTotalCost = 0;
+        }
+       setTotalCost(tmpTotalCost);
     }, [totalShareholders]);
 
     useEffect (()=>{
@@ -246,6 +250,11 @@ function CreateVault(props) {
 
         } else {
             if (wizardStep > 2 && !isPaymentComplete) {
+                return;
+            }
+            if (totalCost===0) {
+                setIsPaymentComplete(true);
+                setWizardStep(wizardStep +2);
                 return;
             }
             setWizardStep(wizardStep + 1);

@@ -88,11 +88,12 @@ function Homepage(props) {
                             <div className={'homepageH1Inner'}>
                                 <div className={'homepageH1pretitle'}>Multi-signature cold storage</div>
                                 <div className={'actualTitle'}>
-                                    <div>Backup your passwords on a paper data vault</div>
+                                    {/*<div>Backup your passwords on a paper data vault</div>*/}
+                                    <div>Your cold storage password vault</div>
                                 </div>
                                 <div className={'heroSubtitle'}>
                                     <div>
-                                        Backup passwords on a paper-based cold storage
+                                        Backup passwords and other critical data on a paper-based cold storage
                                         vault with distributed keys and social recovery.
                                         {/*Secure enough that you can frame it on your wall.*/}
                                     </div>
@@ -101,10 +102,10 @@ function Homepage(props) {
                                 <div>
                                     <div className={'featureChecklist'}>
                                         <div className={'featureCheckWrapper'}>
-                                            <FaCheck className={'featureCheck'} /> 100% offline backup
+                                            <FaCheck className={'featureCheck'} /> Get started free
                                         </div>
                                         <div className={'featureCheckWrapper'}>
-                                            <FaCheck className={'featureCheck'} /> Keep it forever
+                                            <FaCheck className={'featureCheck'} /> 100% offline
                                         </div>
                                         <div className={'featureCheckWrapper'}>
                                             <FaCheck className={'featureCheck'} /> Social recovery
@@ -214,19 +215,9 @@ function Homepage(props) {
 
             <HomepageTestimonials/>
 
-            <div  className={'homepagePricingRow'} style={{paddingTop:40, paddingLeft:70, paddingRight:70}}>
+           {/* <div  className={'homepagePricingRow'} style={{paddingTop:40, paddingLeft:70, paddingRight:70}}>
                 <div ref={pricingRef} style={{fontWeight:'bold'}}>${global.setupCost} per vault + ${global.costPerKey} per key</div>
-               {/* <div style={{marginTop:20}}>
-                    <span className={'alert alert-info'} style={{fontSize:18}}><b>FREE</b> beta</span>
-                </div>*/}
-
-                <div className={'alert alert-warning'} style={{marginTop:20, fontSize:'1.2rem', display:'inline-block'}}>
-                    <b>
-                        <FaTwitter style={{color:'#00acee'}} />
-                        &nbsp;Follow and DM&nbsp;<a href={'https://twitter.com/kosign_xyz'} target={'_blank'} className={'linkage'}>@kosign_xyz</a>&nbsp; for a free $50 coupon code
-                    </b>
-                </div>
-            </div>
+            </div>*/}
 
             <Row>
                 <Col xs={{span:12, offset:0}} md={{span:12, offset:0}} lg={{span:12, offset:0}} style={{textAlign:'center', marginTop:30, marginBottom:60}}>

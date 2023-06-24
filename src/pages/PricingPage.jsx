@@ -47,7 +47,7 @@ function PricingPage() {
                     </Row>
                     <div style={{paddingLeft:30, paddingRight:30, marginTop:10}}>
                         <Row>
-                            {/*<Col xs={{span:12}} md={{span:4, offset:0}} lg={{span:4, offset:0}} style={{paddingTop:10, marginBottom:40}}>
+                            <Col xs={{span:12}} md={{span:4, offset:2}} lg={{span:4, offset:2}} style={{paddingTop:10, marginBottom:40}}>
                                 <div className={'pricingColumn'} style={{marginTop:30}}>
                                     <div className={'packageTitle'}>Free</div>
                                     <div className={'minidivider'}></div>
@@ -61,52 +61,34 @@ function PricingPage() {
                                         <Button
                                             variant={'primary'}
                                             size={'lg'}
-                                            onClick={() => navigate('create')}
+                                            onClick={() => navigate('/create')}
                                         >
                                             Get started free
                                         </Button>
                                     </div>
                                     <div className={'featureDivider'}></div>
                                     <div className={'pricingFeature'}>
-                                        <FaCheck className={'pricingCheck'}/> No credit card required
+                                        <FaCheck className={'pricingCheck'}/> up to {global.freeKeys} keys
                                     </div>
                                     <div className={'pricingFeature'}>
-                                        <FaCheck className={'pricingCheck'}/> 1 vault
-                                    </div>
-                                    <div className={'pricingFeature'}>
-                                        <div>
-                                            <FaCheck className={'pricingCheck'}/>
-                                        </div>
-                                        <div>
-                                            5 keys
-                                        </div>
-                                    </div>
-                                    <div className={'pricingFeature'}>
-                                        <div>
-                                            <FaCheck className={'pricingCheck'}/>
-                                        </div>
-                                        <div>
-                                            100 characters per vault
-                                        </div>
+                                        <FaCheck className={'pricingCheck'}/> {global.maxCharsPerVaultFree.toLocaleString()} character limit
                                     </div>
                                 </div>
-                            </Col>*/}
+                            </Col>
 
-                            <Col xs={{span:12}} md={{span:10, offset:1}} lg={{span:8, offset:2}} style={{paddingTop:10}}>
+                            <Col xs={{span:12}} md={{span:4, offset:0}} lg={{span:4, offset:0}} style={{paddingTop:10, marginBottom:40}}>
 
                                 <div className={'highlightColumn '}>
                                     <div style={{textAlign:'center', fontWeight:'bold', paddingTop:4, paddingBottom:4, color:'#fff'}}>One-time payment</div>
                                     <div className={'pricingColumn'}>
-                                        <div className={'packageTitle'}>${global.setupCost} per vault + ${global.costPerKey} per key </div>
+                                        <div className={'packageTitle'}>Pro</div>
                                         <div className={'minidivider'}></div>
-                                        {/*<div className={'packageSubtitleWrapper'}>
-                                            <div className={'packageSubtitle'}>
-
+                                        <div className={'packageSubtitleWrapper'}>
+                                            <div className={'packageSubtitle'}>$10</div>
+                                            <div className={'text-muted'}>
+                                                <div>per key</div>
                                             </div>
-                                        </div>*/}
-                                        {/*<div className={'text-muted'}>
-                                            <div>One-time payment</div>
-                                        </div>*/}
+                                        </div>
                                         <div className={'pricingActionWrapper'}>
                                             <Button
                                                 variant={'primary'}
@@ -114,118 +96,30 @@ function PricingPage() {
                                                 size={'lg'}
                                                 onClick={() => navigate('/create')}
                                             >
-                                                Create a vault
+                                                Create vault
                                             </Button>
                                         </div>
                                         <div className={'featureDivider'}></div>
-
-                                        <div style={{display:'flex', flex:1, flexDirection:'row', alignItems:'center'}}>
-                                            <div style={{display:'flex', flex:1, flexDirection:'column', alignItems:'start'}}>
-                                                <div className={'pricingFeature'}>
-                                                    <div><FaCheck className={'pricingCheck'}/> No signup </div>
-                                                    {/*<div className={'text-muted'}>&nbsp;</div>*/}
-                                                </div>
-                                                <div className={'pricingFeature'}>
-                                                    <div><FaCheck className={'pricingCheck'}/> Cold data storage</div>
-                                                </div>
-                                                {/*<div className={'pricingFeature'}>
-                                                    <div><FaCheck className={'pricingCheck'}/> Keep it forever</div>
-                                                </div>*/}
-                                               {/* <div className={'pricingFeature'}>
-                                                    <div><FaCheck className={'pricingCheck'}/> your custom unlock settings</div>
-                                                    <div className={'text-muted'}>Print your vault for offline storage</div>
-                                                </div>*/}
-                                            </div>
-                                            <div style={{display:'flex', flex:1, flexDirection:'column', alignItems:'start'}}>
-                                                <div className={'pricingFeature'}>
-                                                    <div><FaCheck className={'pricingCheck'}/> Print your vault on paper</div>
-                                                </div>
-                                                <div className={'pricingFeature'}>
-                                                    <div><FaCheck className={'pricingCheck'}/> Distribute keys to delegates</div>
-                                                </div>
-                                               {/* <div className={'pricingFeature'}>
-                                                    <div><FaCheck className={'pricingCheck'}/> up to {global.maxCharsPerVault} characters per vault</div>
-                                                </div>*/}
-                                            </div>
+                                        <div className={'pricingFeature'}>
+                                            <FaCheck className={'pricingCheck'}/> up to 20 keys
                                         </div>
-
+                                        <div className={'pricingFeature'}>
+                                            <FaCheck className={'pricingCheck'}/> 2 keys free
+                                        </div>
+                                        <div className={'pricingFeature'}>
+                                            <FaCheck className={'pricingCheck'}/> 5,000 character limit
+                                        </div>
 
 
                                     </div>
                                 </div>
-
-                                <div className={'alert alert-warning'} style={{marginTop:20}}>
-                                    <b>
-                                        <FaTwitter style={{color:'#00acee'}} />
-                                        &nbsp;Follow and DM&nbsp;<a href={'https://twitter.com/kosign_xyz'} target={'_blank'} className={'linkage'}>@kosign_xyz</a>&nbsp; for a free $50 coupon code
-                                    </b>
-                                </div>
-
                             </Col>
-
-                            {/* <Col xs={{span:12}} md={{span:4, offset:0}} lg={{span:4, offset:0}} style={{paddingTop:40}}>
-                                <div>
-                                    <div className={'pricingColumn'}>
-                                        <div className={'packageTitle'}>Enterprise</div>
-                                        <div className={'minidivider'}></div>
-                                        <div className={'packageSubtitleWrapper'}>
-                                            <div className={'packageSubtitle'}>
-                                                $199
-                                            </div>
-                                            <div className={'text-muted'}>
-                                                <div>per month</div>
-                                            </div>
-                                        </div>
-                                        <div className={'pricingActionWrapper'}>
-                                            <Button
-                                                variant={'primary'}
-                                                className={'highlightedButton'}
-                                                size={'lg'}
-                                                onClick={() => navigate('enterprise')}
-                                            >
-                                                Start 30 day free trial
-                                            </Button>
-                                        </div>
-                                        <div className={'featureDivider'}></div>
-                                        <div className={'pricingFeature'}>
-                                            <FaCheck className={'pricingCheck'}/> Includes all Pro features
-                                        </div>
-                                        <div className={'pricingFeature'}>
-                                            <FaCheck className={'pricingCheck'}/> 100 vaults
-                                        </div>
-                                        <div className={'pricingFeature'}>
-                                            <FaCheck className={'pricingCheck'}/> 20 keys per vault
-                                        </div>
-                                        <div className={'pricingFeature'}>
-                                            <div>
-                                                <FaCheck className={'pricingCheck'}/>
-                                            </div>
-                                            <div>
-                                                Webhooks
-                                                <span className={'text-muted'}>coming soon</span>
-                                            </div>
-                                        </div>
-                                        <div className={'pricingFeature'}>
-                                        <div>
-                                            <FaCheck className={'pricingCheck'}/>
-                                        </div>
-                                        <div>
-                                            SSO Authentication
-                                            <span className={'text-muted'}>coming soon</span>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </div>
-                            </Col>*/}
-
                         </Row>
                     </div>
                 </Container>
             </div>
 
             <Footer/>
-
-
         </Layout>
     )
 
