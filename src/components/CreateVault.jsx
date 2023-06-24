@@ -523,8 +523,23 @@ function CreateVault(props) {
                                                             </Button>
                                                         </div>
                                                         <div className={'costSummary'}>
-                                                            <div className={'formTotalCost'}>${totalCost} Total</div>
-                                                            <div className={'text-muted'}>${global.setupCost} per vault + ${totalShareholders*global.costPerKey} for {totalShareholders} keys</div>
+                                                            {totalCost === 0 ?
+                                                                <div>
+                                                                    <div
+                                                                        className={'formTotalCost'}>$0 free vault
+                                                                    </div>
+                                                                </div>
+                                                                :
+                                                                <div>
+                                                                    <div
+                                                                        className={'formTotalCost'}>${totalCost} Total
+                                                                    </div>
+                                                                    {/*<div className={'text-muted'}>
+                                                                        ${(totalShareholders * global.costPerKey) + (global.setupCost) - (global.freeKeys*global.costPerKey)}
+                                                                        &nbsp;for {totalShareholders} keys
+                                                                    </div>*/}
+                                                                </div>
+                                                            }
                                                         </div>
                                                     </div>
                                                 </FormGroup>
