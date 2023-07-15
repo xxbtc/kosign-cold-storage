@@ -260,7 +260,7 @@ const PDFVaultBackup = (props) => {
                 }
 
                 <div>
-                    {props.qrtype==='printable'?<QRCode id='qrcodekey' value={qrData.raw} size={230} />:null}
+                    {props.qrtype==='printable'?<QRCode id='qrcodekey' value={qrData.raw} size={260} />:null}
                     {props.qrtype==='downloadable'?
                         <Image src={qrData.qrCode} style={styles.QRImage}/>
                         :

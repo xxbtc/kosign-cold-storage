@@ -75,14 +75,14 @@ function CreateVault(props) {
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
     const [totalPages, setTotalPages] = useState();
 
-    const maxLengthPerQRCode = 1000;
+    const maxLengthPerQRCode = 600;
     const qrPerPage     = 4;
     const firstPageQR   = 2;
     const qrPerRow      = 2;
 
 
     const calculateHowManyPages = (value) => {
-        const totalQRs = Math.ceil(value.length / 1000)*qrPerRow;
+        const totalQRs = Math.ceil(value.length / 600)*qrPerRow;
         const remainingQRs = totalQRs - firstPageQR;
 
         const totalPages = 1 + Math.ceil(remainingQRs / qrPerPage);

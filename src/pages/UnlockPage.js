@@ -97,9 +97,11 @@ function UnlockPage() {
             setMetadata(jsonObject);
         } else {
             if (jsonObject.id !== (numOfQRsScanned+1)) {
-                alert ('please scan shard #'+(numOfQRsScanned));
-                setIsProcessing(false);
-                return;
+                if (jsonObject.id!='1002') {
+                    alert('please scan shard #' + (numOfQRsScanned));
+                    setIsProcessing(false);
+                    return;
+                }
             }
 
             setCipherData(cipherData+jsonObject.data);
