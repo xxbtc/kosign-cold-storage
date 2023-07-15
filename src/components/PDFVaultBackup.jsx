@@ -45,7 +45,7 @@ const PDFVaultBackup = (props) => {
                 data: props.cipherText.substr(i, maxLengthPerQRCode)
             });
             QRCode2.toCanvas(canvas, QRText);
-            tmpQRArray.push({qrCode:canvas.toDataURL(), id:c, raw:(JSON.stringify({id:i+2, data:props.cipherText.substr(i, maxLengthPerQRCode) } ))});
+            tmpQRArray.push({qrCode:canvas.toDataURL(), id:c, raw:(JSON.stringify({id:c, data:props.cipherText.substr(i, maxLengthPerQRCode) } ))});
         }
 
         //console.log('prechunked array is ',tmpQRArray);
