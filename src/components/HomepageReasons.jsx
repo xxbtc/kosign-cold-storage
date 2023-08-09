@@ -92,13 +92,6 @@ function HomepageReasons(props) {
     return (
         <div ref={refTop} className={'homepageReasonsRow'}>
             <Container>
-                {/*<Row>
-                    <Col xs={{span:12, offset:0}} md={{span:12, offset:0}} lg={{span:12, offset:0}}>
-                        <div className={"rowTitle"}>
-                            Why Kosign
-                        </div>
-                    </Col>
-                </Row>*/}
                 <div  ref={refReason1} className={"homepageReason"}>
                     <Row>
                         <Col xs={{span:12, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>

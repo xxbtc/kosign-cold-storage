@@ -9,6 +9,7 @@
     flex:1;
     align-items: center;
     min-height:85vh;
+
     /*background-color: #f7f7f7;*/
     /*background: #29BDD1;*/
    /* background: -webkit-linear-gradient(to bottom, #2200FF, #1786ff);
@@ -43,8 +44,7 @@
     text-align: center;
 }
 .rightHomepageInner img {
-    width:80%;
-    flex:1;
+    width:100%;
 
 }
 .homepageHero .homepageH1 .homepageH1pretitle {
@@ -74,7 +74,7 @@
 }
 .homepageHero .homepageH1 .homepageH1Inner {
     display: flex;
-    flex:1;
+    flex:2;
     flex-direction: column;
     justify-content: center;
 }
@@ -100,13 +100,15 @@
     display: flex;
     flex:1;
     flex-direction: row;
-    margin:30px 0px 80px 0px;
+    margin:30px 0px 50px 0px;
 }
 
 .featureCheckWrapper {
     color:green;
     margin-right: 30px;
     font-family: "Graphik", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size:1.1rem;
+    white-space: nowrap;
 }
 .featureCheck {
     color:green;
@@ -165,6 +167,13 @@
 
 }
 
+.homepageTestimonialsTitle {
+    font-family: "Graphik", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 2.8rem !important;
+    text-align: center;
+    margin-top:100px;
+    color:#000;
+}
 .homepageUseCasesRow {
     padding:0px 0px 50px 0px;
     background-color: #1786ff;
@@ -172,8 +181,8 @@
 }
 
 .homepageUseCasesRow .rowTitle {
-    font-family: "Graphik-Bold", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
-    font-size: 2.2rem !important;
+    font-family: "Graphik", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 2.8rem !important;
     text-align: center;
     color:#fff !important;
     margin-bottom: 30px;
@@ -211,7 +220,7 @@
     justify-content: start;
     align-content: center;
     height:100%;
-    padding:40px 20px;
+    padding:20px 20px;
     background-color: #fff;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -220,8 +229,8 @@
 }
 
 .featureClass .featureNumber {
-    font-family: "Montserrat", "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
-    background-color:#1260B3;
+    font-family: "Graphik-Bold", "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    background-color:#1786ff;
     padding:4px 19px;
     color:#fff;
     font-size: 1.8rem;
@@ -230,17 +239,20 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
     margin-bottom: 20px;
-    display: inline-block;
+    display: inline;
     font-weight: 100;
     /*border:1px solid #000;*/
     /*box-shadow: 1px 1px 1px 1px #000;*/
 }
 .featureClass .featureTitle {
-    font-family: "Graphik-Bold", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
-    font-size: 1.4rem;
+    font-family: "Graphik", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.8rem;
     color:#000;
     margin-bottom: 10px;
     letter-spacing: -.5px;
+    display: inline;
+    margin-left: 10px;
+    font-weight: 600;
 }
 .featureClass .featureText {
     font-family:  "Graphik", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
@@ -248,32 +260,55 @@
     line-height: 1.5rem;
     color:#000;
     letter-spacing: -.5px;
+    margin-top:20px;
 }
 .featureClass .featureTextAdditional {
     font-family:  "Graphik", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     color:#2e2e2e;
     margin-top:10px;
     letter-spacing: -.5px;
+    color:green;
+    font-weight: bold;
 }
 
 
 .homepageReasonsRow {
-    background: #fff;
+
     font-family:  "Graphik", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
     z-index: 10;
-    padding:0px 0px;
-    marginBottom:30px;
+    padding: 100px 0px;
+
+}
+.homepageReasonsRow .homepageReasonsCol {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
 }
 .homepageReasonsRow .rowTitle {
-    text-align: center;
-    font-family: "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
-    font-size: 2.5rem ;
-    color:#000;
-    margin: 20px 0px 20px 0px;
-
+    font-family: "Graphik", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    font-size: 2.8rem !important;
+    text-align: left;
+    color:#000 ;
+    margin-bottom: 10px;
 }
 
+.homepageReasonsRow .rowSubtitle {
+    font-family: "Graphik", "Montserrat", "Inter-800", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+    color:#555;
+    font-size: 1.6rem;
+    z-index: 10;
+}
+
+.hompageReasonsRow .featureClass {
+    clear:both;
+}
+.homepageReasonsRow .featureClass .featureText{
+    margin:0;
+    color:green;
+    margin-bottom:10px;
+}
 .homepageReasonsRow .homepageReason {
     font-family: "Graphik-Medium", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
     font-size: 1.8rem;
@@ -281,11 +316,12 @@
     font-weight: bold;
     padding:40px 40px;
 }
-.homepageReasonsRow .homepageReason .homepageReasonImage {
+.homepageReasonsRow  .homepageReasonImage {
     display: flex;
     flex:1;
     align-items: center;
     justify-content: end;
+    width:100%;
 
 }
 .homepageReasonsRow .homepageReason .homepageReasonText {
@@ -304,8 +340,13 @@
     color:#000;
     letter-spacing: -.5px;
 }
-
-
+.homepageReasonsRow .homepageReasonsList {
+    list-style-type: none;
+    padding:0;
+}
+.homepageReasonsRow .homepageReasonsList li {
+    margin-bottom: 20px;
+}
 .homepageComparisonRow {
     padding-bottom: 30px;
     margin-top: -1px;
@@ -475,6 +516,9 @@
 }
 .marqueeContainer .scrollBox img {
     width:100%;
+    max-width: 600px;
+    border:1px solid #ccc;
+    height:200px;
 }
 
 .homepagePricingRow {
@@ -487,6 +531,14 @@
 
 }
 
+.tweet2fa {
+    width:100%;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
 
 @keyframes slide {
     0% {
@@ -511,7 +563,10 @@
 /* Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) and (max-width: 767.98px) {
 
+    .rightHomepage {
+        display: none;
 
+    }
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
@@ -524,8 +579,7 @@
         display:block;
     }
     .rightHomepage {
-        display: block;
-        margin:60px 0px 0px 0px;
-        min-height: auto;
+        display: none;
+
     }
 }

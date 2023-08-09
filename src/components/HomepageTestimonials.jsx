@@ -20,30 +20,31 @@ import img1446533482998484992 from '../images/1446533482998484992.jpg';
 import img1366031922120585217 from '../images/1366031922120585217.jpg';
 import img1557826172267937792 from '../images/1557826172267937792.jpg';
 import img1552492518209687552 from '../images/1552492518209687552.jpg';
+import tweet2fa from '../images/tweet2fa.png';
 
 function HomepageTestimonials(props) {
     const navigate                   = useNavigate();
 
 
     return (
-        <div className={'homepageReasonsRow'}>
+        <div>
             <div style={{position:'relative', display:'block'}}>
 
                 <Marquee
-                    pauseOnHover={false}
-                    speed={25}
+                    pauseOnHover={true}
+                    speed={30}
                     gradient={false}
                     className={'marqueeContainer'}
                 >
-                    <div className="scrollBox">
+                    {/*<div className="scrollBox">
                         <img src={img1514376453768441858} />
-                    </div>
-                    <div className="scrollBox">
+                    </div>*/}
+                    {/*<div className="scrollBox">
                         <img src={img1243732864404983808} />
-                    </div>
-                    <div className="scrollBox">
+                    </div>*/}
+                   {/* <div className="scrollBox">
                         <img src={img1446533482998484992} />
-                    </div>
+                    </div>*/}
                     <div className="scrollBox">
                         <img src={img1366031922120585217} />
                     </div>

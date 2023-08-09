@@ -22,7 +22,7 @@ import {BsArrowReturnRight} from 'react-icons/bs';
 import paperVault from '../images/papervault.jpg';
 import personWithLock from '../images/personwithlock.png';
 import printerqr from '../images/printerqr.png';
-import peoplepaper from '../images/peoplepaper.png';
+import peoplepaper from '../images/qr-code-inside-a-glacier-with-a-lock--white-backgr.jpg';
 
 import groupQR from '../images/groupqr.png';
 
@@ -34,6 +34,7 @@ import HomepageTestimonials from '../components/HomepageTestimonials';
 import {FaCheck} from 'react-icons/fa';
 import Cookies from "universal-cookie";
 import {FaTwitter, FaMedium} from 'react-icons/fa';
+import HomepageReasonsNew from "../components/HomepageReasonsNew";
 
 
 function Homepage(props) {
@@ -76,6 +77,8 @@ function Homepage(props) {
 
     }, [props]);
 
+
+
     return (
         <Layout>
             <Navbar />
@@ -86,30 +89,47 @@ function Homepage(props) {
                         <div className={'homepageH1'}>
 
                             <div className={'homepageH1Inner'}>
-                                <div className={'homepageH1pretitle'}>Multi-signature cold storage</div>
+                                <div className={'homepageH1pretitle'}>Kosign cold storage</div>
                                 <div className={'actualTitle'}>
                                     {/*<div>Backup your passwords on a paper data vault</div>*/}
-                                    <div>Your cold storage password vault</div>
+                                    {/*<div>Digital inheritance made easy and secure</div>*/}
+                                    <div>Backup your digital life</div>
+                                    {/*<div>The password vault designed for inheritance</div>*/}
                                 </div>
                                 <div className={'heroSubtitle'}>
                                     <div>
-                                        Backup passwords and other critical data on a paper-based cold storage
-                                        vault with distributed keys and social recovery.
+                                        Backup digital assets and passwords in a cold storage data
+                                        vault designed for long-term safekeeping and inheritance
                                         {/*Secure enough that you can frame it on your wall.*/}
                                     </div>
                                 </div>
 
+                                {/* FOR LONG TERM STORAGE */}
+                                {/* you dont need to remember any passwords */}
+                                {/* so secure your kids can put it on the fridge. keep in multiple locations. divoce use cases */}
+
                                 <div>
                                     <div className={'featureChecklist'}>
-                                        <div className={'featureCheckWrapper'}>
-                                            <FaCheck className={'featureCheck'} /> Get started free
-                                        </div>
-                                        <div className={'featureCheckWrapper'}>
-                                            <FaCheck className={'featureCheck'} /> 100% offline
-                                        </div>
-                                        <div className={'featureCheckWrapper'}>
-                                            <FaCheck className={'featureCheck'} /> Social recovery
-                                        </div>
+                                        <Row>
+                                            <Col xs={{span:12, offset:0}} md={{span:4, offset:0}} lg={{span:4, offset:0}}>
+                                                <div className={'featureCheckWrapper'}>
+                                                    <FaCheck className={'featureCheck'} /> Secure-by-design
+                                                </div>
+                                            </Col>
+
+                                            <Col xs={{span:12, offset:0}} md={{span:4, offset:0}} lg={{span:4, offset:0}}>
+                                                <div className={'featureCheckWrapper'}>
+                                                    <FaCheck className={'featureCheck'} /> Disaster resilience
+                                                </div>
+                                            </Col>
+
+                                            <Col xs={{span:12, offset:0}} md={{span:4, offset:0}} lg={{span:4, offset:0}}>
+                                                <div className={'featureCheckWrapper'}>
+                                                    <FaCheck className={'featureCheck'} /> 100% in your control
+                                                </div>
+                                            </Col>
+
+                                        </Row>
                                     </div>
                                 </div>
 
@@ -147,7 +167,9 @@ function Homepage(props) {
                 <img src={layerPeaks} style={{width:'100%'}} className={'flipImage'} />
             </div>
 
-            <HomepageReasons/>
+            <HomepageReasonsNew/>
+
+          {/*  <HomepageReasons/>*/}
 
 
             {/*<div className={'homepageThreeFeaturesRow'}>
@@ -213,6 +235,10 @@ function Homepage(props) {
                 <img src={layerWaves} style={{width:'100%'}}  />
             </div>*/}
 
+
+            <div className={'homepageTestimonialsTitle'}>
+                We solve these problems
+            </div>
             <HomepageTestimonials/>
 
            {/* <div  className={'homepagePricingRow'} style={{paddingTop:40, paddingLeft:70, paddingRight:70}}>
@@ -238,25 +264,9 @@ function Homepage(props) {
             </div>
 
 
-            <Row  style={{backgroundColor:'#1786ff'}}>
-                <div className={'homepageUseCasesRow'}>
-                    <div className={'rowTitle'} style={{color:'#fff'}}>See a demo</div>
-                    <Col xs={{span:12, offset:0}} md={{span:12, offset:0}} lg={{span:12, offset:0}} style={{textAlign:'center', marginTop:30, marginBottom:60}}>
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/3gF414HSJFQ"
-                                title="YouTube video player" frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen></iframe>
-                    </Col>
-                </div>
-            </Row>
-
             <div style={{position:'relative', marginTop:-70, marginBottom:-3}}>
                 <img src={layerPeaks} style={{width:'100%'}} className={'flipImage'} />
             </div>
-
-
-
-
 
             <HomepageFAQ/>
 
