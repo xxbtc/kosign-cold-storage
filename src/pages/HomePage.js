@@ -22,7 +22,7 @@ import {BsArrowReturnRight} from 'react-icons/bs';
 import paperVault from '../images/papervault.jpg';
 import personWithLock from '../images/personwithlock.png';
 import printerqr from '../images/printerqr.png';
-import peoplepaper from '../images/qr-code-inside-a-glacier-with-a-lock--white-backgr.jpg';
+import peoplepaper from '../images/happy-people-holding-a-paper-with-a-qr-code.jpg';
 
 import groupQR from '../images/groupqr.png';
 
@@ -245,18 +245,18 @@ function Homepage(props) {
                 <div ref={pricingRef} style={{fontWeight:'bold'}}>${global.setupCost} per vault + ${global.costPerKey} per key</div>
             </div>*/}
 
-            <Row>
-                <Col xs={{span:12, offset:0}} md={{span:12, offset:0}} lg={{span:12, offset:0}} style={{textAlign:'center', marginTop:30, marginBottom:60}}>
-                    <Button
-                        variant = {'primary'}
-                        size    = {'lg'}
-                        onClick = {()=>navigate('/create')}
-                        className={'bottomActionButton'}
-                    >
-                        Create a vault
-                    </Button>
-                </Col>
-            </Row>
+
+            <div style={{textAlign:'center', marginTop:30, marginBottom:60}}>
+                <Button
+                    variant = {'primary'}
+                    size    = {'lg'}
+                    onClick = {()=>navigate('/create')}
+                    className={'bottomActionButton'}
+                >
+                    Create a vault
+                </Button>
+            </div>
+
 
 
             <div style={{position:'relative', marginTop:-50}}>
