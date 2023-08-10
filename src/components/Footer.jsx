@@ -26,9 +26,6 @@ export default function Footer() {
                                     <Link to={'/privacy'}>Privacy Policy</Link>
                                 </li>
                                 <li>
-                                    <a href={'https://twitter.com/kosign_xyz'} target={'_blank'}>@kosign_xyz</a>
-                                </li>
-                                <li>
                                     <a href={'https://kosignxyz.medium.com'} target={'_blank'}>Blog</a>
                                 </li>
                             </ul>

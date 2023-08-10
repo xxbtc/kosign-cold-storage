@@ -9,6 +9,9 @@ import '../style/homepage.css';
 import Container from 'react-bootstrap/Container';
 import Accordion from 'react-bootstrap/Accordion';
 
+import {BsTwitter} from 'react-icons/bs';
+import {BsEnvelope} from 'react-icons/bs';
+
 
 function HomepageFAQ(props) {
     const navigate                   = useNavigate();
@@ -21,17 +24,18 @@ function HomepageFAQ(props) {
                     <Col xs={{span:12}} md={{span:6, offset:0}} lg={{span:6, offset:0}} style={{marginBottom:50}}>
                         <h3>About Kosign</h3>
                         <div style={{paddingRight:60, marginTop:40}}>
-                            Kosign is an offline cold storage paper vault using quorum-based security to
-                            protect and recover sensitive critical data.
-
-                            Securely store your data encrypted in a paper vault.
-
-                            Distribute vault keys with up to 20 people, and set how many
-                            keys are needed to unlock.
-
-                            The quorum based security model is perfect for data
-                            that needs to be stored securely and recovered in emergencies, such as passwords,
-                            and digital asset keys.
+                            Kosign is an offline digital vault designed for disaster resilience.
+                            Trustlessly backup digital asset seeds, passwords and other critical data.
+                            <div style={{marginTop:20}}>
+                                <a className={'linkage'} href={'https://twitter.com/kosign_xyz'} target={'_blank'}>
+                                    <BsTwitter /> &nbsp;@kosign_xyz
+                                </a>
+                            </div>
+                            <div style={{marginTop:20}}>
+                                <a className={'linkage'} href={'mailto:support@kosign.xyz'} target={'_blank'}>
+                                    <BsEnvelope/> &nbsp;support@kosign.xyz
+                                </a>
+                            </div>
                         </div>
                     </Col>
                     <Col xs={{span:12}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
@@ -40,14 +44,32 @@ function HomepageFAQ(props) {
                             <Accordion.Item eventKey="0" className={'accordionItem'}>
                                 <Accordion.Header>Why do I need a Kosign Vault?</Accordion.Header>
                                 <Accordion.Body>
-                                    Kosign vaults are designed for long term storage of passwords,
-                                    account recovery codes, private keys, and other critical data.
-                                    You need a Kosign vault to solve &nbsp;
-                                    <a className={'linkage'} href={"https://kosignxyz.medium.com/breaking-cyclic-dependencies-in-password-management-introducing-kosign-xyz-ac04f92eb9ef"}
-                                       target={"_blank"}>
-                                         cyclic dependencies in password management
-                                    </a>&nbsp;
-                                    and to ensure a secure succession/inheritance plan for your data.
+                                    <ul style={{margin:0, padding:0}}>
+                                        <li>
+                                            <b>Secure Personal Storage</b> -
+                                            Digital asset seeds, 2fa keys, and the password to your password manager
+                                            are just some examples of data that can be tricky to
+                                            backup, because storing it in a password manager creates &nbsp;
+                                            <a className={'linkage'} href={"https://kosignxyz.medium.com/breaking-cyclic-dependencies-in-password-management-introducing-kosign-xyz-ac04f92eb9ef"}
+                                               target={"_blank"}>
+                                                cyclic dependencies
+                                            </a>.
+                                            <br/>
+                                            Kosign vaults are designed for long term storage of critical data,
+                                            and enable social recovery in emergencies.
+                                        </li>
+                                        <li style={{marginTop:10}}>
+                                            <b>Data succession</b> -
+                                            Social recovery enables your successors to trustlessly store a backup of your vault,
+                                            and recover it in emergencies by collecting keys from your circle of trust.
+                                        </li>
+                                        <li style={{marginTop:10}}>
+                                            <b>Disaster resilience</b> -
+                                            Easily create digital and paper backups for offline geo-separated  storage.
+                                        </li>
+                                    </ul>
+                                    <br/>
+
                                 </Accordion.Body>
                             </Accordion.Item>
                             <Accordion.Item eventKey="1" className={'accordionItem'}>
@@ -64,7 +86,7 @@ function HomepageFAQ(props) {
                                     </p>
                                 </Accordion.Body>
                             </Accordion.Item>
-                            <Accordion.Item eventKey="2" className={'accordionItem'}>
+                            {/*<Accordion.Item eventKey="2" className={'accordionItem'}>
                                 <Accordion.Header>Can my key guardians open my vault without me?</Accordion.Header>
                                 <Accordion.Body>
                                     <p>
@@ -77,7 +99,7 @@ function HomepageFAQ(props) {
                                         you must give them a copy of the encrypted vault
                                     </p>
                                 </Accordion.Body>
-                            </Accordion.Item>
+                            </Accordion.Item>*/}
                             <Accordion.Item eventKey="3" className={'accordionItem'}>
                                 <Accordion.Header>Which encryption algorythm do vaults use?</Accordion.Header>
                                 <Accordion.Body>
@@ -87,8 +109,8 @@ function HomepageFAQ(props) {
                             <Accordion.Item eventKey="4" className={'accordionItem'}>
                                 <Accordion.Header>Can I unlock my vault if the website is down?</Accordion.Header>
                                 <Accordion.Body>
-                                    Yes! The unlock tool is open source and can run locally on your computer.
-                                    Get the <a href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>source code on Github</a>
+                                   Kosign's unlock tool is open source and can run directly on your computer.
+                                    See our <a className={'linkage'} href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>source code on Github</a>
                                 </Accordion.Body>
                             </Accordion.Item>
 

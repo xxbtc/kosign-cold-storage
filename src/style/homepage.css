@@ -182,10 +182,11 @@
 
 .homepageUseCasesRow .rowTitle {
     font-family: "Graphik", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
-    font-size: 2.8rem !important;
+    font-size: 2.8rem;
     text-align: center;
     color:#fff !important;
     margin-bottom: 30px;
+
 }
 
 .homepageUseCasesRow .useCase {
@@ -288,10 +289,11 @@
 }
 .homepageReasonsRow .rowTitle {
     font-family: "Graphik", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
-    font-size: 2.8rem !important;
+    font-size: 2.8rem;
     text-align: left;
     color:#000 ;
     margin-bottom: 10px;
+    letter-spacing: -.5px;
 }
 
 .homepageReasonsRow .rowSubtitle {
@@ -299,6 +301,8 @@
     color:#555;
     font-size: 1.6rem;
     z-index: 10;
+    letter-spacing: -.5px;
+
 }
 
 .hompageReasonsRow .featureClass {
@@ -572,7 +576,7 @@
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
     .homepageHero {
-        margin-top:30px;
+        margin-top:50px;
         text-align: center;
     }
     .homepageHero .homepageH1 {
@@ -580,6 +584,16 @@
     }
     .rightHomepage {
         display: none;
+
+    }
+    .homepageReasonsRow {
+        padding-left:15px;
+        padding-right:15px;
+    }
+    .homepageReasonsRow .homepageReasonsCol .rowTitle {
+        font-size:1.9rem;
+        line-height: 2.2rem;
+        font-weight: bold;
 
     }
 }

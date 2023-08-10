@@ -41,9 +41,10 @@ function HomepageReasonsNew(props) {
 
                 <Row className={'homepageReasonsRow'}>
                     <Col className={'homepageReasonsCol'} xs={{span:12, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
-                        <div className={'rowTitle'}>Disaster resilient</div>
+                        <div className={'rowTitle'}>Disaster resilient storage</div>
                         <div className={'rowSubtitle'}>
-                            Download or print your vault onto paper to easily store copies in geo-separate locations in case of disaster or emergencies.
+                            Download or print your vault onto paper for offline geo-seperated storage.
+                            Ensure long term disaster resilience with easy recovery in emergencies.
                         </div>
                         <div className={'featureClass'}>
                             <div className={'featureText'}>
@@ -62,7 +63,7 @@ function HomepageReasonsNew(props) {
                     <Col className={'homepageReasonsCol'} xs={{span:12, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
                         <div className={'rowTitle'}>100% in your control</div>
                         <div className={'rowSubtitle'}>
-                            Your vault is created in your browser and is 100% in your
+                            Vaults are generated in the browser and are 100% in your
                             control. No clouds or servers are involved.
                         </div>
                         <div className={'featureClass'}>
@@ -129,25 +130,24 @@ function HomepageReasonsNew(props) {
                                    &nbsp;
                                    <b>Cold storage</b>
                                    &nbsp;
-                                   Your vault and keys are created 100% offline, and can be
-                                    printed on paper for offline cold storage
+                                   Vaults and keys are created offline, are encrypted, and can be
+                                    printed on paper for offline safekeeping
                                </li>
                                <li>
                                    <FaArrowRight />
                                    &nbsp;
                                    <b>Open source</b>
                                    &nbsp;
-                                   Our unlock utility is &nbsp;
-                                   <a className={'linkage'} target="_blank" href="https://github.com/xxbtc/kosign-unlock">available on Github</a>
-                                   &nbsp; making your vault future-proof
+                                   Kosign's unlock utility is &nbsp;
+                                   <a className={'linkage'} target="_blank" href="https://github.com/xxbtc/kosign-unlock">available on Github</a>,
+                                   &nbsp; making your vault future-proof with no reliance on Kosign services
                                </li>
                                <li>
                                    <FaArrowRight />
                                    &nbsp;
                                    <b>Strong encryption</b>
                                    &nbsp;
-                                   Secured with
-                                   bank grade AES 256 bits encryption
+                                   Secured with AES 256 bits encryption
                                </li>
                            </ul>
                         </div>
@@ -160,16 +160,16 @@ function HomepageReasonsNew(props) {
             </Container>
 
             <div style={{position:'relative', marginTop:-50}}>
-                <img src={layerPeaks} style={{width:'100%', marginBottom:-2}}  />
+                <img src={layerPeaks} style={{width:'110%', marginBottom:-2}}  />
             </div>
 
             <div style={{backgroundColor:'#1786ff'}}>
                 <Container>
                     <Row className={'homepageReasonsRow'} style={{padding:0, paddingBottom:50}}>
                         <Col className={'homepageReasonsCol'} xs={{span:12, offset:0}} md={{span:12, offset:0}} lg={{span:12, offset:0}}>
-                            <div className={'rowTitle'} style={{color:'#fff', textAlign:'center'}}>Solve cyclic dependencies in password management</div>
+                            <div className={'rowTitle'} style={{color:'#fff', textAlign:'center'}}>Stop cyclic dependencies in password management</div>
                             <div className={'rowSubtitle'} style={{color:'#fff', textAlign:'center'}}>
-                                The only good way to backup wallet seeds, 2FA keys,
+                                Social recovery is the most resilient way to backup wallet seeds, 2FA keys,
                                 and the password to your password manager.
                             </div>
                            {/* <div className={'featureClass'}>
@@ -183,8 +183,8 @@ function HomepageReasonsNew(props) {
                 </Container>
             </div>
 
-            <div style={{position:'relative', marginTop:-70, marginBottom:-3}}>
-                <img src={layerPeaks} style={{width:'100%'}} className={'flipImage'} />
+            <div style={{position:'relative', marginTop:0, marginBottom:-3}}>
+                <img src={layerPeaks} style={{width:'110%'}} className={'flipImage'} />
             </div>
 
 
