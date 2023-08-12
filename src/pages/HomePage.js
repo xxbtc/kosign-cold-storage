@@ -246,6 +246,11 @@ function Homepage(props) {
             </div>*/}
 
 
+
+
+
+
+
             <div style={{textAlign:'center', marginTop:30, marginBottom:60}}>
                 <Button
                     variant = {'primary'}
@@ -259,14 +264,6 @@ function Homepage(props) {
 
 
 
-            <div style={{position:'relative', marginTop:-50, overflow:'hidden'}}>
-                <img src={layerPeaks} style={{width:'100%', marginBottom:-2}}  />
-            </div>
-
-
-            <div style={{position:'relative', marginTop:-70, marginBottom:-3, overflow:'hidden'}}>
-                <img src={layerPeaks} style={{width:'100%'}} className={'flipImage'} />
-            </div>
 
             <HomepageFAQ/>
 
