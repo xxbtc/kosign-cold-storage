@@ -159,7 +159,7 @@ function HomepageReasonsNew(props) {
                 </Row>
             </Container>
 
-            <div style={{position:'relative', marginTop:-50}}>
+            <div style={{position:'relative', marginTop:-50, overflow:'hidden'}}>
                 <img src={layerPeaks} style={{width:'110%', marginBottom:-2}}  />
             </div>
 
@@ -183,7 +183,7 @@ function HomepageReasonsNew(props) {
                 </Container>
             </div>
 
-            <div style={{position:'relative', marginTop:0, marginBottom:-3}}>
+            <div style={{position:'relative', marginTop:0, marginBottom:-3, overflow:'hidden'}}>
                 <img src={layerPeaks} style={{width:'110%'}} className={'flipImage'} />
             </div>
 
