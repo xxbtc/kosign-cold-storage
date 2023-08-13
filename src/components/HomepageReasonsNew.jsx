@@ -13,7 +13,7 @@ import LottieAnimationKey from '../animations/6370-keys'
 import LottieAnimationUnlock from '../animations/using-key-to-unlock'
 import LottieAnimationPaper from '../animations/paper-tray'
 
-import emergencyImg from "../images/fire-in-a-building--white-background.png";
+import emergencyImg from "../images/fire-in-a-building--white-background.jpg";
 
 
 import {BsArrowReturnRight} from 'react-icons/bs';
