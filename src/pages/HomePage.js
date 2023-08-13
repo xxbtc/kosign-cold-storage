@@ -93,7 +93,7 @@ function Homepage(props) {
                                 <div className={'actualTitle'}>
                                     {/*<div>Backup your passwords on a paper data vault</div>*/}
                                     {/*<div>Digital inheritance made easy and secure</div>*/}
-                                    <div>Backup your digital life</div>
+                                    <h1>Backup your digital life</h1>
                                     {/*<div>The password vault designed for inheritance</div>*/}
                                 </div>
                                 <div className={'heroSubtitle'}>
@@ -147,7 +147,7 @@ function Homepage(props) {
 
                             <div className={'rightHomepage'}>
                                 <div className={'rightHomepageInner'}>
-                                    <img src={peoplepaper} />
+                                    <img src={peoplepaper} alt={'homepage image of people holding a paper vault'} />
                                 </div>
                             </div>
 
@@ -158,13 +158,13 @@ function Homepage(props) {
             </div>
 
             <div style={{position:'relative', marginTop:-50, overflow:'hidden'}}>
-                <img src={layerPeaks} style={{width:'110%', marginBottom:-2}}  />
+                <img src={layerPeaks} style={{width:'110%', marginBottom:-2}} alt={'divider image'} />
             </div>
 
             <HomepageUseCases/>
 
             <div style={{position:'relative', marginTop:0, overflow:'hidden'}}>
-                <img src={layerPeaks} style={{width:'110%'}} className={'flipImage'} />
+                <img src={layerPeaks} style={{width:'110%'}} className={'flipImage'} alt={'divider image 2'}  />
             </div>
 
             <HomepageReasonsNew/>
