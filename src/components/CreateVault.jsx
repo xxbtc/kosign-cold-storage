@@ -415,7 +415,7 @@ function CreateVault(props) {
 
         <div style={{marginBottom:100}}>
             <div>
-                {wizardStep !== 5 ?
+                {/*{wizardStep !== 5 ?
                     <div className={'progressBarWrapper'}>
                         <ProgressBar style={{height: 70}}>
                             <ProgressBar striped={wizardStep === 1 ? true : false}
@@ -423,7 +423,7 @@ function CreateVault(props) {
                                          className={renderProgressBarClass('setup')} now={30} key={1} label={
                                 <div>
                                     <TbCircleNumber1
-                                        className={'progressIcon'}/> Setup {/*<FaChevronRight className={'progressIcon'} />*/}
+                                        className={'progressIcon'}/> Setup <FaChevronRight className={'progressIcon'} />
                                 </div>
                             }/>
                             <ProgressBar striped={wizardStep === 2 ? true : false}
@@ -450,7 +450,7 @@ function CreateVault(props) {
                         </ProgressBar>
                     </div>
                     :null
-                }
+                }*/}
                 <div className={'createPageWrapper'}>
 
                     <div>

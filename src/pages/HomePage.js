@@ -112,14 +112,17 @@ function Homepage(props) {
                                     <div className={'featureChecklist'}>
                                         <Row>
                                             <Col xs={{span:12, offset:0}} md={{span:4, offset:0}} lg={{span:4, offset:0}}>
-                                                <div className={'featureCheckWrapper'}>
+                                                {/*<div className={'featureCheckWrapper'}>
                                                     <FaCheck className={'featureCheck'} /> Secure-by-design
+                                                </div>*/}
+                                                <div className={'featureCheckWrapper'}>
+                                                    <FaCheck className={'featureCheck'} /> Get started free
                                                 </div>
                                             </Col>
 
                                             <Col xs={{span:12, offset:0}} md={{span:4, offset:0}} lg={{span:4, offset:0}}>
                                                 <div className={'featureCheckWrapper'}>
-                                                    <FaCheck className={'featureCheck'} /> Disaster resilience
+                                                    <FaCheck className={'featureCheck'} /> No signup
                                                 </div>
                                             </Col>
 

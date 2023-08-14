@@ -227,7 +227,6 @@ const PDFVaultBackup = (props) => {
             paddingBottom:1,
             backgroundColor:'#ddd',
             borderRadius:15,
-            webkitBorderRadius:15,
         },
         alertDanger: {
             backgroundColor:'#f8d7da',
@@ -250,7 +249,7 @@ const PDFVaultBackup = (props) => {
     const renderQR = (qrData, ii, i) => {
 
         return (
-            <div key={'qrkey'+ii} style={styles.QRWrapperInner}>
+            <div key={'qrkey'+ii+'_'+i} style={styles.QRWrapperInner}>
                 {qrData.id===1?
                     <div style={styles.QRText}>
                         Metadata
@@ -292,6 +291,7 @@ const PDFVaultBackup = (props) => {
                   Unlock at <a href={'https://kosign.xyz/unlock'} style={{color:'#1786ff'}}>https://kosign.xyz/unlock</a>
               </div>
               :null}
+
               <div style={styles.detailWrapper}>
                   <div>
                       <div>
@@ -348,7 +348,7 @@ const PDFVaultBackup = (props) => {
         <div style={{size: 'A4', margin: 0, height:'initial', width:'210mm'}}>
 
             {qrArray.map((row, i) =>
-                <div style={i%2===1?styles.printPage:null}>
+                <div key={'keyqrraray_'+i} style={i%2===1?styles.printPage:null}>
                     <div style={styles.page}>
                         {i===0?renderVaultHeader(i, true):null}
 

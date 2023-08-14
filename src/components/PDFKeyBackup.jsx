@@ -120,7 +120,6 @@ const PDFKeyBackup = (props) => {
             paddingBottom:1,
             backgroundColor:'#ddd',
             borderRadius:15,
-            webkitBorderRadius:15,
         },
         alertDanger: {
             backgroundColor:'#f8d7da',
