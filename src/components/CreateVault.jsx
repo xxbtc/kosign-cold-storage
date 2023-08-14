@@ -257,6 +257,7 @@ function CreateVault(props) {
                     setIsPaymentComplete(true);
                     setMaxChars(global.maxCharsPerVaultFree);
                     setWizardStep(wizardStep +2);
+                    setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
                 }).catch(error => {
                     alert ('Error, please check your connection and try again');
                     console.log(error.response.data);
