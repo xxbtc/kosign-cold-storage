@@ -94,7 +94,7 @@ function CreateMintKeys(props) {
                                         ))}
                                     </select>
                                 </div>
-                                <div className={'text-muted'} style={{marginTop:5}}>Each key is unique. Distribute one per person.</div>
+                                <div className={'text-muted'} style={{marginTop:5}}>How many keys do you want to mint?.</div>
                             </FormGroup>
 
                             {totalShareholders>1?
@@ -106,7 +106,7 @@ function CreateMintKeys(props) {
                                             <option key={'selectoptionkey_'+i+2} value={i+2}>Require {i+2} keys to unlock</option>
                                         ))}
                                     </select>
-                                    <div className={'text-muted'} style={{marginTop:5}}>Set the minimum amount of keys needed to unlock the vault.</div>
+                                    <div className={'text-muted'} style={{marginTop:5}}>How many keys are needed to unlock the vault?</div>
 
                                 </div>
 {/*
