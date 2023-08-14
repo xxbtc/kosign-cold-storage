@@ -10,6 +10,7 @@ import TestPage from "./pages/TestPage";
 import LegalPage from "./pages/LegalPage";
 import PricingPage from "./pages/PricingPage";
 import ReactGA from 'react-ga4';
+import PrivacyPage from "./pages/PrivacyPage";
 
 function App () {
     let location = useLocation();
@@ -34,6 +35,7 @@ function App () {
             <Route exact path="/unlock" element={<UnlockPage/>}/>
             <Route exact path="/pricing" element={<PricingPage />}/>
             <Route exact path="/legal" element={<LegalPage />}/>
+            <Route exact path="/privacy" element={<PrivacyPage />}/>
 
            {/* <Route exact path="/test" element={<TestPage showPricing={true}/>}/>*/}
 
