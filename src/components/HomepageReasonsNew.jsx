@@ -43,7 +43,7 @@ function HomepageReasonsNew(props) {
                     <Col className={'homepageReasonsCol'} xs={{span:12, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
                         <div className={'rowTitle'}>Disaster resilient storage</div>
                         <div className={'rowSubtitle'}>
-                            Download or print your vault onto paper for offline geo-seperated storage.
+                            Download or print your vault onto paper for offline geo-separated storage.
                             Ensure long term disaster resilience with easy recovery in emergencies.
                         </div>
                         <div className={'featureClass'}>
