@@ -93,7 +93,7 @@ function Homepage(props) {
                                 <div className={'actualTitle'}>
                                     {/*<div>Backup your passwords on a paper data vault</div>*/}
                                     {/*<div>Digital inheritance made easy and secure</div>*/}
-                                    <h1>Backup your digital life</h1>
+                                    <h1>Secure your passwords on an offline paper data vault</h1>
                                     {/*<div>The password vault designed for inheritance</div>*/}
                                 </div>
                                 <div className={'heroSubtitle'}>
