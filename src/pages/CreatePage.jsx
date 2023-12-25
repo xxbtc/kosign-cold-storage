@@ -36,51 +36,51 @@ function CreatePage() {
     const [paymentComplete, setPaymentComplete] = useState(false);
     const [isLoading, setIsLoading]             = useState(true);
 
-    useEffect(()=>{
-        const queryString = window.location.search;
+    // useEffect(()=>{
+    //     const queryString = window.location.search;
 
-        // Create a new URLSearchParams object from the query string
-        const params = new URLSearchParams(queryString);
-        // Retrieve the values using the parameter names
-        const productId             = params.get('product_id');
-        const product_permalink     = params.get('product_permalink');
-        const sale_id               = params.get('sale_id');
-        if (!productId || !sale_id) {
-            setIsLoading(false);
-            return;
+    //     // Create a new URLSearchParams object from the query string
+    //     const params = new URLSearchParams(queryString);
+    //     // Retrieve the values using the parameter names
+    //     const productId             = params.get('product_id');
+    //     const product_permalink     = params.get('product_permalink');
+    //     const sale_id               = params.get('sale_id');
+    //     if (!productId || !sale_id) {
+    //         setIsLoading(false);
+    //         return;
 
-            //console.log('wno prodicut id or saleid...');
-        }
-        //we are here because we were redirected from gumroad after a payment
-        //console.log('welcome back from gumroad...');
-        PaymentService.setupGumroadPayment(productId, sale_id).then((response)=>{
-            //console.log('setupGumroadPayment', response);
-            setPaymentComplete(true);
-            setIsLoading(false);
-            setCookie('kosign_sale_id', sale_id);
-            setCookie('kosign_product_id', productId);
-            //alert ('apyment succeeded');
-        }).catch(error => {
-            alert ('Payment Error');
-            setPaymentComplete(false);
-            setIsLoading(false);
-            navigate('/');
-            //console.log('payment intent ERROR');
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-        });
-    },[]);
+    //         //console.log('wno prodicut id or saleid...');
+    //     }
+    //     //we are here because we were redirected from gumroad after a payment
+    //     //console.log('welcome back from gumroad...');
+    //     PaymentService.setupGumroadPayment(productId, sale_id).then((response)=>{
+    //         //console.log('setupGumroadPayment', response);
+    //         setPaymentComplete(true);
+    //         setIsLoading(false);
+    //         setCookie('kosign_sale_id', sale_id);
+    //         setCookie('kosign_product_id', productId);
+    //         //alert ('apyment succeeded');
+    //     }).catch(error => {
+    //         alert ('Payment Error');
+    //         setPaymentComplete(false);
+    //         setIsLoading(false);
+    //         navigate('/');
+    //         //console.log('payment intent ERROR');
+    //         console.log(error.response.data);
+    //         console.log(error.response.status);
+    //         console.log(error.response.headers);
+    //     });
+    // },[]);
 
-    const setCookie = (cookieName, cookieValue) => {
-        const expirationTime = 120 * 60 * 1000; // 120 minutes in milliseconds
+    // const setCookie = (cookieName, cookieValue) => {
+    //     const expirationTime = 120 * 60 * 1000; // 120 minutes in milliseconds
 
-        const cookieOptions = {
-            maxAge: expirationTime,
-        };
+    //     const cookieOptions = {
+    //         maxAge: expirationTime,
+    //     };
 
-        cookies.set(cookieName, cookieValue, cookieOptions);
-    };
+    //     cookies.set(cookieName, cookieValue, cookieOptions);
+    // };
 
     return (
         <Layout>
