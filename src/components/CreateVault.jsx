@@ -534,9 +534,9 @@ function CreateVault(props) {
                                                         <div className={'costSummary'}>
                                                             {totalCost === 0 ?
                                                                 <div>
-                                                                    <div
+                                                                    {/* <div
                                                                         className={'formTotalCost'}>$0 free vault
-                                                                    </div>
+                                                                    </div> */}
                                                                 </div>
                                                                 :
                                                                 <div>

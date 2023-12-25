@@ -38,9 +38,9 @@ const NavbarTop = (props) => {
                     </NavbarToggler>
                     <Collapse isOpen={isOpen} navbar>
                         <Nav className="justify-content-end" navbar style={{width:'100%'}}>
-                            <NavItem className={'nav-item'}>
+                            {/* <NavItem className={'nav-item'}>
                                 <Link className={"nav-link"} to={'/pricing'}>Pricing</Link>
-                            </NavItem>
+                            </NavItem> */}
                             <NavItem className={'nav-item'}>
                                 <Link className={"nav-link"} to={'/unlock'}>Unlock</Link>
                             </NavItem>

@@ -117,7 +117,7 @@ function Homepage(props) {
                                                     <FaCheck className={'featureCheck'} /> Secure-by-design
                                                 </div>*/}
                                                 <div className={'featureCheckWrapper'}>
-                                                    <FaCheck className={'featureCheck'} /> Get started free
+                                                    <FaCheck className={'featureCheck'} /> 100% Free
                                                 </div>
                                             </Col>
 
@@ -129,7 +129,7 @@ function Homepage(props) {
 
                                             <Col xs={{span:12, offset:0}} md={{span:4, offset:0}} lg={{span:4, offset:0}}>
                                                 <div className={'featureCheckWrapper'}>
-                                                    <FaCheck className={'featureCheck'} /> 100% in your control
+                                                    <FaCheck className={'featureCheck'} /> Non custodial
                                                 </div>
                                             </Col>
 
