@@ -232,9 +232,9 @@ function CreateVault(props) {
         let cookie_product_id    = cookies.get('kosign_product_id');
        // console.log('VERIFYING COOKIE', cookie_product_id, cookie_sale_id);
 
-        if (cookie_sale_id && cookie_product_id) {
+        //if (cookie_sale_id && cookie_product_id) {
             //make sure our cookies are actually valid and authentic
-            onPaymentComplete();
+         //   onPaymentComplete();
             // PaymentService.setupGumroadPayment(cookie_product_id, cookie_sale_id).then((response)=>{
             //   //  console.log('setupGumroadPayment', response);
             //     onPaymentComplete();
@@ -248,7 +248,7 @@ function CreateVault(props) {
             // });
             //onPaymentComplete();
 
-        } else {
+       // } else {
             if (wizardStep > 2 && !isPaymentComplete) {
                 return;
             }
@@ -266,8 +266,9 @@ function CreateVault(props) {
             //     });
             //     return;
             // }
+            setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
             setWizardStep(wizardStep + 2);
-        }
+       // }
 
         /*if (wizardStep + 1 === 5) {
             setPageTitle('Key Ceremony');
