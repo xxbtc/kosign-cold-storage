@@ -34,7 +34,7 @@ function CreatePage() {
     const cookies   = new Cookies();
 
     const [paymentComplete, setPaymentComplete] = useState(false);
-    const [isLoading, setIsLoading]             = useState(true);
+    const [isLoading, setIsLoading]             = useState(false);
 
     // useEffect(()=>{
     //     const queryString = window.location.search;

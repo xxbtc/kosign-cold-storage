@@ -7,10 +7,10 @@ global.paymentCompleteURL = 'https://kosign.xyz/thankyou';
 
 //global.stripePubKey = 'pk_test_thNMA1k47dvYwQAtl9x3cBkU004UqaXoD7';
 global.stripePubKey = 'pk_test_I4rOTLfBxkIH2dqZ1c8iTr2400Pjy6dJbv';
-global.costPerKey = 10;
+global.costPerKey = 0;
 global.setupCost  = 0;
 global.freeKeys   = 20;
-global.maxCharsPerVaultFree = 300;
+global.maxCharsPerVaultFree = 5000;
 global.maxCharsPerVault = 5000;
 //global.regularURL = 'http://xxxxxx.localhost/api/index.php/';
 

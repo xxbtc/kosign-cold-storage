@@ -199,16 +199,16 @@ function CreateVault(props) {
     }, []);
 
 
-    useEffect (()=>{
-        if (props.paymentComplete) {
-           /* setIsPaymentComplete(true);
-            setWizardStep(3);
-            setAgreeToTerms(true);*/
-            setAgreeToTerms(true);
-            onPaymentComplete();
-            return;
-        }
-    }, [props.paymentComplete]);
+    // useEffect (()=>{
+    //     if (props.paymentComplete) {
+    //        /* setIsPaymentComplete(true);
+    //         setWizardStep(3);
+    //         setAgreeToTerms(true);*/
+    //         setAgreeToTerms(true);
+    //         onPaymentComplete();
+    //         return;
+    //     }
+    // }, [props.paymentComplete]);
 
     const continueWizard = (forcepage) => {
         // console.log('continuing with secret', secretValue);
@@ -234,39 +234,39 @@ function CreateVault(props) {
 
         if (cookie_sale_id && cookie_product_id) {
             //make sure our cookies are actually valid and authentic
-
-            PaymentService.setupGumroadPayment(cookie_product_id, cookie_sale_id).then((response)=>{
-              //  console.log('setupGumroadPayment', response);
-                onPaymentComplete();
-                return;
-                //alert ('apyment succeeded');
-            }).catch(error => {
-                alert ('Payment Error');
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            });
+            onPaymentComplete();
+            // PaymentService.setupGumroadPayment(cookie_product_id, cookie_sale_id).then((response)=>{
+            //   //  console.log('setupGumroadPayment', response);
+            //     onPaymentComplete();
+            //     return;
+            //     //alert ('apyment succeeded');
+            // }).catch(error => {
+            //     alert ('Payment Error');
+            //     console.log(error.response.data);
+            //     console.log(error.response.status);
+            //     console.log(error.response.headers);
+            // });
             //onPaymentComplete();
 
         } else {
             if (wizardStep > 2 && !isPaymentComplete) {
                 return;
             }
-            if (totalCost===0) {
-                PaymentService.notification(JSON.stringify({type:'freevault',vaultName:vaultName,keys:totalShareholders,threshold:consensus})).then((response)=>{
-                    setIsPaymentComplete(true);
-                    setMaxChars(global.maxCharsPerVaultFree);
-                    setWizardStep(wizardStep +2);
-                    setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
-                }).catch(error => {
-                    alert ('Error, please check your connection and try again');
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                });
-                return;
-            }
-            setWizardStep(wizardStep + 1);
+            // if (totalCost===0) {
+            //     PaymentService.notification(JSON.stringify({type:'freevault',vaultName:vaultName,keys:totalShareholders,threshold:consensus})).then((response)=>{
+            //         setIsPaymentComplete(true);
+            //         setMaxChars(global.maxCharsPerVaultFree);
+            //         setWizardStep(wizardStep +2);
+            //         setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
+            //     }).catch(error => {
+            //         alert ('Error, please check your connection and try again');
+            //         console.log(error.response.data);
+            //         console.log(error.response.status);
+            //         console.log(error.response.headers);
+            //     });
+            //     return;
+            // }
+            setWizardStep(wizardStep + 2);
         }
 
         /*if (wizardStep + 1 === 5) {
@@ -289,34 +289,34 @@ function CreateVault(props) {
     }, [showPDFBackupVault]);   */
 
 
-    const renderProgressBarClass = (stepType) => {
-        if ((wizardStep===1) && (stepType==='setup')) {
-            return 'progressBarActive';
-        }
-        if ((wizardStep===2) && (stepType==='keys')) {
-            return 'progressBarActive';
-        }
-        if ((wizardStep===3) && (stepType==='payment')) {
-            return 'progressBarActive';
-        }
-        if ((wizardStep===4) && (stepType==='download')) {
-            return 'progressBarActive';
-        }
+    // const renderProgressBarClass = (stepType) => {
+    //     if ((wizardStep===1) && (stepType==='setup')) {
+    //         return 'progressBarActive';
+    //     }
+    //     if ((wizardStep===2) && (stepType==='keys')) {
+    //         return 'progressBarActive';
+    //     }
+    //     if ((wizardStep===3) && (stepType==='payment')) {
+    //         return 'progressBarActive';
+    //     }
+    //     if ((wizardStep===4) && (stepType==='download')) {
+    //         return 'progressBarActive';
+    //     }
 
-        if ((wizardStep>=2) && (stepType==='setup')) {
-            return 'progressBarSuccess';
-        }
-        if ((wizardStep>=3) && (stepType==='keys')) {
-            return 'progressBarSuccess';
-        }
-        if ((wizardStep>=4) && (stepType==='payment')) {
-            return 'progressBarSuccess';
-        }
-        if ((wizardStep>=5) && (stepType==='download')) {
-            return 'progressBarSuccess';
-        }
-        return 'progressBarDefault';
-    };
+    //     if ((wizardStep>=2) && (stepType==='setup')) {
+    //         return 'progressBarSuccess';
+    //     }
+    //     if ((wizardStep>=3) && (stepType==='keys')) {
+    //         return 'progressBarSuccess';
+    //     }
+    //     if ((wizardStep>=4) && (stepType==='payment')) {
+    //         return 'progressBarSuccess';
+    //     }
+    //     if ((wizardStep>=5) && (stepType==='download')) {
+    //         return 'progressBarSuccess';
+    //     }
+    //     return 'progressBarDefault';
+    // };
 
     const onPaymentComplete = () => {
         cookies.remove('kosign_sale_id');
