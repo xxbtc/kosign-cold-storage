@@ -94,7 +94,7 @@ function CreateMintKeys(props) {
                                         ))}
                                     </select>
                                 </div>
-                                <div className={'text-muted'} style={{marginTop:5}}>How many keys do you want to mint? First two keys are free.</div>
+                                <div className={'text-muted'} style={{marginTop:5}}>How many keys do you want to mint?</div>
                             </FormGroup>
 
                             {totalShareholders>1?
