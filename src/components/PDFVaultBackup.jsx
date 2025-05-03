@@ -22,7 +22,7 @@ const PDFVaultBackup = (props) => {
         }
         let metadata = JSON.stringify({
             id:1,
-            about:'Kosign Vault',
+            about:'Vault [Kosign.xyz]',
             qrcodes: totalQRCodes,
             version: CURRENT_VAULT_VERSION,
             vaultName: props.vaultName,
@@ -279,7 +279,7 @@ const PDFVaultBackup = (props) => {
           <div key={'rowvaultheader_'+pageNumber} style={styles.sectionTop}>
               <div style={{height:60,display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
                     <div style={styles.vaultTitle}>
-                        Kosign Data Vault
+                        Vault [Kosign.xyz]
                         <span style={styles.alertDanger}>
                             <b>!! IMPORTANT !!</b>
                         </span>

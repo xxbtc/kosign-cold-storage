@@ -37,6 +37,7 @@ import Html2PDF from 'html2pdf.js';
 import PaymentGumRoadComponent from "./PaymentGumRoadComponent";
 import {Oval} from "react-loading-icons";
 import {PaymentService} from "../services/PaymentService";
+import VaultDownloadSection from './VaultDownloadSection';
 
 function CreateVault(props) {
 
@@ -628,152 +629,26 @@ function CreateVault(props) {
                 }
 
                 {wizardStep === 5 ?
-                    <div>
-                        <Row>
-                            <Col xs={{span: 12}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
-                                <div className="alert alert-warning">
-                                    <b>This page will only be visible once. </b>
-                                    Do not browse away before you've printed both your vault and keys
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col xs={{span: 12}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                                <div className={'downloadSection'}>
-                                    <h3><span className={'numberSpan'}>1.</span> Print your vault</h3>
-                                    <div>Print your encrypted vault.</div>
-                                    <div className={'securityTips'}>
-                                        <div><FaLock style={{color:'#777', marginRight:4, fontSize:12}} /> Keep copies in different locations</div>
-                                    </div>
-                                    <div style={{marginTop:15}}>
-                                        <div>
-                                            <Button
-                                                className={hasPressedVaultPrint?'btn-success btn-download':'btn-primary btn-download flashing'}
-                                                style={{marginRight:10}}
-                                                size={'lg'}
-                                                onClick={()=>doPrintVault()}
-                                            >
-                                                Print Vault
-                                            </Button>
-                                        </div>
-                                        <div style={{marginTop:10, textAlign:'center'}}>
-                                            <Link
-                                                to={'#'}
-                                                className={'linkage'}
-                                                onClick={()=>downloadVault()}
-                                            >
-                                                Download Vault
-                                            </Link>
-                                        </div>
-                                    </div>
-
-                                    <div id={'idvaultbackup'}
-                                         ref={refBackupVaultPDF}
-                                         className={'contentToPrint'}>
-                                        <PDFVaultBackup
-                                            vaultIdent={vaultIdent}
-                                            cipherText={cipherText}
-                                            shares={shares}
-                                            threshold={consensus}
-                                            vaultName={vaultName}
-                                            description={description}
-                                            cipherIV={cipherIV}
-                                            createdTimestamp={createdTimestamp}
-                                            qrtype={'printable'}
-                                            keyAliasArray = {keyAliasArray}
-                                            maxLengthPerQRCode={maxLengthPerQRCode}
-                                        />
-                                    </div>
-                                </div>
-
-                            </Col>
-                            <Col xs={{span: 12}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                                <div className={'downloadSection'}>
-                                    <h3><span className={'numberSpan'}>2.</span> Print keys</h3>
-                                    <div>Distribute one key per person.</div>
-                                    <div className={'securityTips'}>
-                                        {/*<div>
-                                            <FaLock style={{color:'#777', marginRight:4, fontSize:12}} /> Place keys in taper proof envelopes
-                                        </div>*/}
-                                        <div>
-                                            <FaLock style={{color:'#777', marginRight:4, fontSize:12}} /> Distribute in-person where possible
-                                        </div>
-                                        {/*<div>
-                                            <FaLock style={{color:'#777', marginRight:4, fontSize:12}} /> Don't download keys if you don't have to. If you do, make sure you delete all key files after distribution.
-                                        </div>*/}
-                                    </div>
-                                    <div style={{marginTop:15}}>
-                                        <div>
-                                            <Button
-                                                className={hasPressedKeyPrint?'btn-success btn-download':'btn-primary btn-download flashing'}
-                                                style={{marginRight:10}}
-                                                size={'lg'}
-                                                onClick={doPrintKeys}
-                                            >
-                                                Print Keys ({shares.length})
-                                            </Button>
-                                        </div>
-                                        <div style={{marginTop:10, textAlign:'center'}}>
-                                            {shares.map((share, i) =>
-                                                <div key={'sharekey-'+i} style={{marginTop:10}}>
-                                                    <Link
-                                                        to={'#'}
-                                                        className={'linkage'}
-                                                        onClick={()=>downloadKey(share, i)}
-                                                    >
-                                                        Download key #{i+1}
-                                                    </Link>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div id={'idvaultbackup'}
-                                         ref={refBackupKeyPDF}
-                                         className={'contentToPrint'}>
-                                        {shares.map((share, i) =>
-                                            <PDFKeyBackup
-                                                /* ref={refBackupKeyPDF}*/
-                                                /*ref={props.refProp.current[i]}*/
-                                                id={'keyshare'+i}
-                                                key={'share'+i}
-                                                vaultIdent={vaultIdent}
-                                                threshold={consensus}
-                                                vaultName={vaultName}
-                                                description={description}
-                                                createdTimestamp={createdTimestamp}
-                                                myDecryptedKey={share}
-                                                qrtype={'printable'}
-                                                keyAlias={keyAliasArray[i]}
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/*<PDFDownloadLink
-                                    className={'btn btn-primary'}
-                                    document={
-                                        <PDFVaultBackup
-                                            vaultIdent={vaultIdent}
-                                            cipherText={cipherText}
-                                            shares={shares}
-                                            threshold={consensus}
-                                            vaultName={vaultName}
-                                            description={description}
-                                            cipherIV={cipherIV}
-                                            createdTimestamp={createdTimestamp}
-                                            />
-                                    }
-                                    fileName={"kosign-vault.pdf"}
-                                >
-                                    {({ blob, url, loading, error }) => (loading ? 'Loading  ...' : ('Download Vault'))}
-                                </PDFDownloadLink>*/}
-
-                                {/*<PDFViewer className={'pdfViewer'}>
-
-                                </PDFViewer>*/}
-                            </Col>
-                        </Row>
-                    </div>
+                    <VaultDownloadSection
+                        hasPressedVaultPrint={hasPressedVaultPrint}
+                        hasPressedKeyPrint={hasPressedKeyPrint}
+                        doPrintVault={doPrintVault}
+                        doPrintKeys={doPrintKeys}
+                        downloadVault={downloadVault}
+                        downloadKey={downloadKey}
+                        refBackupVaultPDF={refBackupVaultPDF}
+                        refBackupKeyPDF={refBackupKeyPDF}
+                        vaultIdent={vaultIdent}
+                        cipherText={cipherText}
+                        shares={shares}
+                        consensus={consensus}
+                        vaultName={vaultName}
+                        description={description}
+                        cipherIV={cipherIV}
+                        createdTimestamp={createdTimestamp}
+                        keyAliasArray={keyAliasArray}
+                        maxLengthPerQRCode={maxLengthPerQRCode}
+                    />
                     : null}
                 </div>
 
