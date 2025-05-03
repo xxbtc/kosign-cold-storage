@@ -3,6 +3,7 @@ import moment from 'moment-timezone';
 import QRCode from 'qrcode.react';
 import QRCode2 from 'qrcode';
 import {StyleSheet, Image } from '@react-pdf/renderer';
+import { CURRENT_VAULT_VERSION, VAULT_VERSIONS } from '../config/vaultConfig';
 
 const PDFVaultBackup = (props) => {
      //   console.log(props);
@@ -23,13 +24,14 @@ const PDFVaultBackup = (props) => {
             id:1,
             about:'Kosign Vault',
             qrcodes: totalQRCodes,
-            version:1,
+            version: CURRENT_VAULT_VERSION,
             vaultName: props.vaultName,
             description: props.description,
             shares: props.shares.length,
             threshold: props.threshold,
             cipherIV: props.cipherIV,
-            keys:props.keyAliasArray
+            keys:props.keyAliasArray,
+            format: VAULT_VERSIONS[CURRENT_VAULT_VERSION]
         });
 
         canvas = document.createElement('canvas');

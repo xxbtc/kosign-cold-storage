@@ -133,28 +133,21 @@ function CreateVault(props) {
     useEffect(()=>{
         if (wizardStep===4) {
             setTimeout(() => {
-                //console.log('secret value is ', secretValue);
                 EncryptionService.encrypt(secretValue, false).then((encryptionResult) => {
-                    //console.log('done encyprint', encryptionResult);
                     setCiphertext(encryptionResult.cipherText);
                     setCipherKey(encryptionResult.cipherKey);
                     setCipherIV(encryptionResult.cipherIV);
                     setCipherOpenSSL(encryptionResult.cipherOpenSSL);
                     setVaultIdent('kosign-coldstorage');
                     setCreatedTimestamp(Math.floor(Date.now() / 1000));
-                    //console.log('splitting key....');
+                   
                     if (parseInt(totalShareholders)>1) {
                         EncryptionService.splitKey(encryptionResult.cipherKey, parseInt(totalShareholders), parseInt(consensus)).then((xshares) => {
-                           // console.log('split OK....', xshares);
                             setShares(xshares);
-
-                            //console.log('wizard step is ', wizardStep+1);
-                            // setWizardStep(5);
                         });
                     } else {
                         setShares([encryptionResult.cipherKey]);
                     }
-
                 });
             }, 1000);
         }

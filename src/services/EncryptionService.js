@@ -1,9 +1,11 @@
 import secrets from 'secrets.js'; //TODO:fix to secrets.js-grempe
+import { CURRENT_VAULT_VERSION, VAULT_VERSIONS } from '../config/vaultConfig';
+
 const CryptoJS = require("crypto-js");
 const bip39 = require('bip39');
 
-export  class EncryptionService  {
 
+export class EncryptionService {
     constructor() {
 
     }
@@ -25,26 +27,33 @@ export  class EncryptionService  {
 
         const encryptionOptions = {
             iv      : iv,
-            /*mode    : CryptoJS.mode.CBC,
-            padding : CryptoJS.pad.Pkcs7,*/
             mode    : CryptoJS.mode.CTR,
             padding : CryptoJS.pad.NoPadding,
             hasher  : CryptoJS.algo.SHA256
         };
 
-        const key        = CryptoJS.PBKDF2(passphrase, salt, {keySize: 256/32, iterations: 100000});
+        const key = CryptoJS.PBKDF2(passphrase, salt, {
+            keySize: 256/32, 
+            iterations: 100000
+        });
+        
         const ciphertext = CryptoJS.AES.encrypt(dataToEncrypt, key, encryptionOptions);
 
         return {
-            cipherText        : ciphertext.ciphertext.toString(CryptoJS.enc.Hex),
-            cipherKey         : ciphertext.key.toString(CryptoJS.enc.Hex),
-            cipherIV          : ciphertext.iv.toString(CryptoJS.enc.Hex),
-            cipherOpenSSL     : ciphertext.toString(),
-            encryptionOptions : encryptionOptions
+            cipherText: ciphertext.ciphertext.toString(CryptoJS.enc.Hex),
+            cipherKey: ciphertext.key.toString(CryptoJS.enc.Hex),
+            cipherIV: ciphertext.iv.toString(CryptoJS.enc.Hex),
+            cipherOpenSSL: ciphertext.toString(),
+            version: CURRENT_VAULT_VERSION
         };
     };
 
-    static decrypt = async (dataToDecrypt, secretKey, iv) => {
+    static decrypt = async (dataToDecrypt, secretKey, iv, version = CURRENT_VAULT_VERSION) => {
+        // Version validation
+        if (!VAULT_VERSIONS[version]) {
+            throw new Error(`Unsupported vault version: ${version}. Please update your software.`);
+        }
+
         const encryptionOptions = {
             iv      : CryptoJS.enc.Hex.parse(iv),
             mode    : CryptoJS.mode.CTR,
@@ -108,15 +117,11 @@ export  class EncryptionService  {
 
         mnemonic.forEach((row) => {
             row.forEach((word) => {
-
                     cleanWords.push((word));
-
-
             });
         });
 
        // console.log('clearn words ', cleanWords);
-
 
         let returnArray = [];
         let c = 0;
@@ -137,6 +142,5 @@ export  class EncryptionService  {
 
         return returnArray;
     }
-
 }
 
