@@ -4,6 +4,7 @@ import QRCode from 'qrcode.react';
 import QRCode2 from 'qrcode';
 import {StyleSheet, Image } from '@react-pdf/renderer';
 import { CURRENT_VAULT_VERSION, VAULT_VERSIONS } from '../config/vaultConfig';
+import { FaExclamationTriangle, FaKey, FaLock, FaCalendarAlt, FaQrcode, FaUnlock, FaGithub } from 'react-icons/fa';
 
 const PDFVaultBackup = (props) => {
      //   console.log(props);
@@ -25,14 +26,17 @@ const PDFVaultBackup = (props) => {
             about:'Vault [Kosign.xyz]',
             qrcodes: totalQRCodes,
             version: CURRENT_VAULT_VERSION,
-            vaultName: props.vaultName,
-            description: props.description,
+            name: props.vaultName,
+            // description: props.description,
             shares: props.shares.length,
             threshold: props.threshold,
             cipherIV: props.cipherIV,
             keys:props.keyAliasArray,
             format: VAULT_VERSIONS[CURRENT_VAULT_VERSION]
         });
+
+        console.log('Metadata QR length:', metadata.length);
+        console.log('Metadata QR is ', metadata);
 
         canvas = document.createElement('canvas');
         QRCode2.toCanvas(canvas, metadata);
@@ -67,13 +71,13 @@ const PDFVaultBackup = (props) => {
 
     let pageNumber = 0;
 
-    const qrPerPage     = 4;
-    const firstPageQR   = 2;
+    const qrPerPage     = 1;
+    const firstPageQR   = 1;
 
     const totalQRs = qrArray.length*qrPerRow;
     const remainingQRs = totalQRs - firstPageQR;
 
-    const totalPages = 1 + Math.ceil(remainingQRs / qrPerPage);
+    const totalPages = totalQRCodes; // Each QR code gets its own page
 
 
 
@@ -84,295 +88,648 @@ const PDFVaultBackup = (props) => {
         return moment.tz(new Date(timestamp*1000), 'YYYY-MM-DD', moment.tz.guess()).format('YYYY-MM-DD HH:mm:ss')
     };
 
+    
     const styles = StyleSheet.create({
         printPage: {
-            pageBreakBefore: 'always',
-            height: 'auto !important',
-            overflow: 'initial !important',
+            flex: 1,
+            flexGrow: 1,
+            width: '100%',
+            minHeight: '297mm', // A4 height
+            boxSizing: 'border-box',
+            margin: 0,
+            padding: 0,
+        },
+        downloadPage: {
+            
+        },
+        highlightStyle: {
+            color: '#000', // gold/orange
+            fontWeight: 'bold',
+            textDecoration: 'underline',
+        },
+        asciiBoxStyle: {
+            fontFamily: 'monospace',
+            fontSize: 16,
+            color: '#000',
+            padding: '24px 32px',
+            marginBottom: 0,
+            whiteSpace: 'pre',
+            borderRadius: 8,
+            width: '100%',
+            boxSizing: 'border-box',
         },
         page: {
             flexDirection: 'column',
             backgroundColor: '#fff',
-            flex:1,
-            width:'100%',
-            height:'100%',
-            padding:50,
-            flexGrow:1,
-            display:'flex',
+            flex: 1,
+            width: '100%',
+            height: '100%',
+            padding: 0,
+            flexGrow: 1,
+            display: 'flex',
+            position: 'relative',
         },
         sectionTop: {
-            backgroundColor:'#fff',
-
-            display:'flex',
-            flexDirection:'column',
-            textAlign:'left',
-
+            backgroundColor: '#fff',
+            display: 'flex',
+            flexDirection: 'column',
+            textAlign: 'left',
+            borderBottom: '2px solid #e9ecef',
         },
-        detailWrapper: {
-            borderWidth:1,
-            borderRadius:4,
-            borderColor:'#ccc',
-            borderStyle:'solid',
-            padding:20,
-        },
-        sectionBottom: {
-            display:'block',
-            flex:1,
-            textAlign:'center',
-        },
-        QRRow: {
-            flexDirection:'row',
-            width:'100%',
-            display:'flex',
-            flex:1,
-            justifyContent:'space-around',
-            marginTop:0,
-            marginBottom:20,
-
-        },
-        QRWrapper: {
-            display:'flex',
-            flexDirection:'column',
-            flex:1,
-            flexGrow:1,
-            padding:0,
-            marginTop:10,
-            width:'100%',
-           /* borderWidth: 4,
-            borderColor: 'pink',
-            borderStyle: 'solid',*/
-            textAlign:'center',
-            alignItems:'center',
-        },
-        QRWrapperMiddle: {
-            display:'flex',
-            flexDirection:'column',
-            flex:1,
-            width:'100%',
-        },
-        QRWrapperInner: {
-            /*backgroundColor:'red',*/
-            display:'block',
-            padding:0,
-            marginRight:0,
-            marginBottom:0,
-            paddingTop:20,
-            textAlign:'center',
-        },
-        QRText: {
-            textAlign:'center',
-            fontFamily: 'Helvetica-Oblique',
-            fontSize:20,
-            display:'inline-block',
-            marginBottom:20,
-        },
-        QRImage: {
-            width:230,
-            height:230,
-        },
-        vaultText: {
-            marginBottom:10,
-            fontFamily: "Helvetica",
-            fontSize:20,
-            display:'block',
-
-        },
-        vaultTitleWrapper: {
-            marginBottom:0,
-            position:'relative',
+        headerContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            padding: '4px 0',
+            gap: 6,
+            width: '100%',
         },
         vaultTitle: {
             fontFamily: "Helvetica-BoldOblique",
-            fontSize:30,
-
-        },
-        vaultTextBold: {
-            fontFamily: "Helvetica-Bold",
-            display:'block',
-
-        },
-        vaultVariable: {
-            whiteSpace:'normal',
-            overflowWrap:'break-word',
-            paddingRight:10,
-        },
-        timestamp: {
-            fontFamily: "Helvetica",
-            fontSize:10,
-            color:'#999',
-            position:'absolute',
-            right:0,
-            top:6,
-        },
-        alert: {
-            backgroundColor:'#cfe2ff',
-            color:'#084298',
-            padding:20,
-            borderColor:'#b6d4fe',
-            borderRadius:4,
-            fontSize:12,
-            fontFamily: "Helvetica",
-            marginBottom:20,
-            marginTop:20,
-        },
-        keyAlias: {
-            display:'inline-block',
-            margin:4,
-            marginLeft:0,
-            borderWidth:1,
-            borderColor:'#ccc',
-            borderStyle:'solid',
-            fontSize:16,
-            paddingTop:1,
-            paddingRight:6,
-            paddingLeft:6,
-            paddingBottom:1,
-            backgroundColor:'#ddd',
-            borderRadius:15,
+            fontSize: 30,
+            color: '#2c3e50',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
         },
         alertDanger: {
-            backgroundColor:'#f8d7da',
-            color: '#721c24',
-            borderWidth:1,
-            borderColor:'#f5c6cb',
-            borderStyle:'solid',
-            display:'inline-block',
-            fontSize:20,
-            padding:4,
-            paddingTop:0,
-            paddingBottom:0,
-            paddingLeft:10,
-            paddingRight:10,
-            marginLeft:20,
-            marginBottom:10
-        }
+            backgroundColor: '#fff3f3',
+            color: '#dc3545',
+            borderWidth: 1,
+            borderColor: '#dc3545',
+            borderStyle: 'solid',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            fontSize: 16,
+            padding: '8px 12px',
+            borderRadius: 4,
+            marginLeft: 20,
+        },
+        unlockLink: {
+            color: '#0d6efd',
+            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+        },
+        detailWrapper: {
+            borderWidth: 1,
+            borderRadius: 8,
+            borderColor: '#e9ecef',
+            borderStyle: 'solid',
+            padding: 0,
+            backgroundColor: '#fff',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            marginTop: 12,
+        },
+        detailTable: {
+            width: '100%',
+            borderCollapse: 'separate',
+            borderSpacing: 0,
+        },
+        detailRow: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            padding: '10px 0',
+            borderTop: '1px solid #f0f2f5',
+        },
+        detailRowLast: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            padding: '8px 0',
+        },
+        detailLabel: {
+            width: 140,
+            minWidth: 140,
+            fontFamily: "Helvetica-Bold",
+            color: '#000',
+            fontSize: 14,
+            paddingRight: 16,
+            textAlign: 'right',
+            letterSpacing: 0.1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            gap: 6,
+        },
+        detailValue: {
+            flex: 1,
+            fontFamily: "Helvetica",
+            color: '#495057',
+            fontSize: 14,
+            paddingLeft: 8,
+            wordBreak: 'break-word',
+            display: 'flex',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 4,
+        },
+        keyAlias: {
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4,
+            margin: '2px 2px',
+            borderWidth: 1,
+            borderColor: '#e9ecef',
+            borderStyle: 'solid',
+            fontSize: 12,
+            padding: '2px 6px',
+            backgroundColor: '#f8f9fa',
+            borderRadius: 12,
+            color: '#495057',
+            transition: 'all 0.2s ease',
+        },
+        keysContainer: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 4,
+            padding: 0,
+            marginTop: 0,
+        },
+        keysLabel: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            marginBottom: 4,
+        },
+        vaultNameHeader: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            padding: '0',
+            maxWidth: '50%',
+            flex: '0 0 auto',
+        },
+        vaultNameLabel: {
+            width: 140,
+            minWidth: 140,
+            fontFamily: "Helvetica-Bold",
+            color: '#2c3e50',
+            fontSize: 16,
+            paddingRight: 16,
+            textAlign: 'right',
+            letterSpacing: 0.1,
+        },
+        vaultNameValue: {
+            flex: 1,
+            fontFamily: "Helvetica",
+            color: '#2c3e50',
+            fontSize: 16,
+            paddingLeft: 8,
+            wordBreak: 'break-word',
+        },
+        QRWrapperMiddle: {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            width: '100%',
+            padding: '0',
+            gap: 0,
+        },
+        QRWrapperMiddleSecondPage: {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            width: '100%',
+            padding: '0',
+            marginTop: 200,
+        },
+        QRRow: {
+            
+        },
+        QRWrapperInner: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+        },
+        QRText: {
+            fontFamily: 'Helvetica-Bold',
+            fontSize: 18,
+            color: '#0d6efd',
+            fontWeight: 400,
+            letterSpacing: 0.2,
+            wordSpacing: 0.2,
+            padding: '4px 16px',
+            textAlign: 'center',
+            backgroundColor: '#f8f9fa',
+            border: '1px solid #0d6efd',
+            borderRadius: 4,
+            textTransform: 'uppercase',
+            marginBottom:15,
+        },
+        QRCodeContainer: {
+            flex: 1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 0,
+        },
+        QRImage: {
+            width: 400,
+            height: 400,
+            padding: 10,
+            backgroundColor: '#fff',
+            objectFit: 'contain',
+        },
+        pageNumber: {
+            position: 'absolute',
+            bottom: 40,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            fontSize: 16,
+            color: '#000',
+            fontFamily: 'Helvetica',
+        },
+        vaultTitleCompact: {
+            fontFamily: "Helvetica-BoldOblique",
+            fontSize: 25,
+            color: '#2c3e50',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            maxWidth: '60%',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+        },
+        headerRight: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-end',
+            justifyContent: 'flex-start',
+            fontSize: 16,
+            color: '#000',
+            fontWeight: 500,
+            textAlign: 'right',
+            fontFamily: 'monospace',
+            minWidth: '200px',
+            flex: '0 0 auto',
+        },
+        QRWarning: {
+            fontFamily: 'Helvetica-Oblique',
+            fontSize: 16,
+            color: '#dc3545',
+            fontWeight: 600,
+            letterSpacing: 0.1,
+            wordSpacing: 0.1,
+            writingMode: 'vertical-rl',
+            textOrientation: 'mixed',
+            transform: 'rotate(180deg)',
+            paddingRight: '30px',
+        },
+        QRLeftText: {
+            fontFamily: 'Helvetica-Oblique',
+            fontSize: 16,
+            color: '#dc3545',
+            fontWeight: 600,
+            letterSpacing: 0.1,
+            wordSpacing: 0.1,
+            writingMode: 'vertical-rl',
+            textOrientation: 'mixed',
+            transform: 'rotate(180deg)',
+            paddingLeft: '30px',
+            
+        },
+        qrCount: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '4px 12px',
+            border: '1px solid #e9ecef',
+            borderRadius: 4,
+            minWidth: 80,
+        },
+        qrCountNumber: {
+            fontFamily: 'Helvetica-Bold',
+            fontSize: 16,
+            color: '#2c3e50',
+        },
+        qrCountLabel: {
+            fontFamily: 'Helvetica',
+            fontSize: 12,
+            color: '#6c757d',
+            marginTop: 2,
+        },
+        colorIdentifier: {
+            display: 'flex',
+            flexDirection: 'row',
+            height: '6px',
+            marginTop: '10px',
+            overflow: 'hidden',
+        },
+        colorBox: {
+            flex: 1,
+            height: '100%',
+        },
+        asciiImportantBox: {
+            width: '100%',
+            marginTop: 16,
+            marginBottom: 16,
+            fontFamily: 'monospace',
+        },
+        asciiDetailsSection: {
+            fontFamily: 'monospace',
+            whiteSpace: 'pre',
+        },
+        printPageBreak: {
+            pageBreakBefore: 'always',
+            pageBreakInside: 'avoid',
+            breakInside: 'avoid',
+            breakBefore: 'page',
+        },
     });
 
     const renderQR = (qrData, ii, i) => {
-
         return (
             <div key={'qrkey'+ii+'_'+i} style={styles.QRWrapperInner}>
-                {qrData.id===1?
-                    <div style={styles.QRText}>
-                        Metadata
+                <div style={styles.QRText}>
+                    {qrData.id===1 ? 'METADATA' : `SHARD #${qrData.id-1}`}
+                </div>
+                <div style={styles.QRCodeContainer}>
+                    <div style={styles.QRLeftText}>
+                        KEEP SECURE
                     </div>
-                    :
-                    <div style={styles.QRText}>Shard #{qrData.id-1}</div>
-                }
-
-                <div>
-                    {props.qrtype==='printable'?<QRCode id='qrcodekey' value={qrData.raw} size={260} />:null}
-                    {props.qrtype==='downloadable'?
-                        <Image src={qrData.qrCode} style={styles.QRImage}/>
-                        :
-                        null
+                    {props.qrtype==='printable'?
+                        <QRCode 
+                            id='qrcodekey' 
+                            value={qrData.raw} 
+                            size={400} 
+                            level="H"
+                            includeMargin={true}
+                        />
+                        :null
                     }
+                    {props.qrtype==='downloadable'?
+                        <Image 
+                            src={qrData.qrCode} 
+                            style={styles.QRImage}
+                            alt={`QR Code ${qrData.id === 1 ? 'Metadata' : `Data Shard #${totalQRs-1}`}`}
+                        />
+                        :null
+                    }
+                    <div style={styles.QRWarning}>
+                        DO NOT FOLD
+                    </div>
                 </div>
             </div>
         )
     };
 
-    const renderVaultHeader = (page, forceShowFullHeader) => {
-        pageNumber++;
-        //console.log('xxPAGE IS ', page);
-      return (
-          <div key={'rowvaultheader_'+pageNumber} style={styles.sectionTop}>
-              <div style={{height:60,display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
-                    <div style={styles.vaultTitle}>
-                        Vault [Kosign.xyz]
-                        <span style={styles.alertDanger}>
-                            <b>!! IMPORTANT !!</b>
-                        </span>
+    const renderVaultHeaderAscii = (page, forceShowFullHeader) => {
+        // Get formatted creation date
+        const creationDate = formatTime(props.createdTimestamp);
+
+        // Determine how to display the page range for shards
+        const shardPagesText = totalQRCodes === 2 
+            ? "(page 2)" 
+            : `(pages 2-${totalPages})`;
+
+        return (
+            <div style={styles.asciiBoxStyle}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                }}>
+                    <div style={{
+                        flexGrow: 1,
+                        flexShrink: 1,
+                        minWidth: 0,
+                        maxWidth: '65%',  
+                    }}>
+                        <div style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10, marginTop: 10, fontFamily: 'Helvetica-BoldOblique'}}>
+                            KOSIGN.XYZ SECURE COLD STORAGE
+                        </div>
+                        <div>
+                            {` ██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗
+ ██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝
+ ██║   ██║███████║██║   ██║██║     ██║   
+ ╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║   
+  ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║   
+   ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝   `}
+                        </div>
                     </div>
-                    <div style={{display:'inline-block'}}>
-                        Page {pageNumber}-of-{totalPages}
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-end',
+                        justifyContent: 'flex-start',
+                        minWidth: '240px',
+                    }}>
+                        {/* Color blocks with actual colors */}
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: '8px',
+                            marginTop: '8px',
+                        }}>
+                            {props.vaultColors && props.vaultColors.map((color, index) => (
+                                <div key={index} style={{
+                                    width: '28px',
+                                    height: '28px',
+                                    backgroundColor: color,
+                                    border: '1px solid #333',
+                                    borderRadius: '4px',
+                                }}></div>
+                            ))}
+                        </div>
+                        <div style={{
+                            marginTop: 10,
+                            fontFamily: 'monospace',
+                            color: '#dc3545',
+                            fontWeight: 'bold',
+                            border: '1px solid #dc3545',
+                            borderRadius: '0px',
+                            padding: '4px 0px',
+                            backgroundColor: '#fff3f3',
+                        }}>
+                            {`     !!! IMPORTANT !!!       `}
+                        </div>
+                        <div style={{marginTop: 8, fontWeight: 'bold'}}>{`Page 1 of ${totalPages}`}</div>
+                        <div style={{marginTop: 8}}>Created: {creationDate}</div>
+                        <div style={{marginTop: 8}}>v{CURRENT_VAULT_VERSION}</div>
                     </div>
-              </div>
-              {forceShowFullHeader?
-              <div style={{marginTop:10,marginBottom:20}}>
-                  Unlock at <a href={'https://kosign.xyz/unlock'} style={{color:'#1786ff'}}>https://kosign.xyz/unlock</a>
-              </div>
-              :null}
-
-              <div style={styles.detailWrapper}>
-                  <div>
-                      <div>
-                          <div style={styles.vaultText}>
-                              <div style={styles.vaultTextBold}>Vault Name:</div>
-                              <div style={styles.vaultVariable}>{props.vaultName}</div>
-                          </div>
-
-                          {forceShowFullHeader?
-                              <div>
-                                 {/* <div style={styles.vaultText}>
-                                      <div style={styles.vaultTextBold}>Description:</div>
-                                      <div style={styles.vaultVariable}>{props.description}</div>
-                                  </div>*/}
-                                  <div style={styles.vaultText}>
-                                      <div style={styles.vaultTextBold}>Keys:</div>
-                                      <div style={styles.vaultVariable}>
-                                          {props.keyAliasArray.map((val,i)=>
-                                              <div key={'aliaskey_'+i} style={styles.keyAlias}>
-                                                  {val}
-                                              </div>
-                                          )}
-                                      </div>
-                                  </div>
-                                  <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
-                                      <div style={styles.vaultText}>
-                                          <div style={styles.vaultTextBold}>Threshold:</div>
-                                          <div style={styles.vaultVariable}>{props.threshold} of {props.shares.length}</div>
-                                      </div>
-                                      <div style={{marginLeft:20}}>
-                                          <div style={styles.vaultText}>
-                                              <div style={styles.vaultTextBold}>Created:</div>
-                                              <div style={styles.vaultVariable}>{formatTime(props.createdTimestamp)}</div>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                              : null
-                          }
-                      </div>
-
-
-                  </div>
-              </div>
-
-              {/*<div><div>{props.threshold} of {props.shares}</div></div>*/}
-          </div>
-      )
+                </div>
+                
+                <div style={styles.asciiDetailsSection}>
+                    {`-----------------------------------------------------------------------------
+Vault Name:         ${props.vaultName}
+Contents:           ◆ 1 Metadata QR Code (page 1)
+                    ◆ ${totalQRCodes - 1} Data Shard QR Code${totalQRCodes - 1 !== 1 ? 's' : ''} ${shardPagesText}
+                    ◆ ${totalPages} page${totalPages !== 1 ? 's' : ''} total
+Keys Required:      ${props.threshold} of ${props.shares.length}
+Unlock URL:         `}
+                    <span style={styles.highlightStyle}>https://kosign.xyz/unlock</span>
+                    {`
+Source Code:        `}
+                    <span style={styles.highlightStyle}>https://github.com/xxbtc/kosign-unlock</span>
+                    {`
+Keys:               `}
+                    <div style={{
+                        display: 'inline-flex',
+                        flexWrap: 'wrap',
+                        fontFamily: 'monospace',
+                        maxWidth: 'calc(100% - 19ch)',
+                        gap: '8px',
+                        marginTop: '2px'
+                    }}>
+                        {props.keyAliasArray.map((key, index) => (
+                            <span key={index} style={{
+                                padding: '0 4px',
+                                border: '0.5px solid #888',
+                                borderRadius: '4px',
+                                backgroundColor: '#f8f9fa',
+                                fontWeight: 'normal',
+                                whiteSpace: 'nowrap',
+                                position: 'relative',
+                                display: 'inline-block'
+                            }}>
+                                {`${key}`}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )
+    };
+    
+    // Modify the renderCompactHeader function to match the full header style
+    const renderCompactHeader = (pageNumber) => {
+        // Get formatted creation date
+        const creationDate = formatTime(props.createdTimestamp);
+        
+        return (
+            <div style={styles.asciiBoxStyle}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                }}>
+                    <div style={{
+                        flexGrow: 1,
+                        flexShrink: 1,
+                        minWidth: 0,
+                        maxWidth: '65%',  
+                    }}>
+                        <div style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10, marginTop: 10, fontFamily: 'Helvetica-BoldOblique'}}>
+                            KOSIGN.XYZ SECURE COLD STORAGE
+                        </div>
+                        <div>
+                            {` ██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗
+ ██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝
+ ██║   ██║███████║██║   ██║██║     ██║   
+ ╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║   
+  ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║   
+   ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝   `}
+                        </div>
+                    </div>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-end',
+                        justifyContent: 'flex-start',
+                        minWidth: '240px',
+                    }}>
+                        {/* Color blocks with actual colors */}
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: '8px',
+                            marginTop: '8px',
+                        }}>
+                            {props.vaultColors && props.vaultColors.map((color, index) => (
+                                <div key={index} style={{
+                                    width: '28px',
+                                    height: '28px',
+                                    backgroundColor: color,
+                                    border: '1px solid #333',
+                                    borderRadius: '4px',
+                                }}></div>
+                            ))}
+                        </div>
+                        <div style={{
+                            marginTop: 10,
+                            fontFamily: 'monospace',
+                            color: '#dc3545',
+                            fontWeight: 'bold',
+                            border: '1px solid #dc3545',
+                            borderRadius: '0px',
+                            padding: '4px 0px',
+                            backgroundColor: '#fff3f3',
+                        }}>
+                            {`     !!! IMPORTANT !!!       `}
+                        </div>
+                        
+                        <div style={{marginTop: 8, fontWeight: 'bold'}}>{`Page ${pageNumber} of ${totalPages}`}</div>
+                    </div>
+                </div>
+                
+                <div style={{...styles.asciiDetailsSection, paddingBottom: 0, marginBottom: 0}}>
+                    {`-----------------------------------------------------------------------------
+Vault Name:         `}
+                    <span style={{
+                        display: 'inline-block',
+                        wordBreak: 'break-word',
+                        maxWidth: 'calc(100% - 19ch)',
+                        whiteSpace: 'normal'
+                    }}>
+                        {props.vaultName}
+                    </span>
+                    
+                </div>
+            </div>
+        );
     };
 
-
-
     return (
-        <div style={{size: 'A4', margin: 0, height:'initial', width:'210mm'}}>
-
-            {qrArray.map((row, i) =>
-                <div key={'keyqrraray_'+i} style={i%2===1?styles.printPage:null}>
+        <div style={props.qrtype==='printable'?styles.printPage:styles.downloadPage}>
+            {/* First page: Metadata QR + full header/details */}
+            <div style={{...styles.page, breakAfter: 'page'}}>
+                {renderVaultHeaderAscii(0, true)}
+                
+                <div style={styles.QRWrapperMiddle}>
+                    <div style={styles.QRRow}>
+                        {renderQR(qrArray[0][0], 0, 0)}
+                    </div>
+                </div>
+                <div style={{position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', fontSize: 16, color: '#000', fontFamily: 'Helvetica', zIndex: 1000}}>
+                    Page 1 of {totalPages}
+                </div>
+            </div>
+            
+            {/* Shard pages: One per page, compact header */}
+            {qrArray.flat().slice(1).map((qrData, idx) => (
+                <div key={'shardpage_' + idx} 
+                    style={{
+                        ...styles.printPageBreak,
+                        ...(props.qrtype==='printable' ? styles.printPage : null)
+                    }}>
                     <div style={styles.page}>
-                        {i===0?renderVaultHeader(i, true):null}
-
-                        {i % 2 === 1?
-                            <div>
-                                <div style={{marginTop:0}}>
-                                    {renderVaultHeader(i, false)}
-                                </div>
+                        {/* Compact header for non-first pages */}
+                        {renderCompactHeader(idx + 2)}
+                        
+                        <div style={{
+                            ...styles.QRWrapperMiddleSecondPage,
+                            marginTop: 80 // Reduced top margin to accommodate the header
+                        }}>
+                            <div style={styles.QRRow}>
+                                {renderQR(qrData, 0, idx + 1)}
                             </div>
-                            :null
-                        }
-                        <div key={'anotherkey'+i} style={styles.QRWrapperMiddle}>
-                            <div key={'qrrowid'+i} style={styles.QRRow}>
-                                {row.map((qrData, ii) => renderQR(qrData, ii, i))}
-                            </div>
+                        </div>
+                        <div style={{position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', fontSize: 16, color: '#000', fontFamily: 'Helvetica', zIndex: 1000}}>
+                            Page {idx + 2} of {totalPages}
                         </div>
                     </div>
                 </div>
-            )}
+            ))}
         </div>
     );
 
 };
 
 export default PDFVaultBackup;
+

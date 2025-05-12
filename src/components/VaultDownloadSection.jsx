@@ -25,13 +25,45 @@ const VaultDownloadSection = ({
     keyAliasArray,
     maxLengthPerQRCode
 }) => {
+    // Generate 3 distinct, recognizable colors for vault identification
+    const generateColors = () => {
+        // A set of easy-to-identify, high-contrast colors
+        const baseColors = [
+            '#FF0000', // Red
+            '#0000FF', // Blue
+            '#008000', // Green
+            '#FFA500', // Orange
+            '#800080', // Purple
+            '#A52A2A', // Brown
+            '#000000', // Black 
+            '#FF00FF', // Magenta
+            '#00FFFF', // Cyan
+            '#FFD700'  // Gold
+        ];
+        
+        // Randomly select 3 distinct colors
+        const selectedColors = [];
+        const copyColors = [...baseColors];
+        
+        for (let i = 0; i < 3; i++) {
+            if (copyColors.length === 0) break;
+            const randomIndex = Math.floor(Math.random() * copyColors.length);
+            selectedColors.push(copyColors[randomIndex]);
+            copyColors.splice(randomIndex, 1); // Remove selected color
+        }
+        
+        return selectedColors;
+    };
+
+    const vaultColors = generateColors();
+
     return (
         <div>
             <Row>
                 <Col xs={{span: 12}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
                     <div className="alert alert-warning">
                         <b>This page will only be visible once. </b>
-                        Do not browse away before you've printed both your vault and keys
+                        <br/>Do not browse away before you've printed both your vault and keys
                     </div>
                 </Col>
             </Row>
@@ -80,6 +112,7 @@ const VaultDownloadSection = ({
                                 qrtype={'printable'}
                                 keyAliasArray={keyAliasArray}
                                 maxLengthPerQRCode={maxLengthPerQRCode}
+                                vaultColors={vaultColors}
                             />
                         </div>
                     </div>
@@ -133,6 +166,7 @@ const VaultDownloadSection = ({
                                     myDecryptedKey={share}
                                     qrtype={'printable'}
                                     keyAlias={keyAliasArray[i]}
+                                    vaultColors={vaultColors}
                                 />
                             )}
                         </div>

@@ -9,7 +9,7 @@ const VaultMetadata = ({ metadata, VAULT_VERSIONS }) => {
             <div className="metadata-header">
                 <div className="meta-item">
                     <span className="meta-label">Vault Name</span>
-                    <span className="meta-value">{metadata.vaultName}</span>
+                    <span className="meta-value">{metadata.name}</span>
                 </div>
             </div>
             <div className="metadata-details">

@@ -516,18 +516,6 @@
     }
 }
 
-@media print {
-    @page {
-        size: A4;
-        margin: 0;
-    }
-    html, body {
-        width: 210mm; /* A4 Paper width */
-        height: initial !important;
-        overflow: initial !important;
-    }
-}
-
 
 /* large devices */
 @media (min-width: 768px) {

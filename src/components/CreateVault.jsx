@@ -57,7 +57,7 @@ function CreateVault(props) {
     //const [maxSecretChars, setMaxChars] = useState(1470);
     const [maxSecretChars, setMaxChars] = useState(global.maxCharsPerVault);
     const [maxDescriptionChars, setMaxDescriptionChars] = useState(135);
-    const [maxVaultNameChars, setMaxVaultNameChars] = useState(60);
+    const [maxVaultNameChars, setMaxVaultNameChars] = useState(50);
     const [keyAliasArray, setKeyAliasArray] = useState([]);
 
     const [hasPressedVaultPrint, setHasPressedVaultPrint]   = useState(false);
@@ -76,10 +76,10 @@ function CreateVault(props) {
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
     const [totalPages, setTotalPages] = useState();
 
-    const maxLengthPerQRCode = 600;
+    const maxLengthPerQRCode = 400;
     const qrPerPage     = 4;
     const firstPageQR   = 2;
-    const qrPerRow      = 2;
+    const qrPerRow      = 4;
 
 
     const calculateHowManyPages = (value) => {

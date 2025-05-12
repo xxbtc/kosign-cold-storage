@@ -13,9 +13,7 @@ export const VAULT_VERSIONS = {
     '1': {
         algorithm: 'AES-256-CTR',
         kdf: 'PBKDF2',
-        kdfIterations: 100000,
-        shamirImpl: 'secrets.js',
-        description: 'Initial vault format'
+        
     }
 };
 

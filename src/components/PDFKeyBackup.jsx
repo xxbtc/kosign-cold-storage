@@ -136,6 +136,18 @@ const PDFKeyBackup = (props) => {
             paddingRight:10,
             marginLeft:20,
             marginBottom:10
+        },
+        colorIdentifier: {
+            display: 'flex',
+            flexDirection: 'row',
+            height: '8px',
+            marginBottom: '12px',
+            borderRadius: '2px',
+            overflow: 'hidden',
+        },
+        colorBox: {
+            flex: 1,
+            height: '100%',
         }
     });
 
@@ -158,6 +170,13 @@ const PDFKeyBackup = (props) => {
         <div style={props.qrtype==='printable'?styles.printPage:null}>
             <div style={styles.page}>
                  <div style={styles.sectionTop}>
+                    {props.vaultColors && (
+                        <div style={styles.colorIdentifier}>
+                            {props.vaultColors.map((color, i) => (
+                                <div key={'color-'+i} style={{...styles.colorBox, backgroundColor: color}} />
+                            ))}
+                        </div>
+                    )}
                     <div style={{display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between'}}>
                         <div style={styles.vaultTitle}>
                             Kosign Vault Key
