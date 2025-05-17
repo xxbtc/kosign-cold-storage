@@ -88,7 +88,17 @@ const PDFVaultBackup = (props) => {
         return moment.tz(new Date(timestamp*1000), 'YYYY-MM-DD', moment.tz.guess()).format('YYYY-MM-DD HH:mm:ss')
     };
 
-    
+    // Add this right after the formatTime function
+    // Define a fallback set of colors to use if props.vaultColors is empty
+    const defaultColors = ['#FF0000', '#0000FF', '#008000']; // Red, Blue, Green
+    // Log and use the colors that are available, or use defaults
+    const effectiveColors = (props.vaultColors && props.vaultColors.length > 0) 
+        ? props.vaultColors 
+        : defaultColors;
+
+    console.log("Vault colors:", props.vaultColors);
+    console.log("Effective colors:", effectiveColors);
+
     const styles = StyleSheet.create({
         printPage: {
             flex: 1,
@@ -100,7 +110,13 @@ const PDFVaultBackup = (props) => {
             padding: 0,
         },
         downloadPage: {
-            
+            flex: 1,
+            flexGrow: 1,
+            width: '100%',
+            minHeight: '297mm', // A4 height
+            boxSizing: 'border-box',
+            margin: 0,
+            padding: 0,
         },
         highlightStyle: {
             color: '#000', // gold/orange
@@ -109,9 +125,9 @@ const PDFVaultBackup = (props) => {
         },
         asciiBoxStyle: {
             fontFamily: 'monospace',
-            fontSize: 16,
+            fontSize: props.qrtype === 'downloadable' ? 14 : 16,
             color: '#000',
-            padding: '24px 32px',
+            padding: props.qrtype === 'downloadable' ? '12px 20px' : '24px 32px',
             marginBottom: 0,
             whiteSpace: 'pre',
             borderRadius: 8,
@@ -128,6 +144,8 @@ const PDFVaultBackup = (props) => {
             flexGrow: 1,
             display: 'flex',
             position: 'relative',
+            boxSizing: 'border-box',
+            overflow: 'hidden',
         },
         sectionTop: {
             backgroundColor: '#fff',
@@ -286,7 +304,7 @@ const PDFVaultBackup = (props) => {
             flexDirection: 'column',
             flex: 1,
             width: '100%',
-            padding: '0',
+            padding: props.qrtype === 'downloadable' ? '30px 0 60px 0' : '0',
             gap: 0,
         },
         QRWrapperMiddleSecondPage: {
@@ -295,7 +313,8 @@ const PDFVaultBackup = (props) => {
             flex: 1,
             width: '100%',
             padding: '0',
-            marginTop: 200,
+            marginTop: props.qrtype === 'downloadable' ? 40 : 100,
+            paddingBottom: props.qrtype === 'downloadable' ? 60 : 0,
         },
         QRRow: {
             
@@ -326,7 +345,11 @@ const PDFVaultBackup = (props) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            gap: 0,
+            position: 'relative',
+            padding: props.qrtype === 'downloadable' ? '0 70px' : '0',
+            height: props.qrtype === 'downloadable' ? 380 : 400,
+            width: props.qrtype === 'downloadable' ? 380 : 400,
+            margin: '0 auto',
         },
         QRImage: {
             width: 400,
@@ -376,10 +399,23 @@ const PDFVaultBackup = (props) => {
             fontWeight: 600,
             letterSpacing: 0.1,
             wordSpacing: 0.1,
-            writingMode: 'vertical-rl',
-            textOrientation: 'mixed',
-            transform: 'rotate(180deg)',
-            paddingRight: '30px',
+            ...(props.qrtype === 'printable' 
+                ? {
+                    writingMode: 'vertical-rl',
+                    textOrientation: 'mixed',
+                    transform: 'rotate(180deg)',
+                    paddingRight: '30px',
+                    position: 'relative'
+                  }
+                : {
+                    transform: 'rotate(-90deg)',
+                    paddingRight: '0px',
+                    position: 'absolute',
+                    right: '-80px',
+                    width: '100px',
+                    textAlign: 'center'
+                  }
+            )
         },
         QRLeftText: {
             fontFamily: 'Helvetica-Oblique',
@@ -388,11 +424,23 @@ const PDFVaultBackup = (props) => {
             fontWeight: 600,
             letterSpacing: 0.1,
             wordSpacing: 0.1,
-            writingMode: 'vertical-rl',
-            textOrientation: 'mixed',
-            transform: 'rotate(180deg)',
-            paddingLeft: '30px',
-            
+            ...(props.qrtype === 'printable'
+                ? {
+                    writingMode: 'vertical-rl',
+                    textOrientation: 'mixed',
+                    transform: 'rotate(180deg)',
+                    paddingLeft: '30px',
+                    position: 'relative'
+                  }
+                : {
+                    transform: 'rotate(90deg)',
+                    paddingLeft: '0px',
+                    position: 'absolute',
+                    left: '-80px',
+                    width: '100px',
+                    textAlign: 'center'
+                  }
+            )
         },
         qrCount: {
             display: 'flex',
@@ -422,8 +470,10 @@ const PDFVaultBackup = (props) => {
             overflow: 'hidden',
         },
         colorBox: {
-            flex: 1,
-            height: '100%',
+            width: '28px',
+            height: '28px',
+            border: '1px solid #333',
+            borderRadius: '4px',
         },
         asciiImportantBox: {
             width: '100%',
@@ -479,6 +529,70 @@ const PDFVaultBackup = (props) => {
         )
     };
 
+    // First, add a function that creates a text-based representation of colors
+    const getColorRep = (color) => {
+        // Extract the color name or generate a simple text representation
+        if (color.startsWith('#')) {
+            // Convert hex to simple name if possible
+            if (color === '#FF0000') return 'RED';
+            if (color === '#0000FF') return 'BLUE';
+            if (color === '#008000') return 'GREEN';
+            if (color === '#FFA500') return 'ORANGE';
+            if (color === '#800080') return 'PURPLE';
+            if (color === '#A52A2A') return 'BROWN';
+            if (color === '#000000') return 'BLACK';
+            if (color === '#FF00FF') return 'MAGENTA';
+            if (color === '#00FFFF') return 'CYAN';
+            if (color === '#FFD700') return 'GOLD';
+            
+            // If not a standard color, use first 3 chars of hex
+            return color.substring(1, 4);
+        }
+        return 'COLOR';
+    };
+
+    // Then update the renderColorBoxes function to use effectiveColors instead
+    const renderColorBoxes = () => {
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+                marginTop: '8px',
+                alignItems: 'flex-end'
+            }}>
+                {/* Add a text label for colors that will definitely show up in PDF
+                <div style={{fontSize: 12, fontFamily: 'monospace', fontWeight: 'bold'}}>
+                    COLORS: {effectiveColors.map(color => getColorRep(color)).join(' | ')}
+                </div> */}
+                
+                {/* Also keep the visual representation for browser/print */}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '8px',
+                }}>
+                    {effectiveColors.map((color, index) => (
+                        <div key={index} style={{
+                            width: '28px',
+                            height: '28px',
+                            backgroundColor: color,
+                            border: '1px solid #333',
+                            borderRadius: '4px',
+                            textAlign: 'center',
+                            lineHeight: '28px',
+                            fontSize: '16px',
+                            color: color === '#000000' ? '#FFFFFF' : '#000000',
+                            fontWeight: 'bold'
+                        }}>
+                            &nbsp;
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
     const renderVaultHeaderAscii = (page, forceShowFullHeader) => {
         // Get formatted creation date
         const creationDate = formatTime(props.createdTimestamp);
@@ -520,23 +634,9 @@ const PDFVaultBackup = (props) => {
                         justifyContent: 'flex-start',
                         minWidth: '240px',
                     }}>
-                        {/* Color blocks with actual colors */}
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: '8px',
-                            marginTop: '8px',
-                        }}>
-                            {props.vaultColors && props.vaultColors.map((color, index) => (
-                                <div key={index} style={{
-                                    width: '28px',
-                                    height: '28px',
-                                    backgroundColor: color,
-                                    border: '1px solid #333',
-                                    borderRadius: '4px',
-                                }}></div>
-                            ))}
-                        </div>
+                        {/* Use the new function to render color blocks */}
+                        {renderColorBoxes()}
+                        
                         <div style={{
                             marginTop: 10,
                             fontFamily: 'monospace',
@@ -634,23 +734,9 @@ Keys:               `}
                         justifyContent: 'flex-start',
                         minWidth: '240px',
                     }}>
-                        {/* Color blocks with actual colors */}
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: '8px',
-                            marginTop: '8px',
-                        }}>
-                            {props.vaultColors && props.vaultColors.map((color, index) => (
-                                <div key={index} style={{
-                                    width: '28px',
-                                    height: '28px',
-                                    backgroundColor: color,
-                                    border: '1px solid #333',
-                                    borderRadius: '4px',
-                                }}></div>
-                            ))}
-                        </div>
+                        {/* Use the new function to render color blocks */}
+                        {renderColorBoxes()}
+                        
                         <div style={{
                             marginTop: 10,
                             fontFamily: 'monospace',
@@ -691,13 +777,26 @@ Vault Name:         `}
             <div style={{...styles.page, breakAfter: 'page'}}>
                 {renderVaultHeaderAscii(0, true)}
                 
-                <div style={styles.QRWrapperMiddle}>
+                <div style={{
+                    ...styles.QRWrapperMiddle,
+                    position: 'relative',
+                }}>
                     <div style={styles.QRRow}>
                         {renderQR(qrArray[0][0], 0, 0)}
                     </div>
-                </div>
-                <div style={{position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', fontSize: 16, color: '#000', fontFamily: 'Helvetica', zIndex: 1000}}>
-                    Page 1 of {totalPages}
+                    
+                    {/* <div style={{
+                        position: props.qrtype === 'downloadable' ? 'absolute' : 'absolute',
+                        bottom: props.qrtype === 'downloadable' ? '10px' : '40px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        fontSize: props.qrtype === 'downloadable' ? 14 : 16,
+                        color: '#000',
+                        fontFamily: 'Helvetica',
+                        zIndex: 1000
+                    }}>
+                        Page 1 of {totalPages}
+                    </div> */}
                 </div>
             </div>
             
@@ -714,14 +813,24 @@ Vault Name:         `}
                         
                         <div style={{
                             ...styles.QRWrapperMiddleSecondPage,
-                            marginTop: 80 // Reduced top margin to accommodate the header
+                            position: 'relative',
                         }}>
                             <div style={styles.QRRow}>
                                 {renderQR(qrData, 0, idx + 1)}
                             </div>
-                        </div>
-                        <div style={{position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', fontSize: 16, color: '#000', fontFamily: 'Helvetica', zIndex: 1000}}>
-                            Page {idx + 2} of {totalPages}
+                            
+                            {/* <div style={{
+                                position: props.qrtype === 'downloadable' ? 'absolute' : 'absolute',
+                                bottom: props.qrtype === 'downloadable' ? '10px' : '40px',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                fontSize: props.qrtype === 'downloadable' ? 14 : 16,
+                                color: '#000',
+                                fontFamily: 'Helvetica',
+                                zIndex: 1000
+                            }}>
+                                Page {idx + 2} of {totalPages}
+                            </div> */}
                         </div>
                     </div>
                 </div>

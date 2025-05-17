@@ -81,6 +81,7 @@ function CreateVault(props) {
     const firstPageQR   = 2;
     const qrPerRow      = 4;
 
+    const [vaultColors, setVaultColors] = useState([]);
 
     const calculateHowManyPages = (value) => {
         const totalQRs = Math.ceil(value.length / 600)*qrPerRow;
@@ -131,9 +132,41 @@ function CreateVault(props) {
         cookies.set(cookieName, cookieValue, cookieOptions);
     };
 
+    const generateColors = () => {
+        // A set of easy-to-identify, high-contrast colors
+        const baseColors = [
+            '#FF0000', // Red
+            '#0000FF', // Blue
+            '#008000', // Green
+            '#FFA500', // Orange
+            '#800080', // Purple
+            '#A52A2A', // Brown
+            '#000000', // Black 
+            '#FF00FF', // Magenta
+            '#00FFFF', // Cyan
+            '#FFD700'  // Gold
+        ];
+        
+        // Randomly select 3 distinct colors
+        const selectedColors = [];
+        const copyColors = [...baseColors];
+        
+        for (let i = 0; i < 3; i++) {
+            if (copyColors.length === 0) break;
+            const randomIndex = Math.floor(Math.random() * copyColors.length);
+            selectedColors.push(copyColors[randomIndex]);
+            copyColors.splice(randomIndex, 1); // Remove selected color
+        }
+        
+        return selectedColors;
+    };
+
     useEffect(()=>{
         if (wizardStep===4) {
             setTimeout(() => {
+                // Generate colors once when entering step 4
+                setVaultColors(generateColors());
+                
                 EncryptionService.encrypt(secretValue, false).then((encryptionResult) => {
                     setCiphertext(encryptionResult.cipherText);
                     setCipherKey(encryptionResult.cipherKey);
@@ -356,7 +389,7 @@ function CreateVault(props) {
 
     const downloadVault = async () => {
         const printElement = ReactDOMServer.renderToString(
-            <div style={{padding:40}}>
+            <div style={{padding:0}}>
                 <PDFVaultBackup
                 vaultIdent          = {vaultIdent}
                 cipherText          = {cipherText}
@@ -369,10 +402,11 @@ function CreateVault(props) {
                 qrtype              = {'downloadable'}
                 keyAliasArray       = {keyAliasArray}
                 maxLengthPerQRCode  = {maxLengthPerQRCode}
+                vaultColors={vaultColors}
             />
             </div>
         );
-        const exporter = new Html2PDF(printElement, {filename:"Kosign - Vault.pdf"}).set({
+        const exporter = new Html2PDF(printElement, {filename:"Kosign - Vault - "+vaultName+".pdf"}).set({
             pagebreak: { before:'.pagebreak', mode: ['avoid-all', 'css', 'legacy'] }
         });
         await exporter.getPdf(true);
@@ -380,7 +414,7 @@ function CreateVault(props) {
 
     const downloadKey = async (share, i) => {
         const printElement = ReactDOMServer.renderToString(
-
+            <div style={{padding:0}}>
                 <PDFKeyBackup
                     vaultIdent={vaultIdent}
                     threshold={consensus}
@@ -390,12 +424,13 @@ function CreateVault(props) {
                     myDecryptedKey={share}
                     qrtype={'downloadable'}
                     keyAlias={keyAliasArray[i]}
+                    vaultColors={vaultColors}
                 />
-
+            </div>
         );
 
         const exporter = new Html2PDF(printElement, {filename:"Kosign-key-"+keyAliasArray[i]+".pdf"}).set({
-
+            pagebreak: { before:'.pagebreak', mode: ['avoid-all', 'css', 'legacy'] }
         });
         await exporter.getPdf(true);
     };
@@ -648,6 +683,7 @@ function CreateVault(props) {
                         createdTimestamp={createdTimestamp}
                         keyAliasArray={keyAliasArray}
                         maxLengthPerQRCode={maxLengthPerQRCode}
+                        vaultColors={vaultColors}
                     />
                     : null}
                 </div>

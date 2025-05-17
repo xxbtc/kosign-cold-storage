@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import moment from 'moment-timezone';
 import QRCode from 'qrcode.react';
 import QRCode2 from 'qrcode'
@@ -10,221 +10,350 @@ const PDFKeyBackup = (props) => {
         return moment.tz(new Date(timestamp*1000), 'YYYY-MM-DD', moment.tz.guess()).format('YYYY-MM-DD HH:mm:ss')
     };
 
-    const styles = StyleSheet.create({
-        page: {
-            backgroundColor: '#fff',
+    // Define a fallback set of colors to use if props.vaultColors is empty
+    const defaultColors = ['#FF0000', '#0000FF', '#008000']; // Red, Blue, Green
+    // Use the colors that are available, or use defaults
+    const effectiveColors = (props.vaultColors && props.vaultColors.length > 0) 
+        ? props.vaultColors 
+        : defaultColors;
 
-        },
+    // Convert color hex to name representation
+    const getColorRep = (color) => {
+        // Extract the color name or generate a simple text representation
+        if (color.startsWith('#')) {
+            // Convert hex to simple name if possible
+            if (color === '#FF0000') return 'RED';
+            if (color === '#0000FF') return 'BLUE';
+            if (color === '#008000') return 'GREEN';
+            if (color === '#FFA500') return 'ORANGE';
+            if (color === '#800080') return 'PURPLE';
+            if (color === '#A52A2A') return 'BROWN';
+            if (color === '#000000') return 'BLACK';
+            if (color === '#FF00FF') return 'MAGENTA';
+            if (color === '#00FFFF') return 'CYAN';
+            if (color === '#FFD700') return 'GOLD';
+            
+            // If not a standard color, use first 3 chars of hex
+            return color.substring(1, 4);
+        }
+        return 'COLOR';
+    };
+
+    const styles = StyleSheet.create({
         printPage: {
-            pageBreakBefore: 'always',
-            height: 'auto !important',
-            overflow: 'initial !important',
-        },
-        sectionTop: {
-            marginTop:0,
-            padding: 40,
-            paddingBottom:0,
-            paddingTop:40,
-            backgroundColor:'#fff',
-            marginBottom:20,
-            whiteSpace:'normal',
-            overflowWrap:'break-word',
-           /* borderWidth:4,
-            borderColor:'gold',
-            borderStyle:'solid',*/
-        },
-        sectionMiddle: {
-            display:'flex',
-            flexDirection:'row',
-            flex:1,
-            paddingTop:0,
-            padding:40,
-           /* borderWidth:4,
-            borderColor:'blue',
-            borderStyle:'solid',*/
-        },
-        sectionBottom: {
-            textAlign:'center',
-            marginTop:10,
-            marginBottom:0,
-            fontFamily: "Helvetica-Oblique",
-            fontSize:20,
-            color:'red',
-        },
-        sectionRight: {
-            textAlign:'center',
-            marginBottom:0,
-            fontFamily: "Helvetica-Oblique",
-            fontSize:20,
-            color:'red',
-            width:'60%',
-        },
-        QRWrapper: {
-            display:'block',
-            paddingTop:60,
-            paddingBottom:60,
-            marginLeft:'auto',
-            marginRight:'auto',
-            borderWidth: 4,
-            borderColor: 'pink',
-            borderStyle: 'solid',
-        },
-        vaultText: {
-            marginBottom:10,
-            fontFamily: "Helvetica",
-            fontSize:20,
-            display:'block',
-            overflowWrap:'break-word',
-        },
-        detailWrapper: {
-            borderWidth:1,
-            borderRadius:4,
-            borderColor:'#ccc',
-            borderStyle:'solid',
-            padding:20,
-            width:'40%'
-        },
-        vaultTitleWrapper: {
-            borderBottomWidth:1,
-            borderBottomColor:'#ccc',
-            borderBottomStyle:'solid',
-            marginBottom:0,
-            position:'relative',
-        },
-        vaultTitle: {
-            fontFamily: "Helvetica-BoldOblique",
-            fontSize:30,
-        },
-        vaultTextBold: {
-            fontFamily: "Helvetica-Bold",
-        },
-        timestamp: {
-            fontFamily: "Helvetica",
-            fontSize:10,
-            color:'#999',
-            position:'absolute',
-            right:0,
-            top:6,
-        },
-        keyAlias: {
-            display:'inline-block',
-            margin:4,
-            marginLeft:0,
-            borderWidth:1,
-            borderColor:'#ccc',
-            borderStyle:'solid',
-            fontSize:16,
-            paddingTop:1,
-            paddingRight:6,
-            paddingLeft:6,
-            paddingBottom:1,
-            backgroundColor:'#ddd',
-            borderRadius:15,
-        },
-        alertDanger: {
-            backgroundColor:'#f8d7da',
-            color: '#721c24',
-            borderWidth:1,
-            borderColor:'#f5c6cb',
-            borderStyle:'solid',
-            display:'inline-block',
-            fontSize:20,
-            padding:4,
-            paddingTop:0,
-            paddingBottom:0,
-            paddingLeft:10,
-            paddingRight:10,
-            marginLeft:20,
-            marginBottom:10
-        },
-        colorIdentifier: {
-            display: 'flex',
-            flexDirection: 'row',
-            height: '8px',
-            marginBottom: '12px',
-            borderRadius: '2px',
+            flex: 0,
+            flexGrow: 0,
+            width: '100%',
+            maxHeight: '297mm', // A4 height
+            boxSizing: 'border-box',
+            margin: 0,
+            padding: 0,
             overflow: 'hidden',
         },
-        colorBox: {
-            flex: 1,
-            height: '100%',
-        }
+        downloadPage: {
+            flex: 0, 
+            flexGrow: 0,
+            width: '100%',
+            maxHeight: '297mm', // A4 height
+            boxSizing: 'border-box',
+            margin: 0,
+            padding: 0,
+            overflow: 'hidden',
+        },
+        page: {
+            flexDirection: 'column',
+            backgroundColor: '#fff',
+            flex: 0,
+            width: '100%',
+            height: '100%', // Don't set explicit height for downloadable
+            padding: 0,
+            flexGrow: 0,
+            display: 'flex',
+            position: 'relative',
+            boxSizing: 'border-box',
+            overflow: 'hidden',
+        },
+        asciiBoxStyle: {
+            fontFamily: 'monospace',
+            fontSize: props.qrtype === 'downloadable' ? 14 : 16,
+            color: '#000',
+            padding: props.qrtype === 'downloadable' ? '12px 20px' : '24px 32px',
+            marginBottom: 0,
+            whiteSpace: 'pre',
+            borderRadius: 8,
+            width: '100%',
+            boxSizing: 'border-box',
+        },
+        QRWrapperMiddle: {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 0,
+            width: '100%',
+            marginTop: props.qrtype === 'downloadable' ? 10 : 50,
+            marginBottom: 0,
+            height: 'auto',
+        },
+        QRWrapperInner: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+        },
+        QRText: {
+            fontFamily: 'Helvetica-Bold',
+            fontSize: 18,
+            color: '#0d6efd',
+            fontWeight: 400,
+            letterSpacing: 0.2,
+            wordSpacing: 0.2,
+            padding: '4px 16px',
+            textAlign: 'center',
+            backgroundColor: '#f8f9fa',
+            border: '1px solid #0d6efd',
+            borderRadius: 4,
+            textTransform: 'uppercase',
+            marginBottom: 15,
+        },
+        QRCodeContainer: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'relative',
+            padding: props.qrtype === 'downloadable' ? '0 70px' : '0',
+            height: 400,
+            width: 400
+        },
+        QRImage: {
+            width: 400,
+            height: 400,
+            padding: 10,
+            backgroundColor: '#fff',
+            objectFit: 'contain',
+        },
+        QRWarning: {
+            fontFamily: 'Helvetica-Oblique',
+            fontSize: 16,
+            color: '#dc3545',
+            fontWeight: 600,
+            letterSpacing: 0.1,
+            wordSpacing: 0.1,
+            ...(props.qrtype === 'printable' 
+                ? {
+                    writingMode: 'vertical-rl',
+                    textOrientation: 'mixed',
+                    transform: 'rotate(180deg)',
+                    paddingRight: '30px',
+                    position: 'relative'
+                  }
+                : {
+                    transform: 'rotate(-90deg)',
+                    paddingRight: '0px',
+                    position: 'absolute',
+                    right: '-80px',
+                    width: '100px',
+                    textAlign: 'center'
+                  }
+            )
+        },
+        QRLeftText: {
+            fontFamily: 'Helvetica-Oblique',
+            fontSize: 16,
+            color: '#dc3545',
+            fontWeight: 600,
+            letterSpacing: 0.1,
+            wordSpacing: 0.1,
+            ...(props.qrtype === 'printable'
+                ? {
+                    writingMode: 'vertical-rl',
+                    textOrientation: 'mixed',
+                    transform: 'rotate(180deg)',
+                    paddingLeft: '30px',
+                    position: 'relative'
+                  }
+                : {
+                    transform: 'rotate(90deg)',
+                    paddingLeft: '0px',
+                    position: 'absolute',
+                    left: '-80px',
+                    width: '100px',
+                    textAlign: 'center'
+                  }
+            )
+        },
+        asciiDetailsSection: {
+            fontFamily: 'monospace',
+            whiteSpace: 'pre',
+        },
+        keyAliasStyle: {
+            padding: '0 4px',
+            border: '0.5px solid #888',
+            borderRadius: '4px',
+            backgroundColor: '#f8f9fa',
+            fontWeight: 'normal',
+            whiteSpace: 'nowrap',
+            position: 'relative',
+            display: 'inline-block'
+        },
     });
 
+    // Render color boxes with similar style to PDFVaultBackup
+    const renderColorBoxes = () => {
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+                marginTop: '8px',
+                alignItems: 'flex-end'
+            }}>
+                {/* Also keep the visual representation for browser/print */}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '8px',
+                }}>
+                    {effectiveColors.map((color, index) => (
+                        <div key={index} style={{
+                            width: '28px',
+                            height: '28px',
+                            backgroundColor: color,
+                            border: '1px solid #333',
+                            borderRadius: '4px',
+                            textAlign: 'center',
+                            lineHeight: '28px',
+                            fontSize: '16px',
+                            color: color === '#000000' ? '#FFFFFF' : '#000000',
+                            fontWeight: 'bold'
+                        }}>
+                           &nbsp;
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
 
+    // Generate QR code
     let canvas;
-    // For QR Code
-
     let qrdata = JSON.stringify({
-        ident:props.keyAlias,
+        ident: props.keyAlias,
         key: props.myDecryptedKey
     });
 
     canvas = document.createElement('canvas');
-   // console.log('decrypted key is ', props.myDecryptedKey);
     QRCode2.toCanvas(canvas, qrdata);
     const qr = canvas.toDataURL();
 
-//console.log('qr  is ', qr);
-    return (
-        <div style={props.qrtype==='printable'?styles.printPage:null}>
-            <div style={styles.page}>
-                 <div style={styles.sectionTop}>
-                    {props.vaultColors && (
-                        <div style={styles.colorIdentifier}>
-                            {props.vaultColors.map((color, i) => (
-                                <div key={'color-'+i} style={{...styles.colorBox, backgroundColor: color}} />
-                            ))}
-                        </div>
-                    )}
-                    <div style={{display:'flex',flex:1,flexDirection:'row',justifyContent:'space-between'}}>
-                        <div style={styles.vaultTitle}>
-                            Kosign Vault Key
-                            <span style={styles.alertDanger}>
-                          <b>!! IMPORTANT !!</b>
-                      </span>
+    // New ASCII-style header for key backup
+    const renderKeyHeaderAscii = () => {
+        // Get formatted creation date
+        const creationDate = formatTime(props.createdTimestamp);
+
+        return (
+            <div style={styles.asciiBoxStyle}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                }}>
+                    <div style={{
+                        flexGrow: 1,
+                        flexShrink: 1,
+                        minWidth: 0,
+                        maxWidth: '65%',  
+                    }}>
+                        <div style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10, marginTop: 10, fontFamily: 'Helvetica-BoldOblique'}}>
+                            KOSIGN.XYZ SECURE KEY BACKUP
                         </div>
                         <div>
-                            <div style={{display:'inline-block', marginTop:15}}>
-                                Page 1 of 1
-                            </div>
+                            {` ██╗  ██╗███████╗██╗   ██╗
+ ██║ ██╔╝██╔════╝╚██╗ ██╔╝
+ █████╔╝ █████╗   ╚████╔╝ 
+ ██╔═██╗ ██╔══╝    ╚██╔╝  
+ ██║  ██╗███████╗   ██║   
+ ╚═╝  ╚═╝╚══════╝   ╚═╝   `}
                         </div>
                     </div>
-                 </div>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-end',
+                        justifyContent: 'flex-start',
+                        minWidth: '240px',
+                    }}>
+                        {/* Use the new function to render color blocks */}
+                        {renderColorBoxes()}
+                        
+                        <div style={{
+                            marginTop: 10,
+                            fontFamily: 'monospace',
+                            color: '#dc3545',
+                            fontWeight: 'bold',
+                            border: '1px solid #dc3545',
+                            borderRadius: '0px',
+                            padding: '4px 0px',
+                            backgroundColor: '#fff3f3',
+                        }}>
+                            {`     !!! IMPORTANT !!!       `}
+                        </div>
+                        <div style={{marginTop: 8, fontWeight: 'bold'}}>{`Page 1 of 1`}</div>
+                        <div style={{marginTop: 8}}>Created: {creationDate}</div>
+                    </div>
+                </div>
+                
+                <div style={styles.asciiDetailsSection}>
+                    {`-----------------------------------------------------------------------------
+Vault Name:         ${props.vaultName}
+Key Alias:          `}
+                    <span style={styles.keyAliasStyle}>{props.keyAlias}</span>
+                    
+                </div>
+            </div>
+        )
+    };
 
-                 <div style={styles.sectionMiddle}>
-                    <div style={styles.detailWrapper}>
-                        <div style={styles.vaultText}>
-                            <div style={styles.vaultTextBold}>Vault Name:</div>
-                            <div>{props.vaultName}</div>
+    return (
+        <div className="pagebreak" 
+             style={props.qrtype === 'printable' ? styles.printPage : styles.downloadPage}>
+            <div style={styles.page}>
+                {renderKeyHeaderAscii()}
+                
+                <div style={styles.QRWrapperMiddle}>
+                    <div style={styles.QRWrapperInner}>
+                        <div style={styles.QRText}>
+                            VAULT KEY
                         </div>
-                        {/*<div style={styles.vaultText}>
-                            <div style={styles.vaultTextBold}>Description:</div>
-                            <div>{props.description}</div>
-                        </div>*/}
-                        <div style={styles.vaultText}>
-                            <div style={styles.vaultTextBold}>Key Alias:</div>
-                            <div style={styles.keyAlias}>{props.keyAlias}</div>
-                        </div>
-                        <div style={styles.vaultText}>
-                            <div style={styles.vaultTextBold}>Created:</div>
-                            <div>{formatTime(props.createdTimestamp)}</div>
-                        </div>
-                    </div>
-                    <div style={styles.sectionRight}>
-                        <div style={styles.QRWrapper}>
-                            <div style={{marginBottom:40}}>
-                                Keep secure away from cameras.
+                        <div style={styles.QRCodeContainer}>
+                            <div style={styles.QRLeftText}>
+                                KEEP SECURE
                             </div>
-                            {props.qrtype==='printable'?<QRCode id='qrcodekey' value={qrdata} size={250} />:null}
-                            {props.qrtype==='downloadable'?<Image src={qr} style={{maxHeight:350, maxWidth:350}}/>:null}
+                            {props.qrtype === 'printable' ?
+                                <QRCode 
+                                    id='qrcodekey' 
+                                    value={qrdata} 
+                                    size={400}
+                                    level="H"
+                                    includeMargin={true}
+                                />
+                                : null
+                            }
+                            {props.qrtype === 'downloadable' ?
+                                <Image 
+                                    src={qr} 
+                                    style={styles.QRImage}
+                                    alt={`QR Code for Key: ${props.keyAlias}`}
+                                />
+                                : null
+                            }
+                            <div style={styles.QRWarning}>
+                                DO NOT FOLD
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
-
+    );
 };
 
 export default PDFKeyBackup;
