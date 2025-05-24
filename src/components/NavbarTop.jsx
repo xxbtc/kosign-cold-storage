@@ -1,71 +1,56 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-
+import { Link, useLocation } from 'react-router-dom'
 import {
     Collapse,
     Navbar,
     NavbarToggler,
     NavbarBrand,
     Nav,
-    NavItem} from 'reactstrap';
-
-import {Container }from 'react-bootstrap';
-
+    NavItem,
+    Container
+} from 'reactstrap';
 import { MdMenu } from "react-icons/md";
-import {SiMeteor} from 'react-icons/si';
-
-import '../style/navbar.css';
 import logoIMG from "../images/paperlock_small.jpg";
+import '../style/navbar.css';
 
 const NavbarTop = (props) => {
     const [isOpen, setIsOpen] = useState(false);
-
     const toggle = () => setIsOpen(!isOpen);
+    const location = useLocation();
 
     return (
         <div className={'navbarWrapper'}>
-            <Container>
-                <Navbar expand="md" className={'navbarCustom'} >
+            <Container fluid className="px-4">
+                <Navbar expand="md" className={'navbarCustom modern-navbar'}>
                     <NavbarBrand href="/" className={'nav-brand'}>
                         <div className='navbarLogo'>
-                            {/*<SiMeteor className={'navbarLogoIcon'} />*/}
-                            <img src={logoIMG} />
-                            Kosign
+                            <img src={logoIMG} alt="Kosign logo" />
+                            Kosign.xyz
                         </div>
                     </NavbarBrand>
                     <NavbarToggler onClick={toggle} className={'navbar-toggler'} >
                         <MdMenu fill={'#000'}/>
                     </NavbarToggler>
                     <Collapse isOpen={isOpen} navbar>
-                        <Nav className="justify-content-end" navbar style={{width:'100%'}}>
-                            {/* <NavItem className={'nav-item'}>
-                                <Link className={"nav-link"} to={'/pricing'}>Pricing</Link>
-                            </NavItem> */}
+                        <Nav className="justify-content-end modern-nav" navbar style={{width:'100%'}}>
                             <NavItem className={'nav-item'}>
-                                <Link className={"nav-link"} to={'/unlock'}>Unlock</Link>
+                                <Link className={"nav-link" + (location.pathname === '/' ? ' active' : '')} to={'/'}>Home</Link>
                             </NavItem>
                             <NavItem className={'nav-item'}>
-                                <Link className={"nav-link"} to={'/create'}>Create</Link>
-                            </NavItem>
-
-                           {/* <NavItem className={'nav-item'}>
-                                <Link className={"nav-link"} to={'/'}>Home</Link>
+                                <Link className={"nav-link" + (location.pathname === '/unlock' ? ' active' : '')} to={'/unlock'}>Unlock</Link>
                             </NavItem>
                             <NavItem className={'nav-item'}>
-                                <Link className={"nav-link"} to={'/create'}>Create</Link>
+                                <Link className={
+                                    "nav-link" +
+                                    (location.pathname === '/create' ? ' active' : ' nav-link-cta')
+                                } to={'/create'}>Create Vault</Link>
                             </NavItem>
-                            <NavItem className={'nav-item'}>
-                                <Link className={"nav-link"} to={'/recover'}>Recover</Link>
-                            </NavItem>*/}
                         </Nav>
                     </Collapse>
                 </Navbar>
-
             </Container>
         </div>
     )
-
-
 };
 
 export default NavbarTop;

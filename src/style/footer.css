@@ -1,53 +1,101 @@
-
+/* --- MODERN FOOTER --- */
 .footerContainer {
-    background-color: #1786ff;
-    border-top: 1px solid #ccc;
-
+  background: #111111;
+  padding: 2.2rem 0 1.2rem 0;
+  border-top: 1px solid #333333;
+  width: 100%;
 }
 
-.footer {
-    color:#333;
+.footerNav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
 }
 
-
-.footerHeading {
-    color:#dddddd;
-    font-weight: bold;
-    font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    margin-bottom: 10px;
-}
 .footerlist {
-    list-style-type: none;
-    padding:0px;
-    margin:0px auto;
-    width:100%;
-
+  list-style-type: none;
+  padding: 0;
+  margin: 0 auto;
+  display: flex;
+  gap: 2.2rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .footerlist li {
-    padding:20px;
-    padding-left: 20px;
-    display: inline-block;
-    color:#fff;
-    font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  display: inline-block;
+  font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 1.08rem;
+  color: #b0b0b0;
+  font-weight: 500;
 }
 .footerlist li a {
-    color:#fff;
-    font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    text-decoration: none;
+  color: #1786ff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
 }
 .footerlist li a:hover {
-
+  color: #42a5f5;
+  background: rgba(23, 134, 255, 0.1);
+  transform: translateY(-1px);
 }
 
-.footerLogo {
-    font-weight: bold;
-    color:#dddddd;
-    font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    font-size: 30px;
+.footerSocial {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  align-items: center;
+}
+.footerSocial a {
+  color: #1786ff;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  padding: 0.8rem;
+  border-radius: 50%;
+  background: rgba(23, 134, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+}
+.footerSocial a:hover {
+  color: #42a5f5;
+  background: rgba(23, 134, 255, 0.2);
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: 0 4px 16px rgba(23, 134, 255, 0.3);
 }
 
-.footerAppstoreIcons img {
-    height:38px;
-    margin:10px 10px 10px 0px;
+.footerCopyright {
+  text-align: center;
+  color: #888;
+  font-size: 0.98rem;
+  margin-top: 1.5rem;
+  font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+@media (max-width: 600px) {
+  .footerlist {
+    gap: 1rem;
+    font-size: 0.98rem;
+    flex-direction: column;
+  }
+  .footerlist li a {
+    padding: 0.8rem 1.5rem;
+    width: 100%;
+    text-align: center;
+    border-radius: 12px;
+  }
+  .footerSocial {
+    gap: 0.7rem;
+    font-size: 1.2rem;
+  }
+  .footerSocial a {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.2rem;
+  }
 }
