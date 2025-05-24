@@ -1,6 +1,8 @@
 /* --- MODERN NAVBAR --- */
 .navbarWrapper {
-    background-color: #0a0a0a;
+    background-color: transparent;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+
     padding: 0;
     position: relative;
     z-index: 300;

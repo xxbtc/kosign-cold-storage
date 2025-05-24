@@ -77,10 +77,13 @@ function Homepage(props) {
 
     return (
         <Layout>
-            <Navbar />
+            <div className="home-page-navbar">  
+                <Navbar loggedIn={false}/>
+            </div>
             
             {/* Hero Area */}
             <section className="hero-area">
+                
                 <Container>
                     <Row className="align-items-center">
                         <Col lg={6} className="hero-content-col">
@@ -91,8 +94,8 @@ function Homepage(props) {
                             </div>
                             <h1 className="hero-title">
                                 The Foundational Backup for Your Digital Life
-                    </h1>
-                    <p className="hero-subtitle">
+                            </h1>
+                            <p className="hero-subtitle">
                                 Create passwordless vaults secured by distributed physical keys. No master passwords to remember, 
                                 no single points of failure. Designed for emergency access and inheritance planning.
                             </p>

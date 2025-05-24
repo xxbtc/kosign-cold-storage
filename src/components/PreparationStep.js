@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { 
     FaShieldAlt, 
@@ -11,84 +11,150 @@ import {
 } from 'react-icons/fa';
 
 const PreparationStep = ({ isOnline, onContinue }) => {
+    const [checkedItems, setCheckedItems] = useState({
+        vault: false,
+        keys: false,
+        location: false,
+        offline: false
+    });
+
+    const [proceedOnline, setProceedOnline] = useState(false);
+
+    const toggleCheck = (item) => {
+        // Allow checking offline if user chose to proceed online
+        if (item === 'offline' && isOnline && !proceedOnline) {
+            return;
+        }
+        
+        setCheckedItems(prev => ({
+            ...prev,
+            [item]: !prev[item]
+        }));
+    };
+
+    // Automatically check/uncheck offline based on connection status
+    useEffect(() => {
+        if (isOnline) {
+            // Uncheck offline if user goes online (unless they chose to proceed)
+            if (!proceedOnline) {
+                setCheckedItems(prev => ({
+                    ...prev,
+                    offline: false
+                }));
+            }
+        } else {
+            // Automatically check offline if user is offline
+            setCheckedItems(prev => ({
+                ...prev,
+                offline: true
+            }));
+            setProceedOnline(false); // Reset proceed online when actually offline
+        }
+    }, [isOnline, proceedOnline]);
+
+    const handleProceedOnline = () => {
+        setProceedOnline(true);
+        setCheckedItems(prev => ({
+            ...prev,
+            offline: true
+        }));
+    };
+
+    const allItemsChecked = Object.values(checkedItems).every(checked => checked);
+
     return (
         <div className="preparation-content">
             <div className="preparation-header">
                 <div className="header-icon">
                     <FaShieldAlt />
                 </div>
-                <h3>Unlock Ceremony</h3>
-                <p className="header-subtitle">Before you begin, please ensure you have the following items ready</p>
+                <h3>Prepare to unlock your vault</h3>
+                <p className="header-subtitle">Follow the checklist to ensure you have everything ready</p>
             </div>
 
             <div className="checklist-container">
-                <div className="checklist-item">
-                    
+                <div className={`checklist-item ${checkedItems.vault ? 'checked' : ''}`} onClick={() => toggleCheck('vault')}>
                     <div className="checklist-content">
                         <div className="checklist-header">
                             <FaQrcode className="checklist-icon" />
-                            <h5>
-                                Encrypted Vault
-                            </h5>
+                            <div className="checklist-text">
+                                <h5>Encrypted Vault</h5>
+                                <p className="checklist-description">
+                                    Have your encrypted vault page(s) ready.
+                                </p>
+                            </div>
                         </div>
-                        <p className="checklist-description">
-                            Have your encrypted vault page(s) ready. 
-                        </p>
+                        <div className="checklist-status">
+                            {checkedItems.vault && <FaCheck />}
+                        </div>
                     </div>
                 </div>
 
-                <div className="checklist-item">
-                    
+                <div className={`checklist-item ${checkedItems.keys ? 'checked' : ''}`} onClick={() => toggleCheck('keys')}>
                     <div className="checklist-content">
                         <div className="checklist-header">
                             <FaKey className="checklist-icon" />
-                            <h5>Keys</h5>
+                            <div className="checklist-text">
+                                <h5>Keys</h5>
+                                <p className="checklist-description">
+                                    You will need to have enough keys to meet the unlock threshold.
+                                </p>
+                            </div>
                         </div>
-                        <p className="checklist-description">
-                            You will need to have enough keys to meet the unlock threshold. 
-                        </p>
+                        <div className="checklist-status">
+                            {checkedItems.keys && <FaCheck />}
+                        </div>
                     </div>
                 </div>
 
-                <div className="checklist-item">
-                   
+                <div className={`checklist-item ${checkedItems.location ? 'checked' : ''}`} onClick={() => toggleCheck('location')}>
                     <div className="checklist-content">
                         <div className="checklist-header">
                             <FaUserSecret className="checklist-icon" />
-                            <h5>Secure Location</h5>
+                            <div className="checklist-text">
+                                <h5>Secure Location</h5>
+                                <p className="checklist-description">
+                                    Find a private location away from cameras or onlookers.
+                                </p>
+                            </div>
                         </div>
-                        <p className="checklist-description">
-                            Find a private location away from cameras or onlookers.
-                        </p>
+                        <div className="checklist-status">
+                            {checkedItems.location && <FaCheck />}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="connection-status-wrapper">
-                <div className={`connection-status ${isOnline ? 'warning' : 'success'}`}>
-                    <div className="status-indicator">
-                        {isOnline ? (
-                            <div className="warning-animation">
-                                <FaWifi />
+                <div className={`checklist-item ${checkedItems.offline ? 'checked' : ''} ${proceedOnline ? 'warning' : ''} ${isOnline && !proceedOnline ? 'disabled' : ''}`} onClick={() => toggleCheck('offline')}>
+                    <div className="checklist-content">
+                        <div className="checklist-header">
+                            <FaWifi className="checklist-icon" />
+                            <div className="checklist-text">
+                                <h5>Disconnect from Internet</h5>
+                                <p className="checklist-description">
+                                    {isOnline && !proceedOnline ? (
+                                        <>
+                                            Turn on airplane mode or disconnect your WiFi and mobile data.{' '}
+                                            <button 
+                                                className="proceed-anyway-link"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleProceedOnline();
+                                                }}
+                                            >
+                                                Proceed anyway
+                                            </button>
+                                        </>
+                                    ) : proceedOnline ? (
+                                        '⚠️ Proceeding online (not recommended for security)'
+                                    ) : (
+                                        'Confirmed: No internet connection detected'
+                                    )}
+                                </p>
                             </div>
-                        ) : (
-                            <div className="pulse-animation">
-                                <FaCheck />
-                            </div>
-                        )}
-                    </div>
-                    <div>
-                        {isOnline ? (
-                            <strong>Warning: It seems you are currently online</strong>
-                        ) : (
-                            <strong>Perfect! You're offline and ready</strong>
-                        )}
-                        <p className="mb-0">
-                            {isOnline 
-                                ? 'You should disconnect from all networks before proceeding (turn off wifi / mobile data)'
-                                : 'You can safely proceed with the unlock process'
-                            }
-                        </p>
+                        </div>
+                        <div className="checklist-status">
+                            {checkedItems.offline && <FaCheck />}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -98,12 +164,18 @@ const PreparationStep = ({ isOnline, onContinue }) => {
                     variant="primary"
                     onClick={onContinue}
                     className="continue-button"
+                    disabled={!allItemsChecked}
                 >
                     <span className="button-content">
                         Continue
                         <FaChevronRight style={{fontSize: '14px'}} />
                     </span>
                 </Button>
+                {!allItemsChecked && (
+                    <p className="action-note">
+                        Please check all items above to continue
+                    </p>
+                )}
             </div>
         </div>
     );

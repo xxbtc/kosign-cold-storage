@@ -29,6 +29,8 @@ import {Oval} from 'react-loading-icons';
 import PreparationStep from '../components/PreparationStep';
 import ProgressStepper from '../components/ProgressStepper';
 import VaultMetadata from '../components/VaultMetadata';
+import UnlockedVault from '../components/UnlockedVault';
+
 function UnlockPage() {
 
     const navigate              = useNavigate();
@@ -92,7 +94,7 @@ function UnlockPage() {
 
         if ((numOfQRsScanned===0) && (jsonObject.id !==1)) {
             alert ('please scan the metadata QR from your vault backup');
-            setIsProcessing(false);
+            setTimeout(() => setIsProcessing(false), 300);
             return;
         }
 
@@ -111,13 +113,13 @@ function UnlockPage() {
         } else {
             if (jsonObject.id !== (numOfQRsScanned+1)) {
                 alert('please scan shard #' + (numOfQRsScanned));
-                setIsProcessing(false);
+                setTimeout(() => setIsProcessing(false), 300);
                 return;
             }
             setCipherData(cipherData+jsonObject.data);
         }
         setNumOfQRsScanned(jsonObject.id);
-        setIsProcessing(false);
+        setTimeout(() => setIsProcessing(false), 300);
     };
 
     const scannedKey= (data) => {
@@ -126,7 +128,7 @@ function UnlockPage() {
         //let jsonObject  = JSON.parse(data);
         //setCipherData(cipherData+data);
         if (unlockShares.includes(data.key)) {
-            setIsProcessing(false);
+            setTimeout(() => setIsProcessing(false), 300);
             return;
         }
 
@@ -139,7 +141,7 @@ function UnlockPage() {
         setScannedKeys(tmpScannedKeys);
        // console.log('unlock sharesi snow ', unlockShares);
         setNumOfQRKEYSsScanned(numOfQRKEYSsScanned+1);
-        setIsProcessing(false);
+        setTimeout(() => setIsProcessing(false), 300);
     }
 
 
@@ -278,41 +280,71 @@ function UnlockPage() {
         return (
             <Layout>
                 <Navbar />
-                <div className={'pageWrapper'} style={{paddingTop: 40}}>
-                    <Container>
-                        <Row>
-                            <Col xs={{span: 12, offset: 0}} md={{span: 12, offset: 0}} lg={{span: 8, offset: 2}}>
-                                <div>
-                                    <div>
-                                        <h2 className={'pageTitle'}>Vault Unlocked</h2>
-                                    </div>
-                                    <div style={{marginTop: 10, marginBottom:30}}>
-                                        <div className={'alert alert-success'}>
-                                            Vault contents are displayed below (if you entered your keys correctly)
-                                        </div>
-                                        <textarea
-                                            value={decryptionResult}
-                                            disabled={true}
-                                            className={'form-control'}
-                                            placeholder={''}
-                                            style={{height:300}}
-                                        />
-                                    </div>
-
-                                    <Button
-                                        variant={'primary'}
-                                        size={'lg'}
-                                        onClick={() => {
-                                            cleanupSensitiveData();
-                                            navigate('/');
-                                        }}
-                                    >
-                                        Close and clear memory
-                                    </Button>
+                <div className={'pageWrapper'}>
+                    <div className="unlock-layout">
+                        {/* Left Sidebar with Process Flow
+                        <div className="unlock-sidebar">
+                            <div className="sidebar-header">
+                                <div className="sidebar-logo">
+                                    <FaLockOpen className="sidebar-icon" />
                                 </div>
-                            </Col>
-                        </Row>
-                    </Container>
+                            </div>
+                            
+                            <div className="process-flow">
+                                <div className="flow-step completed">
+                                    <div className="step-indicator"><FaCheck /></div>
+                                    <div className="step-content">
+                                        <h4>Preparation</h4>
+                                        <p>Gather your vault and keys for scanning</p>
+                                    </div>
+                                </div>
+                                
+                                <div className="flow-step completed">
+                                    <div className="step-indicator"><FaCheck /></div>
+                                    <div className="step-content">
+                                        <h4>Scan Vault</h4>
+                                        <p>Scan QR codes from your paper vault</p>
+                                    </div>
+                                </div>
+                                
+                                <div className="flow-step completed">
+                                    <div className="step-indicator"><FaCheck /></div>
+                                    <div className="step-content">
+                                        <h4>Scan Keys</h4>
+                                        <p>Scan required unlock keys</p>
+                                    </div>
+                                </div>
+                                
+                                <div className="flow-step completed active">
+                                    <div className="step-indicator"><FaCheck /></div>
+                                    <div className="step-content">
+                                        <h4>Access Vault</h4>
+                                        <p>View your decrypted vault contents</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="sidebar-footer">
+                                <div className="help-section">
+                                    <FaInfoCircle className="help-icon" />
+                                    <span>Need help?</span>
+                                </div>
+                            </div>
+                        </div> */}
+                        
+                        {/* Main Content Area */}
+                        <div className="unlock-main-content">
+                            <div className="content-container">
+                                <UnlockedVault 
+                                    decryptionResult={decryptionResult}
+                                    onClose={() => {
+                                        cleanupSensitiveData();
+                                        navigate('/');
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </Layout>
         )
@@ -323,194 +355,122 @@ function UnlockPage() {
     return (
         <Layout>
             <Navbar loggedIn/>
-            <div className={'pageWrapper'}>
-                <Container>
-                    <Row>
-                        <Col xs={{span: 12, offset: 0}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
-                            <div className="pageNavWrapper">
-                                <div className="unlock-header">
-                                    <div className="unlock-title">
-                                        {/* <FaLock className="title-icon" /> */}
-                                        <h2 className={'pageTitle'}>
-                                            Unlock Vault
-                                        </h2>
-                                    </div>
-                                    <ProgressStepper 
-                                        currentStep={wizardStep}
-                                        unlocked={unlocked}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-   
-                    <div>
-                        {wizardStep === 1 ? (
-                            <PreparationStep 
-                                isOnline={isOnline}
-                                onContinue={() => {
-                                    setShowScanner(true);
-                                    setWizardStep(wizardStep + 1);
-                                }}
-                            />
-                        ) : null}
-                    </div> 
-
-                   
-                    {wizardStep === 2 ?
-                         <div>
-                            <Row>
-                                <Col xs={{span: 12, offset: 0}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                                    <div className="scanner-overlay" style={{
-                                        position: 'relative',
-                                    }}>
-                                        {isProcessing?null:<QrReader
-                                            key={'qrreaderkey_'+numOfQRsScanned+'_'+scanType+'_'+numOfQRKEYSsScanned}
-                                            onResult={(result, error) => scannedSomething(result?.text, error)}
-                                            containerStyle={{
-                                                width: '100%',
-                                                borderRadius: 15,
-                                                height: 'auto',
-                                                margin: 'auto',
-                                                maxHeight: '380px',
-                                                padding: 0,
-                                                marginTop: 0,
-                                                background: '#fff'
-                                            }}
-                                            videoStyle={{
-                                                width: '100%',
-                                                height: 'auto',
-                                                margin: 0,
-                                                padding: 0
-                                            }}
-                                        />}
-                                        
-                                        <div className="scanning-guide">
-                                            <ul className="mb-0" style={{paddingLeft: '1.2rem'}}>
-                                                <li>Hold the QR code steady and centered</li>
-                                                <li>Keep the camera lens clean</li>
-                                                <li>Make sure no one is watching</li>                                                
-                                            </ul>
+            <div>
+                <div className="unlock-layout">
+                    
+                    
+                    {/* Main Content Area */}
+                    <div className="unlock-main-content">
+                        <div className={`content-container ${wizardStep !== 1 ? 'scanning-mode' : ''}`}>
+                            {/* <div className="content-header">
+                                {metadata && (
+                                    <div className="progress-indicator">
+                                        <div className="progress-bar">
+                                            <div 
+                                                className="progress-fill" 
+                                                style={{
+                                                    width: `${((numOfQRsScanned + numOfQRKEYSsScanned) / (metadata.qrcodes + metadata.threshold)) * 100}%`
+                                                }}
+                                            />
                                         </div>
+                                        <span className="progress-text">
+                                            {numOfQRsScanned + numOfQRKEYSsScanned} of {metadata.qrcodes + metadata.threshold} completed
+                                        </span>
                                     </div>
-                                </Col>
-                                <Col xs={{span: 12, offset: 0}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                                    <div className="unlock-inner-wrapper">
-                                        <div className="scan-progress">
-                                            {/* <div className="d-flex justify-content-between align-items-center">
+                                )}
+                            </div> */}
+
+                            {wizardStep === 1 ? (
+                                <PreparationStep 
+                                    isOnline={isOnline}
+                                    onContinue={() => {
+                                        setShowScanner(true);
+                                        setWizardStep(wizardStep + 1);
+                                    }}
+                                />
+                            ) : wizardStep === 2 ? (
+                                <div className="scanning-content">
+                                    
+                                    
+                                    <Row className="scanner-row">
+                                        <Col md={4}>
                                             
-                                                <div className="progress-text">
-                                                    {metadata ? (
-                                                        `${numOfQRsScanned + numOfQRKEYSsScanned} of ${metadata.qrcodes + metadata.threshold} steps completed`
-                                                    ) : (
-                                                        ''
-                                                    )}
-                                                </div>
-                                            </div> */}
-                                            <div className="progress" style={{height: '8px', marginTop: '8px'}}>
-                                                <div 
-                                                    className="progress-bar" 
-                                                    style={{
-                                                        width: metadata ? (
-                                                            `${((numOfQRsScanned + numOfQRKEYSsScanned) / (metadata.qrcodes + metadata.threshold)) * 100}%`
-                                                        ) : '0%'
-                                                    }}
+                                            <div className="scanner-overlay">
+                                                {isProcessing ? null : 
+                                                    <QrReader
+                                                        key={'qr-scanner'}
+                                                        onResult={(result, error) => scannedSomething(result?.text, error)}
+                                                        containerStyle={{
+                                                            margin:0,
+                                                            padding:0,
+                                                            height:'280px',
+                                                            width:'auto',
+                                                            borderRadius: 12,
+                                                        }}
+                                                        videoStyle={{
+                                                            height:'auto',
+                                                            width:'auto',
+                                                            margin: 0,
+                                                            padding: 0,
+                                                            maxWidth: '100%',
+                                                            maxHeight: '100%',
+                                                            borderRadius: 12,
+                                                           
+                                                        }}
+                                                    />
+                                                }
+                                                
+                                                {/* <div className="scanning-guide">
+                                                    <ul>
+                                                        <li>Hold QR code steady</li>
+                                                        <li>Keep camera lens clean</li>
+                                                        <li>Ensure privacy</li>                                                
+                                                    </ul>
+                                                </div> */}
+                                            </div>
+                                           
+                                        </Col>
+                                        
+                                        <Col md={8}>
+                                            <div className="current-action">
+                                                <Oval stroke={'#1786ff'} strokeWidth={15} className={'loading'}  />
+                                                {scanType === 'vault' ?
+                                                    <span>
+                                                        {numOfQRsScanned === 0 ?
+                                                            <span>Scan the <b>metadata</b> QR on your vault</span>
+                                                            :
+                                                            <span>Scan <b>shard #{numOfQRsScanned}</b> from your vault</span>
+                                                        }
+                                                    </span>
+                                                    :
+                                                    <span>Scan key #{numOfQRKEYSsScanned + 1} of {metadata.threshold} required</span>
+                                                }
+                                            </div>
+                                        
+                                            <div className="scan-status-section">
+                                                <VaultMetadata 
+                                                    metadata={metadata} 
+                                                    VAULT_VERSIONS={VAULT_VERSIONS}
+                                                    getClassType={getClassType}
+                                                    getKeyClass={getKeyClass}
+                                                    numOfQRsScanned={numOfQRsScanned}
+                                                    numOfQRKEYSsScanned={numOfQRKEYSsScanned}
+                                                    scanType={scanType}
                                                 />
                                             </div>
-                                            {/* {metadata && (
-                                                <div className="progress-detail mt-2">
-                                                    <small className="text-muted">
-                                                        {scanType === 'vault' ? 
-                                                            `Scan vault shards (${numOfQRsScanned}/${metadata.qrcodes})` : 
-                                                            `Scanning keys (${numOfQRKEYSsScanned}/${metadata.threshold})`
-                                                        }
-                                                    </small>
-                                                </div>
-                                            )} */}
-                                        </div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            ) : null}
 
-                                        <div className={'alert'} style={{marginBottom: 0, textAlign: 'left', paddingLeft:0, paddingRight:0}}>
-                                            <Oval stroke={'#1786ff'} strokeWidth={15} className={'loading'}  />
-                                            {scanType === 'vault' ?
-                                                <span>
-                                                    {numOfQRsScanned === 0 ?
-                                                        <span>
-                                                            Scan the <b>metadata</b> QR on your vault
-                                                        </span>
-                                                        :
-                                                        <span>
-                                                            Scan <b>shard #{numOfQRsScanned}</b> from your vault
-                                                        </span>
-                                                    }
-                                                </span>
-                                                :
-                                                <span>
-                                                    Scan key #{numOfQRKEYSsScanned + 1}-of-{metadata.shares}
-                                                </span>
-                                            }
-                                        </div>
-
-                                        <VaultMetadata metadata={metadata} VAULT_VERSIONS={VAULT_VERSIONS} />
-                                        
-
-                                    
-
-                                        {metadata?
-                                            <div>
-                                                <div className="mb-4">
-                                                    <div className="d-flex align-items-center mb-2">
-                                                        <AiOutlineQrcode className="me-2" style={{fontSize: 18}} />
-                                                        <strong>Vault Data</strong>
-                                                    </div>
-                                                    <div className={'unlockrow'}>
-                                                        {[...Array(metadata.qrcodes)].map((_, index) => (
-                                                            <div className={getClassType(index, 'vault')} 
-                                                                    key={'vaultindx'+index}
-                                                                    style={{transition: 'all 0.2s ease-in-out'}}>
-                                                                <AiOutlineQrcode className={'qrIcon'} />
-                                                                {index===0 ? <div>Metadata</div> : <div>Shard #{index}</div>}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-
-                                                <div className="mb-3">
-                                                    <div className="d-flex align-items-center mb-2">
-                                                        <ImKey className="me-2" style={{fontSize: 18}} />
-                                                        <strong>Required Keys</strong>
-                                                    </div>
-                                                    <div className={'unlockrow'}>
-                                                        {metadata && metadata.keys && [...Array(metadata.shares)].map((_, index) => (
-                                                            <div className={getKeyClass(metadata.keys[index])} 
-                                                                    key={'keyindx'+index}
-                                                                    style={{transition: 'all 0.2s ease-in-out'}}>
-                                                                <div style={{
-                                                                    display: 'flex',
-                                                                    flexDirection: 'row',
-                                                                    flex: 1,
-                                                                    alignItems: 'center',
-                                                                    textAlign: 'left'
-                                                                }}>
-                                                                    <ImKey className={'keyIcon'} />
-                                                                    <div>{metadata.keys[index]}</div>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    : null}
-                                    </div>
-                                </Col>
-                            </Row>
+                            <div className="content-footer">
+                                <div className={'alert alert-info'}>
+                                    This unlock tool is also available <a href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>on Github</a>
+                                </div>
+                            </div>
                         </div>
-                    : null }
-                    
-                    <div className={'alert alert-info'} style={{textAlign:'center', marginTop: 50}}>
-                        This unlock tool is also available <a href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>on Github</a>
                     </div>
-
-                </Container>
+                </div>
             </div>
         </Layout>
     )

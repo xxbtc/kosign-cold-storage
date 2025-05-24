@@ -351,6 +351,14 @@ body {
     text-decoration: underline;
 }
 
+/* --- HOMEPAGE NAVBAR --- */
+.home-page-navbar {
+    background: #111111;
+    padding: 0;
+    position: relative;
+    z-index: 300;
+}
+
 /* Accordion Layout */
 .value-accordion {
     margin-top: 0rem;
