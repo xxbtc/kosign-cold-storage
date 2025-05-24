@@ -353,7 +353,16 @@ body {
 
 /* Accordion Layout */
 .value-accordion {
-    margin-top: 3rem;
+    margin-top: 0rem;
+}
+
+.use-cases-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 3rem;
+    margin-top: 2rem;
 }
 
 .accordion-item {
@@ -816,6 +825,25 @@ body {
     font-weight: 600;
 }
 
+.pricing-card.one-time-purchase::before {
+    content: "One-time purchase";
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffd700;
+    color: #1a1a1a;
+    padding: 0.5rem 1.5rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.pricing-card.one-time-purchase {
+    border-color: #ffd700;
+    box-shadow: 0 8px 32px rgba(255, 215, 0, 0.2);
+}
+
 .pricing-header h3 {
     font-size: 1.5rem;
     font-weight: 700;
@@ -827,7 +855,7 @@ body {
     font-size: 3rem;
     font-weight: 800;
     color: #1786ff;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .price span {
@@ -879,6 +907,18 @@ body {
     margin-top: 1rem;
     margin-bottom: 0;
     font-style: italic;
+    text-align: center;
+}
+
+.pricing-guarantee {
+    font-size: 1rem;
+    color: #b0b0b0;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.pricing-guarantee strong {
+    color: #ffffff;
 }
 
 /* --- TESTIMONIALS SECTION --- */
@@ -1143,7 +1183,7 @@ body {
     .hero-area {
         padding: 2rem 0;
     }
-    
+
     .hero-title {
         font-size: 2rem;
     }
@@ -1234,7 +1274,7 @@ body {
     .final-cta-title {
         font-size: 2rem;
     }
-    
+
     .benefit-card,
     .step-card,
     .pricing-card {
@@ -1277,7 +1317,7 @@ body {
 }
 
 .paradox-flow {
-    display: flex;
+  display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -1286,10 +1326,10 @@ body {
 }
 
 .flow-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
     text-align: center;
     padding: 0.75rem;
     background: #222222;
@@ -1344,7 +1384,7 @@ body {
     font-size: 1.8rem;
     font-weight: 700;
     color: #ffffff;
-    text-align: center;
+  text-align: center;
     margin-bottom: 2rem;
     letter-spacing: -0.02em;
     text-transform: uppercase;
@@ -1379,9 +1419,9 @@ body {
 
 .solution-content h5 {
     font-size: 1.1rem;
-    font-weight: 700;
+  font-weight: 700;
     color: #ffffff;
-    margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .solution-content p {
@@ -1394,7 +1434,7 @@ body {
 /* Responsive adjustments for new components */
 @media (max-width: 768px) {
     .paradox-flow {
-        flex-direction: column;
+    flex-direction: column;
         gap: 1rem;
         padding: 1.5rem;
     }
@@ -1491,14 +1531,14 @@ body {
 }
 
 .comparison-points {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
     gap: 1rem;
 }
 
 .point-item {
     display: flex;
-    align-items: center;
+  align-items: center;
     gap: 1rem;
     padding: 0.75rem;
     background: rgba(255, 255, 255, 0.02);
@@ -1519,7 +1559,7 @@ body {
 .point-item span:last-child {
     color: #b0b0b0;
     font-size: 0.95rem;
-    font-weight: 500;
+  font-weight: 500;
 }
 
 /* Responsive adjustments for hardware wallet section */
@@ -1544,7 +1584,7 @@ body {
 
 /* Inheritance section specific styles */
 .inheritance-challenge {
-    display: flex;
+  display: flex;
     flex-direction: column;
     gap: 1rem;
     padding: 2rem;
@@ -1555,7 +1595,7 @@ body {
 
 .challenge-item {
     display: flex;
-    align-items: center;
+  align-items: center;
     gap: 1.5rem;
     padding: 1rem;
     background: #222222;
@@ -1577,8 +1617,8 @@ body {
 .challenge-text strong {
     display: block;
     color: #ffffff;
-    font-size: 1.1rem;
-    font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 700;
     margin-bottom: 0.25rem;
 }
 
@@ -1623,17 +1663,17 @@ body {
 }
 
 .key-holders {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
 }
 
 .key-holder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
     padding: 1rem;
     background: #222222;
     border-radius: 12px;
@@ -1649,19 +1689,19 @@ body {
 }
 
 .holder-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .key-holder span:last-child {
     color: #e5e5e5;
     font-size: 0.85rem;
     font-weight: 600;
-    text-align: center;
+  text-align: center;
 }
 
 .quorum-result {
-    display: flex;
+  display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
@@ -1680,7 +1720,7 @@ body {
 .quorum-security {
     color: #b0b0b0;
     font-size: 0.9rem;
-    text-align: center;
+  text-align: center;
 }
 
 .inheritance-benefits {
@@ -1690,7 +1730,7 @@ body {
 }
 
 .benefit-item {
-    display: flex;
+  display: flex;
     align-items: flex-start;
     gap: 1rem;
     padding: 1.5rem;
@@ -1714,7 +1754,7 @@ body {
 
 .benefit-content h5 {
     font-size: 1.1rem;
-    font-weight: 700;
+  font-weight: 700;
     color: #ffffff;
     margin-bottom: 0.5rem;
 }
@@ -1785,7 +1825,7 @@ body {
     
     .challenge-item {
         flex-direction: column;
-        text-align: center;
+  text-align: center;
         gap: 0.5rem;
         padding: 1rem;
     }
@@ -1797,14 +1837,14 @@ body {
 
 /* Impossible scenarios styles */
 .impossible-scenarios {
-    display: flex;
+  display: flex;
     flex-direction: column;
     gap: 1.5rem;
     margin: 2rem 0;
 }
 
 .scenario-card {
-    display: flex;
+  display: flex;
     align-items: flex-start;
     gap: 1.5rem;
     padding: 2rem;
@@ -1842,16 +1882,16 @@ body {
 }
 
 .solution-answers {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
     gap: 1.5rem;
     margin-top: 2rem;
 }
 
 .answer-item {
     display: flex;
-    align-items: center;
-    gap: 1.5rem;
+  align-items: center;
+  gap: 1.5rem;
     padding: 1.5rem;
     background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(23, 134, 255, 0.05) 100%);
     border: 2px solid rgba(76, 175, 80, 0.3);
@@ -1907,5 +1947,5 @@ body {
     
     .answer-text {
         font-size: 1rem;
-    }
+  }
 }
