@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaLock } from 'react-icons/fa';
+import { FaLock, FaCheckCircle, FaPrint, FaDownload, FaShieldAlt, FaExclamationTriangle, FaArrowRight } from 'react-icons/fa';
 import PDFVaultBackup from './PDFVaultBackup';
 import PDFKeyBackup from './PDFKeyBackup';
 
@@ -26,122 +26,375 @@ const VaultDownloadSection = ({
     maxLengthPerQRCode,
     vaultColors
 }) => {
-    return (
-        <div>
-            <Row>
-                <Col xs={{span: 12}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
-                    <div className="alert alert-warning">
-                        <b>This page will only be visible once. </b>
-                        <br/>Do not browse away before you've printed both your vault and keys
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col xs={{span: 12}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                    <div className={'downloadSection'}>
-                        <h3><span className={'numberSpan'}>1.</span> Print your vault</h3>
-                        <div>Print your encrypted vault.</div>
-                        <div className={'securityTips'}>
-                            <div><FaLock style={{color:'#777', marginRight:4, fontSize:12}} /> Keep copies in different locations</div>
-                        </div>
-                        <div style={{marginTop:15}}>
-                            <div>
-                                <Button
-                                    className={hasPressedVaultPrint?'btn-success btn-download':'btn-primary btn-download flashing'}
-                                    style={{marginRight:10}}
-                                    size={'lg'}
-                                    onClick={()=>doPrintVault()}
-                                >
-                                    Print Vault
-                                </Button>
-                            </div>
-                            <div style={{marginTop:10, textAlign:'center'}}>
-                                <Link
-                                    to={'#'}
-                                    className={'linkage'}
-                                    onClick={()=>downloadVault()}
-                                >
-                                    Download Vault
-                                </Link>
-                            </div>
-                        </div>
+    const [vaultDownloaded, setVaultDownloaded] = useState(false);
+    const [keysDownloaded, setKeysDownloaded] = useState(new Set());
+    const [showDownloadWarning, setShowDownloadWarning] = useState(false);
+    const [currentStep, setCurrentStep] = useState(1);
+    const [preferredMethod, setPreferredMethod] = useState(null); // 'print' or 'download'
+    const [allPrinted, setAllPrinted] = useState(false);
 
-                        <div id={'idvaultbackup'}
-                             ref={refBackupVaultPDF}
-                             className={'contentToPrint'}>
-                            <PDFVaultBackup
-                                vaultIdent={vaultIdent}
-                                cipherText={cipherText}
-                                shares={shares}
-                                threshold={consensus}
-                                vaultName={vaultName}
-                                description={description}
-                                cipherIV={cipherIV}
-                                createdTimestamp={createdTimestamp}
-                                qrtype={'printable'}
-                                keyAliasArray={keyAliasArray}
-                                maxLengthPerQRCode={maxLengthPerQRCode}
-                                vaultColors={vaultColors}
-                            />
+
+    const handleVaultDownload = () => {
+        downloadVault();
+        setVaultDownloaded(true);
+        setShowDownloadWarning(true);
+    };
+
+    const handleKeyDownload = (share, index) => {
+        downloadKey(share, index);
+        setKeysDownloaded(prev => new Set([...prev, index]));
+        setShowDownloadWarning(true);
+    };
+
+    const handlePrintAll = () => {
+        // Print the combined component that includes both vault and keys
+        doPrintVault();
+        setAllPrinted(true);
+    };
+
+    const goBackToStep = (stepNumber) => {
+        setCurrentStep(stepNumber);
+        if (stepNumber === 1) {
+            setPreferredMethod(null);
+        }
+    };
+
+    const vaultCompleted = hasPressedVaultPrint || vaultDownloaded;
+    const keysCompleted = hasPressedKeyPrint || keysDownloaded.size === shares.length;
+    const printCompleted = allPrinted || (hasPressedVaultPrint && hasPressedKeyPrint);
+    const downloadCompleted = vaultDownloaded && keysDownloaded.size === shares.length;
+    const allCompleted = (preferredMethod === 'print' && printCompleted) || (preferredMethod === 'download' && downloadCompleted);
+
+
+
+    const renderStepIndicator = () => (
+        <div className="vault-wizard-progress">
+            <div className="wizard-steps">
+                {[
+                    { num: 1, label: 'Select method', completed: !!preferredMethod && currentStep > 1 },
+                    { num: 2, label: preferredMethod === 'print' ? 'Print Files' : 'Download Files', completed: allCompleted && currentStep > 2 },
+                    { num: 3, label: 'Test', completed: currentStep > 3 }
+                ].map((step, index) => (
+                    <div key={step.num} className={`wizard-step ${step.completed ? 'completed' : ''} ${currentStep === step.num ? 'active' : ''}`}>
+                        <div className="step-circle">
+                            {step.completed ? <FaCheckCircle /> : step.num}
                         </div>
+                        <span className="step-label">{step.label}</span>
+                        {index < 2 && <div className="step-connector"></div>}
                     </div>
-                </Col>
-                <Col xs={{span: 12}} md={{span: 6, offset: 0}} lg={{span: 6, offset: 0}}>
-                    <div className={'downloadSection'}>
-                        <h3><span className={'numberSpan'}>2.</span> Print keys</h3>
-                        <div>Distribute one key per person.</div>
-                        <div className={'securityTips'}>
-                            <div>
-                                <FaLock style={{color:'#777', marginRight:4, fontSize:12}} /> Distribute in-person where possible
-                            </div>
+                ))}
+            </div>
+        </div>
+    );
+
+    const renderImportantNotice = () => (
+        <div className="important-notice-banner">
+            <div className="notice-icon">
+                <FaLock />
+            </div>
+            <div className="notice-content">
+                <h4>📋 Important: Save Your Documents</h4>
+                <p>These backup documents are generated once. Make sure to save them before leaving this page.</p>
+            </div>
+        </div>
+    );
+
+    const renderMethodSelectionStep = () => (
+        <div className="method-selection-flat">
+            <div className="section-title">
+                <h2>Choose How to Save Your Documents</h2>
+                <p>Pick the method that works best for you</p>
+            </div>
+
+            <div className="method-options-side-by-side">
+                <div className={`method-option ${preferredMethod === 'print' ? 'selected' : ''}`} 
+                     onClick={() => {
+                         setPreferredMethod('print');
+                         if (currentStep === 1) setCurrentStep(2);
+                     }}>
+                    <div className="option-header">
+                        <FaPrint className="option-icon" />
+                        <h3>Print Documents</h3>
+                        <span className="security-badge">Most Secure</span>
+                    </div>
+                    <ul className="option-benefits">
+                        <li>Keep data off your device</li>
+                        <li>Immune to hacking & malware</li>
+                        <li>Mitigates against cyber threats</li>
+                        <li>Future-proof physical storage</li>
+                    </ul>
+                </div>
+
+                <div className="method-divider">
+                    <span>OR</span>
+                </div>
+
+                <div className={`method-option ${preferredMethod === 'download' ? 'selected' : ''}`}
+                     onClick={() => {
+                         setPreferredMethod('download');
+                         if (currentStep === 1) setCurrentStep(2);
+                     }}>
+                    <div className="option-header">
+                        <FaDownload className="option-icon" />
+                        <h3>Download Files</h3>
+                        <span className="convenience-badge">Convenient</span>
+                    </div>
+                    <ul className="option-benefits">
+                        <li>No printer required</li>
+                        <li>Digital backup copies</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    );
+
+    const renderSaveStep = () => (
+        <div className="save-step-flat">
+            <div className="section-description">
+                <p>
+                    {preferredMethod === 'print' 
+                        ? `Print your vault and all ${shares.length} keys together. You need ${consensus} keys to unlock your vault.`
+                        : `Download your vault and ${shares.length} keys separately. You need ${consensus} keys to unlock your vault.`
+                    }
+                </p>
+            </div>
+
+            {preferredMethod === 'print' ? (
+                <div className="single-action-container">
+                    <div className="security-tips-section">
+                        <h4>🖨️ Printing & Distribution Security Tips</h4>
+                        <ul>
+                            <li><strong>Use a private printer</strong> (not shared/office printers)</li>
+                            <li><strong>Clear printer memory/cache</strong> after printing</li>
+                            <li><strong>Use archive-grade paper</strong> for long-term durability (acid-free, lignin-free)</li>
+                            <li><strong>Don't fold the documents</strong> - use flat, tamper-proof envelopes to protect QR codes</li>
+                            <li><strong>For social recovery:</strong> Give each person only their key, hand deliver when possible, or use tamper-proof envelopes with secure mail and tracking</li>
+                            <li><strong>For private storage:</strong> You can keep multiple keys yourself in different locations</li>
+                            <li><strong>Store vault document</strong> in a fireproof safe or safety deposit box</li>
+                            <li><strong>Optional:</strong> Keep a master list noting who has which key and delivery method (adds convenience but also risk)</li>
+                        </ul>
+                    </div>
+                    
+                    <Button
+                        className={`choice-btn primary large ${printCompleted ? 'completed' : 'flashing'}`}
+                        size="lg"
+                        onClick={handlePrintAll}
+                    >
+                        <FaPrint /> &nbsp;
+                        {printCompleted ? 'Print Again' : `Print Vault + All ${shares.length} Keys`}
+                    </Button>
+                </div>
+            ) : (
+                <div className="single-action-container">
+                    <div className="download-files-section">
+                        <div className="security-tips-section download-tips">
+                            <h4>💾 Download & Distribution Security Tips</h4>
+                            <ul>
+                                <li><strong>Don't store vault and keys together</strong> - Use separate devices/locations for vault vs keys</li>
+                                <li><strong>Delete from Downloads folder</strong> and empty trash/recycle bin</li>
+                                <li><strong>For social recovery:</strong> Give each person only their key, hand deliver when possible. If sending digitally (not recommended), use different apps/channels and never send enough keys via the same medium to meet your unlock threshold</li>
+                                <li><strong>For private storage:</strong> You can keep multiple keys yourself in different locations</li>
+                                <li><strong>No cloud storage</strong> - Don't upload to Google Drive, Dropbox, iCloud, etc.</li>
+                                <li><strong>Optional:</strong> Keep a master list noting who has which key and delivery method (adds convenience but also risk)</li>
+                            </ul>
                         </div>
-                        <div style={{marginTop:15}}>
-                            <div>
+                        
+                        <div className="download-actions">
+                            <div className="vault-download-section">
+                                <h4>📄 Vault Document</h4>
+                                <p>Your encrypted data - download this first</p>
                                 <Button
-                                    className={hasPressedKeyPrint?'btn-success btn-download':'btn-primary btn-download flashing'}
-                                    style={{marginRight:10}}
-                                    size={'lg'}
-                                    onClick={doPrintKeys}
+                                    className={`choice-btn primary ${vaultDownloaded ? 'completed' : 'flashing'}`}
+                                    size="lg"
+                                    onClick={handleVaultDownload}
                                 >
-                                    Print Keys ({shares.length})
+                                    <FaDownload />
+                                    {vaultDownloaded ? 'Download Again' : 'Download Vault PDF'}
                                 </Button>
                             </div>
-                            <div style={{marginTop:10, textAlign:'center'}}>
-                                {shares.map((share, i) =>
-                                    <div key={'sharekey-'+i} style={{marginTop:10}}>
-                                        <Link
-                                            to={'#'}
-                                            className={'linkage'}
-                                            onClick={()=>downloadKey(share, i)}
-                                        >
-                                            Download key #{i+1}
-                                        </Link>
+                            
+                            <div className="keys-download-section">
+                                <h4>🔑 Unlock Keys ({shares.length} total)</h4>
+                                <p>Download each key individually for secure distribution</p>
+                                
+                                {keysDownloaded.size > 0 && (
+                                    <div className="download-progress">
+                                        <FaCheckCircle className="progress-icon" />
+                                        <span>{keysDownloaded.size} of {shares.length} keys downloaded</span>
                                     </div>
                                 )}
+                                
+                                <div className="individual-keys-compact">
+                                    {shares.map((share, i) => (
+                                        <Button
+                                            key={i}
+                                            className={`key-download-btn-compact ${keysDownloaded.has(i) ? 'completed' : ''}`}
+                                            onClick={() => handleKeyDownload(share, i)}
+                                            variant="outline-primary"
+                                            size="sm"
+                                            title={`${keyAliasArray[i]} - Key ${i+1} ${keysDownloaded.has(i) ? '(Click to download again)' : ''}`}
+                                        >
+                                            {keysDownloaded.has(i) ? '✓' : (i+1)}
+                                        </Button>
+                                    ))}
+                                </div>
+                                
+                                <div className="keys-help-text">
+                                    <small>Click numbered buttons to download each key individually. You can download again if needed.</small>
+                                </div>
                             </div>
                         </div>
-                        <div id={'idvaultbackup'}
-                             ref={refBackupKeyPDF}
-                             className={'contentToPrint'}>
-                            {shares.map((share, i) =>
-                                <PDFKeyBackup
-                                    id={'keyshare'+i}
-                                    key={'share'+i}
-                                    vaultIdent={vaultIdent}
-                                    threshold={consensus}
-                                    vaultName={vaultName}
-                                    description={description}
-                                    createdTimestamp={createdTimestamp}
-                                    myDecryptedKey={share}
-                                    qrtype={'printable'}
-                                    keyAlias={keyAliasArray[i]}
-                                    vaultColors={vaultColors}
-                                />
-                            )}
-                        </div>
+                        
+                        {(vaultDownloaded || keysDownloaded.size > 0) && (
+                            <div className="post-download-reminder">
+                                <FaExclamationTriangle />
+                                <span><strong>Don't forget:</strong> Move files to secure storage, use different channels, and clear downloads!</span>
+                            </div>
+                        )}
                     </div>
-                </Col>
-            </Row>
+                </div>
+            )}
+
+            <div className="step-navigation">
+                <Button
+                    variant="outline-secondary"
+                    onClick={() => goBackToStep(1)}
+                    className="back-btn"
+                >
+                    ← Change Method
+                </Button>
+                
+                {allCompleted && (
+                    <Button
+                        variant="primary"
+                        onClick={() => setCurrentStep(3)}
+                        className="continue-btn"
+                    >
+                        Continue to Test →
+                    </Button>
+                )}
+            </div>
+        </div>
+    );
+
+    const renderTestStep = () => (
+        <div className="test-step-simple">
+            <div className="test-completion-message">
+                <p>Your vault and keys have been saved. Now test that everything works:</p>
+                
+                <ul style={{textAlign: 'left', color: '#fff', fontSize: '14px', marginBottom: '30px'}}>
+                    <li>Verify QR codes scan correctly</li>
+                    <li>Confirm decryption works</li>
+                    <li>Practice the unlock process</li>
+                </ul>
+            </div>
+
+            <Link to="/unlock">
+                <Button 
+                    className="choice-btn primary large"
+                    size="lg"
+                >
+                    <span>Test Unlock Process</span>
+                    <FaArrowRight style={{marginLeft: '8px'}} />
+                </Button>
+            </Link>
+
+            <div className="step-navigation">
+                <Button
+                    variant="outline-secondary"
+                    onClick={() => goBackToStep(2)}
+                    className="back-btn"
+                >
+                    ← Go Back
+                </Button>
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="vault-download-wizard">
+            {/* Header */}
+            <div className="wizard-header">
+                <div className="header-icon">
+                    {currentStep === 1 ? <FaCheckCircle /> : 
+                     currentStep === 2 ? <FaLock /> : 
+                     <FaShieldAlt />}
+                </div>
+                <h1>
+                    {currentStep === 1 ? '🎉 Vault Created Successfully!' :
+                     currentStep === 2 ? (preferredMethod === 'print' ? 'Print Your Documents' : 'Download Your Documents') :
+                     'Test Your Backup'}
+                </h1>
+                <p>
+                    {currentStep === 1 ? 'Save your backup documents to complete the setup' :
+                     currentStep === 2 ? `${preferredMethod === 'print' ? 'Print' : 'Download'} your vault and keys securely` :
+                     'Verify your documents work before storing them'}
+                </p>
+            </div>
+
+            {renderStepIndicator()}
+            {/* {renderImportantNotice()} */}
+
+            {/* Step Content */}
+            <div className="wizard-content">
+                {currentStep === 1 && renderMethodSelectionStep()}
+                {currentStep === 2 && renderSaveStep()}
+                {currentStep === 3 && renderTestStep()}
+            </div>
+
+            {/* Hidden PDF Components */}
+            <div id="idvaultbackup" ref={refBackupVaultPDF} className="contentToPrint">
+                {/* Vault Document */}
+                <PDFVaultBackup
+                    vaultIdent={vaultIdent}
+                    cipherText={cipherText}
+                    shares={shares}
+                    threshold={consensus}
+                    vaultName={vaultName}
+                    description={description}
+                    cipherIV={cipherIV}
+                    createdTimestamp={createdTimestamp}
+                    qrtype="printable"
+                    keyAliasArray={keyAliasArray}
+                    maxLengthPerQRCode={maxLengthPerQRCode}
+                    vaultColors={vaultColors}
+                />
+                
+                {/* All Keys */}
+                {shares.map((share, i) => (
+                    <PDFKeyBackup
+                        id={`keyshare${i}`}
+                        key={`share${i}`}
+                        vaultIdent={vaultIdent}
+                        threshold={consensus}
+                        vaultName={vaultName}
+                        description={description}
+                        createdTimestamp={createdTimestamp}
+                        myDecryptedKey={share}
+                        qrtype="printable"
+                        keyAlias={keyAliasArray[i]}
+                        vaultColors={vaultColors}
+                    />
+                ))}
+            </div>
+
+            <div id="idkeybackup" ref={refBackupKeyPDF} className="contentToPrint">
+                {shares.map((share, i) => (
+                    <PDFKeyBackup
+                        id={`keyshare${i}`}
+                        key={`share${i}`}
+                        vaultIdent={vaultIdent}
+                        threshold={consensus}
+                        vaultName={vaultName}
+                        description={description}
+                        createdTimestamp={createdTimestamp}
+                        myDecryptedKey={share}
+                        qrtype="printable"
+                        keyAlias={keyAliasArray[i]}
+                        vaultColors={vaultColors}
+                    />
+                ))}
+            </div>
         </div>
     );
 };

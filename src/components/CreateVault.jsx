@@ -20,6 +20,7 @@ import Lottie from 'lottie-react-web'
 import LottieAnimationVault from '../animations/31217-vault'
 import CreateMintKeys from "../components/CreateMintKeys";
 import CreateLoading from "../components/CreateLoading";
+import SecretDataEntry from "../components/SecretDataEntry";
 import PDFVaultBackup from '../components/PDFVaultBackup';
 import * as htmlToImage from "html-to-image";
 import ProgressBar from 'react-bootstrap/ProgressBar'
@@ -34,7 +35,6 @@ import {PDFDownloadLink, PDFViewer} from "@react-pdf/renderer";
 import PDFKeyBackup from "../components/PDFKeyBackup";
 import {useReactToPrint} from 'react-to-print';
 import Html2PDF from 'html2pdf.js';
-import PaymentGumRoadComponent from "./PaymentGumRoadComponent";
 import {Oval} from "react-loading-icons";
 import {PaymentService} from "../services/PaymentService";
 import VaultDownloadSection from './VaultDownloadSection';
@@ -225,20 +225,8 @@ function CreateVault(props) {
 
     }, []);
 
-
-    // useEffect (()=>{
-    //     if (props.paymentComplete) {
-    //        /* setIsPaymentComplete(true);
-    //         setWizardStep(3);
-    //         setAgreeToTerms(true);*/
-    //         setAgreeToTerms(true);
-    //         onPaymentComplete();
-    //         return;
-    //     }
-    // }, [props.paymentComplete]);
-
     const continueWizard = (forcepage) => {
-        // console.log('continuing with secret', secretValue);
+      
         if (!agreeToTerms) {
             alert ('You must agree to the terms to use this service');
             return;
@@ -257,94 +245,17 @@ function CreateVault(props) {
         //we already paid but didnt complete making th evault...
         let cookie_sale_id       = cookies.get('kosign_sale_id');
         let cookie_product_id    = cookies.get('kosign_product_id');
-       // console.log('VERIFYING COOKIE', cookie_product_id, cookie_sale_id);
-
-        //if (cookie_sale_id && cookie_product_id) {
-            //make sure our cookies are actually valid and authentic
-         //   onPaymentComplete();
-            // PaymentService.setupGumroadPayment(cookie_product_id, cookie_sale_id).then((response)=>{
-            //   //  console.log('setupGumroadPayment', response);
-            //     onPaymentComplete();
-            //     return;
-            //     //alert ('apyment succeeded');
-            // }).catch(error => {
-            //     alert ('Payment Error');
-            //     console.log(error.response.data);
-            //     console.log(error.response.status);
-            //     console.log(error.response.headers);
-            // });
-            //onPaymentComplete();
-
-       // } else {
-            if (wizardStep > 2 && !isPaymentComplete) {
-                return;
-            }
-            // if (totalCost===0) {
-            //     PaymentService.notification(JSON.stringify({type:'freevault',vaultName:vaultName,keys:totalShareholders,threshold:consensus})).then((response)=>{
-            //         setIsPaymentComplete(true);
-            //         setMaxChars(global.maxCharsPerVaultFree);
-            //         setWizardStep(wizardStep +2);
-            //         setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
-            //     }).catch(error => {
-            //         alert ('Error, please check your connection and try again');
-            //         console.log(error.response.data);
-            //         console.log(error.response.status);
-            //         console.log(error.response.headers);
-            //     });
-            //     return;
-            // }
-            setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
-            setWizardStep(wizardStep + 2);
-       // }
-
-        /*if (wizardStep + 1 === 5) {
-            setPageTitle('Key Ceremony');
-        }*/
+    
+        if (wizardStep > 2 && !isPaymentComplete) {
+            return;
+        }
+        
+        setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
+        setWizardStep(wizardStep + 2);
+    
 
     };
-    /*useEffect(() => {
-        //hide key every time tab is changed;
-        if (!showPDFBackupVault) return;
-        htmlToImage.toJpeg(refBackupVaultPDF.current, {quality: 0.95, cacheBust: true, skipAutoScale: true})
-            .then(function (dataUrl) {
-                let link = document.createElement('a');
-                link.download = 'kosign-vault-' + vaultName + '.jpeg';
-                link.href = dataUrl;
-                link.click();
-                setShowPDFBackupVault(false);
-                continueWizard();
-            });
-    }, [showPDFBackupVault]);   */
-
-
-    // const renderProgressBarClass = (stepType) => {
-    //     if ((wizardStep===1) && (stepType==='setup')) {
-    //         return 'progressBarActive';
-    //     }
-    //     if ((wizardStep===2) && (stepType==='keys')) {
-    //         return 'progressBarActive';
-    //     }
-    //     if ((wizardStep===3) && (stepType==='payment')) {
-    //         return 'progressBarActive';
-    //     }
-    //     if ((wizardStep===4) && (stepType==='download')) {
-    //         return 'progressBarActive';
-    //     }
-
-    //     if ((wizardStep>=2) && (stepType==='setup')) {
-    //         return 'progressBarSuccess';
-    //     }
-    //     if ((wizardStep>=3) && (stepType==='keys')) {
-    //         return 'progressBarSuccess';
-    //     }
-    //     if ((wizardStep>=4) && (stepType==='payment')) {
-    //         return 'progressBarSuccess';
-    //     }
-    //     if ((wizardStep>=5) && (stepType==='download')) {
-    //         return 'progressBarSuccess';
-    //     }
-    //     return 'progressBarDefault';
-    // };
+   
 
     const onPaymentComplete = () => {
         cookies.remove('kosign_sale_id');
@@ -437,160 +348,86 @@ function CreateVault(props) {
 
     if (props.isLoading) {
         return (
-            <div className={'centerLoading'}><Oval stroke="#1786ff" strokeWidth={10} strokeOpacity={1} speed={1} style={{width:25}} /></div>
+            <div className={'centerLoading createPageWrapper'} style={{background: '#0a0a0a', minHeight: '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Oval stroke="#1786ff" strokeWidth={10} strokeOpacity={1} speed={1} style={{width:25}} />
+            </div>
         )
     }
 
     return (
 
-        <div style={{marginBottom:100}}>
-            <div>
-                {/*{wizardStep !== 5 ?
-                    <div className={'progressBarWrapper'}>
-                        <ProgressBar style={{height: 70}}>
-                            <ProgressBar striped={wizardStep === 1 ? true : false}
-                                         animated={wizardStep === 1 ? true : false}
-                                         className={renderProgressBarClass('setup')} now={30} key={1} label={
-                                <div>
-                                    <TbCircleNumber1
-                                        className={'progressIcon'}/> Setup <FaChevronRight className={'progressIcon'} />
-                                </div>
-                            }/>
-                            <ProgressBar striped={wizardStep === 2 ? true : false}
-                                         animated={wizardStep === 2 ? true : false}
-                                         className={renderProgressBarClass('keys')} now={30} key={2} label={
-                                <div>
-                                    <TbCircleNumber2 className={'progressIcon'}/> Payment
-                                </div>
-                            }/>
-                            <ProgressBar striped={wizardStep === 3 ? true : false}
-                                         animated={wizardStep === 3 ? true : false}
-                                         className={renderProgressBarClass('payment')} now={30} key={3} label={
-                                <div>
-                                    <TbCircleNumber3 className={'progressIcon'}/> Add Data
-                                </div>
-                            }/>
-                            <ProgressBar striped={wizardStep === 4 ? true : false}
-                                         animated={wizardStep === 4 ? true : false}
-                                         className={renderProgressBarClass('download')} now={40} key={4} label={
-                                <div>
-                                    <TbCircleNumber4 className={'progressIcon'}/> Download Vault
-                                </div>
-                            }/>
-                        </ProgressBar>
-                    </div>
-                    :null
-                }*/}
-                <div className={'createPageWrapper'}>
+        <div>
+            <div className="createPageWrapper">
+                
+                <div>
 
-                    <div>
-                    {wizardStep === 1 ?
-                        <div>
-                            <div>
-                                <Row style={{height: '100%'}}>
-
-                                    <Col xs={{span: 12}} md={{span: 12, offset: 0}} lg={{span: 12, offset: 0}}>
-                                        <Form>
-                                            <div className={'createSectionWrapper'}>
-                                                <FormGroup className={'formGroup'} controlId="formBasicName">
-                                                    {/*<FormLabel className={'formLabel'}>Vault Name</FormLabel>*/}
-                                                    <input name="vaultName" type="text" placeholder={'Vault Name'}
-                                                           onChange={(e) => setVaultNameValue(e.target.value)}
-                                                           value={vaultName}
-                                                           className={'form-control formControls'}/>
-                                                    <FormText className="text-muted space-between-row">
-                                                        <div style={{marginTop:5}}>
-                                                            {/*<FaLockOpen style={{color:'#777', marginRight:4, fontSize:12}} />*/}
-                                                            A friendly name that will be visible on your vault and keys
-                                                        </div>
-                                                        {((vaultName.length)>=(maxVaultNameChars*0.25))?
-                                                        <div style={{marginTop:5}}>
-                                                            {maxVaultNameChars - vaultName.length} characters remaining &nbsp;
-                                                        </div>
-                                                        : null}
-                                                    </FormText>
-                                                </FormGroup>
-
-                                               {/* <FormGroup className={'formGroup'} controlId="formBasicDescription">
-                                                    <textarea
-                                                        value={description}
-                                                        onChange={(e) => setDescriptionValue(e.target.value)}
-                                                        className={'form-control'}
-                                                        placeholder={'This vault contains...'}
-                                                        rows={2}
-                                                    />
-                                                    <FormText className="text-muted space-between-row">
-                                                        <div style={{marginTop:5, paddingRight:10}}>
-                                                            Description or instructions that will be visible on your vault
-                                                        </div>
-                                                        {((description.length)>=(maxDescriptionChars*0.25))?
-                                                        <div style={{marginTop:5}} className={'noWrap'} >
-                                                            {maxDescriptionChars - description.length} characters remaining &nbsp;
-                                                        </div>
-                                                        : null}
-                                                    </FormText>
-                                                </FormGroup>*/}
-
-                                                <CreateMintKeys setShareholders={(val) => setTotalShareholders(val)}
-                                                                setConsensus={(val) => setConsensus(val)}
-                                                />
-
-                                                <FormGroup className='formGroupCheckbox' style={{marginTop: 20}}>
-                                                    <div>
-                                                        <div>
-                                                            <Form.Check
-                                                                inline
-                                                                label={<span>Agree to the <Link to={'/legal'} target={'_blank'} className={'linkage'}>Terms of service</Link></span>}
-                                                                name="group1"
-                                                                type={'checkbox'}
-                                                                id={`inline--1`}
-                                                                checked={agreeToTerms}
-                                                                onChange={(e)=>setAgreeToTerms(e.target.checked)}
-                                                            />
-
-                                                        </div>
-                                                    </div>
-                                                </FormGroup>
-
-                                                <FormGroup className={'formGroup'} style={{marginTop: 20}}>
-                                                    <div style={{display:'flex', flexDirection:'row',flex:1}}>
-                                                        <div>
-                                                            <Button variant={'primary'} size={'lg'}
-                                                                    onClick={() => continueWizard() //TODO:Change to 3 to skip payment
-                                                                    }>
-                                                                Continue
-                                                            </Button>
-                                                        </div>
-                                                        <div className={'costSummary'}>
-                                                            {totalCost === 0 ?
-                                                                <div>
-                                                                    {/* <div
-                                                                        className={'formTotalCost'}>$0 free vault
-                                                                    </div> */}
-                                                                </div>
-                                                                :
-                                                                <div>
-                                                                    <div
-                                                                        className={'formTotalCost'}>${totalCost} Total
-                                                                    </div>
-                                                                    {/*<div className={'text-muted'}>
-                                                                        ${(totalShareholders * global.costPerKey) + (global.setupCost) - (global.freeKeys*global.costPerKey)}
-                                                                        &nbsp;for {totalShareholders} keys
-                                                                    </div>*/}
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </FormGroup>
+                    <div style={{flex:1}}>
+                    {wizardStep === 1 && (
+                        <div className="wizard-step-container">
+                            <Form>
+                                <div className={'createSectionWrapper'}>
+                                    <FormGroup className={'formGroup'} controlId="formBasicName">
+                                        <input 
+                                            name="vaultName" 
+                                            type="text" 
+                                            placeholder={'Vault Name'}
+                                            onChange={(e) => setVaultNameValue(e.target.value)}
+                                            value={vaultName}
+                                            className={'form-control formControls'}
+                                        />
+                                        <FormText className="text-muted">
+                                            <div style={{marginTop:5}}>
+                                                A friendly name that will be visible on your vault and keys
                                             </div>
-                                        </Form>
-                                    </Col>
+                                            {((vaultName.length)>=(maxVaultNameChars*0.25)) && (
+                                                <div style={{marginTop:8, fontSize: '0.85rem', opacity: 0.8}}>
+                                                    {maxVaultNameChars - vaultName.length} characters remaining
+                                                </div>
+                                            )}
+                                        </FormText>
+                                    </FormGroup>
 
-                                </Row>
-                            </div>
+                                    <CreateMintKeys 
+                                        setShareholders={(val) => setTotalShareholders(val)}
+                                        setConsensus={(val) => setConsensus(val)}
+                                    />
+
+                                    <FormGroup className='formGroupCheckbox' style={{marginTop: 20}}>
+                                        <Form.Check
+                                            inline
+                                            label={<span>Agree to the <Link to={'/legal'} target={'_blank'} className={'linkage'}>Terms of service</Link></span>}
+                                            name="group1"
+                                            type={'checkbox'}
+                                            id={`inline--1`}
+                                            checked={agreeToTerms}
+                                            onChange={(e)=>setAgreeToTerms(e.target.checked)}
+                                        />
+                                    </FormGroup>
+
+                                    <FormGroup className={'formGroup'} style={{marginTop: 20}}>
+                                        <div className="wizard-footer">
+                                            <Button 
+                                                variant={'primary'} 
+                                                size={'lg'}
+                                                onClick={() => continueWizard()}
+                                            >
+                                                Continue
+                                            </Button>
+                                            
+                                            {totalCost > 0 && (
+                                                <div className={'costSummary'}>
+                                                    <div className={'formTotalCost'}>
+                                                        ${totalCost} Total
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </FormGroup>
+                                </div>
+                            </Form>
                         </div>
-                        : null}
-                    </div>
+                    )}
+                </div>
 
                 {wizardStep === 2 ?
                     <div>
@@ -598,59 +435,21 @@ function CreateVault(props) {
 {/*
                         <PaymentComponent isOnline={isOnline} totalCost={totalCost} quantity={totalShareholders} onPaymentComplete={()=>onPaymentComplete()}/>
 */}
-                        <PaymentGumRoadComponent isOnline={isOnline} totalCost={totalCost} quantity={totalShareholders} onPaymentComplete={()=>onPaymentComplete()}/>
-
+               
                     </div>
                     : null
                 }
 
                 <div>
                 {wizardStep === 3 ?
-                    <div>
-                        {!isOnline ?
-                            <div className={'alert alert-success'}>
-                                <FaCheck style={{marginRight: 2, fontSize: 12}}/>
-                                <b>You are offline</b>
-                            </div>
-                            :
-                            <div className={'alert alert-warning'}>
-                                <MdWarningAmber style={{marginRight: 8, fontSize: 18, lineHeight:16}}/>
-                                <b>Disconnect your internet</b>
-                                <p style={{marginTop: 4, marginBottom: 0}}>For your security, you can disconnect this
-                                    device from the internet and go offline before entering data below and continuing.</p>
-                            </div>
-                        }
-                        <form>
-                            <FormGroup className={'formGroup'} controlId="formBasicSecret">
-                                <textarea
-                                    value={secretValue}
-                                    onChange={(e) => setSecret(e.target.value)}
-                                    className={'form-control secretTextInput'}
-                                    placeholder={'Secret data goes here'}
-                                    rows={8}
-                                />
-                                <FormText className="text-muted" style={{display:'flex', flexDirection:'row',flex:1,justifyContent:'space-between', paddingTop:10}}>
-                                    <div>
-                                        <FaLock style={{color:'darkgreen', marginRight:2, fontSize:12}} />
-                                        <b style={{color:'darkgreen'}}>Secure</b> vault contents to encrypt
-                                    </div>
-
-                                    {maxSecretChars - secretValue.length} characters remaining ({totalPages} pages)&nbsp;
-                                    {/*<div>
-                                        Vaults are limited in characters in order to fit on one page.
-                                    </div>*/}
-                                </FormText>
-                            </FormGroup>
-                            <FormGroup className={'formGroup'} style={{marginTop: 20}}>
-                                <div>
-                                    <Button variant={'primary'} size={'lg'}
-                                            onClick={() => continueWizard(4)}>
-                                        Continue
-                                    </Button>
-                                </div>
-                            </FormGroup>
-                        </form>
-                    </div>
+                    <SecretDataEntry
+                        secretValue={secretValue}
+                        setSecret={setSecret}
+                        maxSecretChars={maxSecretChars}
+                        totalPages={totalPages}
+                        isOnline={isOnline}
+                        onContinue={() => continueWizard(4)}
+                    />
                     : null}
                 </div>
 

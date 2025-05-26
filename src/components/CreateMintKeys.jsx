@@ -18,7 +18,7 @@ function CreateMintKeys(props) {
 
     const cookies   = new Cookies();
 
-    const [totalShareholders, setTotalShareholders]  = useState(2);
+    const [totalShareholders, setTotalShareholders]  = useState(3);
     const [consensus, setConsensus]                  = useState(2);
 
     useEffect(()=>{
@@ -28,14 +28,17 @@ function CreateMintKeys(props) {
         if (cookieShares) {
             setShareholders(cookieShares);
             setTotalShareholders(cookieShares);
+        } else {
+            // Set defaults for new users
+            setShareholders(3);
+            setTotalShareholders(3);
         }
         if (cookieThreshold) {
             updateConsensus(cookieThreshold);
-            setTotalShareholders(cookieShares);
+        } else {
+            // Set default threshold for new users
+            updateConsensus(2);
         }
-
-
-
     },[]);
 
     const setShareholders = (val) => {
@@ -64,76 +67,57 @@ function CreateMintKeys(props) {
     };
 
     return (
-        <div>
+        <div className="createMintKeysWrapper">
+            <div className={'createSectionInnerWrapper'}>
+                
+                {/* Number of Keys Section */}
+                <div className="key-config-section">
+                    <h6 className="config-question">How many keys do you want to create?</h6>
+                    <div className="number-selector">
+                        {Array.from({length: 20}, (_, i) => i + 1).map(num => (
+                            <button
+                                key={num}
+                                type="button"
+                                className={`number-btn ${totalShareholders === num ? 'active' : ''}`}
+                                onClick={() => setShareholders(num)}
+                            >
+                                {num}
+                            </button>
+                        ))}
+                    </div>
+                    <p className="config-help">Each key is a separate document that holds part of your vault's encryption</p>
+                </div>
 
-           {/* <Lottie
-                options={{
-                    animationData: LottieAnimationKey,
-                    loop: false
-                }}
-                width={350}
-                height={350}
-            />
-
-            */}
-            <Row style={{ height:'100%'}}>
-                <Col xs={{span:12}} md={{span:12, offset:0}} lg={{span:12, offset:0}}>
-
-                        <div className={'createSectionWrapper'}>
-
-                            {/*<AddUserToVault addUser={(user) => this.addUser(user)}/>*/}
-
-                            <FormGroup className={'formGroup'} controlId="formThreshold">
-{/*
-                                <FormLabel className={'formLabel'}>How many keys?</FormLabel>
-*/}
-                                <div style={{marginTop:10}}>
-                                    <select className={'formSelect'} value={totalShareholders} onChange={(e) => setShareholders(e.target.value)}>
-                                        {Array.apply(2, Array(20)).map((member, i) => (
-                                            <option key={'selectoptionkey_'+i+1} value={i+1}>{i+1} key{i>0?'s':null}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className={'text-muted'} style={{marginTop:5}}>How many keys do you want to mint?</div>
-                            </FormGroup>
-
-                            {totalShareholders>1?
-                            <FormGroup className={'formGroup'} controlId="formThreshold">
-                                {/*<FormLabel className={'formLabel'}>How many keys are needed to unlock?</FormLabel>*/}
-                                <div style={{marginTop:10}}>
-                                    <select className={'formSelect'} value={consensus} onChange={(e) => updateConsensus( e.target.value)}>
-                                        {Array.apply(2, Array(parseInt(totalShareholders)-1)).map((member, i) => (
-                                            <option key={'selectoptionkey_'+i+2} value={i+2}>Require {i+2} keys to unlock</option>
-                                        ))}
-                                    </select>
-                                    <div className={'text-muted'} style={{marginTop:5}}>How many keys are needed to unlock the vault?</div>
-
-                                </div>
-{/*
-                                <div className={'text-muted'}>{consensus===1 ? <div>&nbsp;</div> : <div>You + {consensus-1} others will be required to unlock</div>}</div>
-*/}
-                            </FormGroup>
-                            : null}
-
-                            {/*<FormGroup className={'formGroup'} controlId="formSubmit" style={{marginTop:50}}>
-                                <div>
-                                    <Button
-                                        variant = {'primary'}
-                                        size    = {'lg'}
-                                        onClick = {()=>props.continue()}
-                                    >
-                                        Continue
-                                    </Button>
-                                </div>
-                            </FormGroup>*/}
+                {/* Threshold Section - Only show if more than 1 key */}
+                {totalShareholders > 1 && (
+                    <div className="key-config-section">
+                        <h6 className="config-question">How many keys are needed to unlock?</h6>
+                        <div className="number-selector">
+                            {Array.from({length: totalShareholders - 1}, (_, i) => i + 2).map(num => (
+                                <button
+                                    key={num}
+                                    type="button"
+                                    className={`number-btn ${consensus === num ? 'active' : ''}`}
+                                    onClick={() => updateConsensus(num)}
+                                >
+                                    {num}
+                                </button>
+                            ))}
                         </div>
+                        <p className="config-help">
+                            {consensus === 2 && totalShareholders === 3 
+                                ? "Recommended: You can lose 1 key and still access your vault"
+                                : consensus === totalShareholders 
+                                ? "High security: All keys required (risky if you lose any)"
+                                : `${consensus} out of ${totalShareholders} keys will be needed`
+                            }
+                        </p>
+                    </div>
+                )}
 
-                </Col>
-
-            </Row>
+            </div>
         </div>
     )
-
 }
 
 export default CreateMintKeys;

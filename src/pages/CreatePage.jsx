@@ -84,27 +84,8 @@ function CreatePage() {
 
     return (
         <Layout>
-            <Navbar loggedIn/>
-            <div className={'pageWrapper'}>
-                <Container>
-                    <Row>
-                        <Col xs={{span: 12, offset: 0}} md={{span: 12, offset: 0}} lg={{span: 8, offset: 2}}>
-                            <div className={'pageNavWrapper'}>
-                                <div>
-                                    <h2 className={'pageTitle'}>Create a vault</h2>
-                                </div>
-
-                            </div>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col xs={{span: 12, offset: 0}} md={{span: 12, offset: 0}} lg={{span: 8, offset: 2}}>
-                            <CreateVault isLoading={isLoading} paymentComplete={paymentComplete} />
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
+            <Navbar loggedIn={false}/>
+            <CreateVault isLoading={isLoading} paymentComplete={paymentComplete} />
             <Footer/>
         </Layout>
     )

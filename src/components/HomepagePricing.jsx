@@ -44,7 +44,7 @@ function HomepagePricing({ pricingRef }) {
                             <ul className="pricing-features">
                                 <li>✓ Everything in Free</li>
                                 <li>✓ Up to 20 key shares</li>
-                                <li>✓ Extended storage (4,000 chars)</li>
+                                <li>✓ Extended storage (5,000 chars)</li>
                             </ul>
                             <button className="pricing-cta primary" onClick={() => navigate('/create')}>
                                 Buy Once, Own Forever

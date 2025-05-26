@@ -33,11 +33,11 @@ function ShareKeyshare(props) {
 
 
     return (
-        <div>
+        <div className="shareKeyshareWrapper createPageWrapper">
            {props.shares.map((member, i) => {
                return (
 
-                   <div key={'share'+i} style={{marginTop:5,marginBottom:15}}>
+                   <div key={'share'+i} style={{marginTop:5,marginBottom:15}} className="shareKeyshareItem">
                        <PDFKeyBackup
                           /* ref={refBackupKeyPDF}*/
                            /*ref={props.refProp.current[i]}*/
