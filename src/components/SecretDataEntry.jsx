@@ -92,15 +92,7 @@ function SecretDataEntry({
                     }
                 </div>
 
-                <div className="instructions-section">
-                    <h5>What can you store?</h5>
-                    <ul className="instruction-list">
-                        <li>Passwords, recovery phrases, and private keys</li>
-                        <li>Personal documents and sensitive notes</li>
-                        <li>Financial information and account details</li>
-                        <li>Any text-based sensitive information</li>
-                    </ul>
-                </div>
+                
 
                 <div className="data-entry-section">
                     <form>

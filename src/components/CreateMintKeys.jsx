@@ -22,38 +22,24 @@ function CreateMintKeys(props) {
     const [consensus, setConsensus]                  = useState(2);
 
     useEffect(()=>{
-        let cookieShares          = cookies.get('kosign_shares');
-        let cookieThreshold       = cookies.get('kosign_threshold');
-        //console.log('thecookiesare', cookieShares, cookieThreshold);
-        if (cookieShares) {
-            setShareholders(cookieShares);
-            setTotalShareholders(cookieShares);
-        } else {
-            // Set defaults for new users
-            setShareholders(3);
-            setTotalShareholders(3);
-        }
-        if (cookieThreshold) {
-            updateConsensus(cookieThreshold);
-        } else {
-            // Set default threshold for new users
-            updateConsensus(2);
-        }
+        // Just set the defaults and notify parent - no cookies
+        props.setShareholders(3);
+        props.setConsensus(2);
     },[]);
 
     const setShareholders = (val) => {
         setTotalShareholders(val);
         props.setShareholders(val);
-        setConsensus(val);
-        setCookie('kosign_shares', val);
-        setCookie('kosign_threshold', val);
-        //console.log('setting the cookie to ', val);
+        // Don't automatically set consensus to match shareholders
+        // Keep existing consensus if it's still valid, otherwise set to 2
+        const newConsensus = consensus > val ? 2 : consensus;
+        setConsensus(newConsensus);
+        props.setConsensus(newConsensus);
     };
 
     const updateConsensus = (val) => {
         setConsensus(val);
         props.setConsensus(val);
-        setCookie('kosign_threshold', val);
     };
 
     const setCookie = (cookieName, cookieValue) => {

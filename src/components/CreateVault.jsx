@@ -53,7 +53,7 @@ function CreateVault(props) {
     const [wizardStep, setWizardStep] = useState(1);
     const [shares, setShares] = useState([]);
     const [vaultName, setVaultName] = useState('');
-    const [totalShareholders, setTotalShareholders] = useState(2);
+    const [totalShareholders, setTotalShareholders] = useState(3);
     //const [maxSecretChars, setMaxChars] = useState(1470);
     const [maxSecretChars, setMaxChars] = useState(global.maxCharsPerVault);
     const [maxDescriptionChars, setMaxDescriptionChars] = useState(135);
@@ -84,12 +84,18 @@ function CreateVault(props) {
     const [vaultColors, setVaultColors] = useState([]);
 
     const calculateHowManyPages = (value) => {
-        const totalQRs = Math.ceil(value.length / 600)*qrPerRow;
-        const remainingQRs = totalQRs - firstPageQR;
-
-        const totalPages = 1 + Math.ceil(remainingQRs / qrPerPage);
-
-        return totalPages;
+        // This should match the exact logic in PDFVaultBackup.jsx
+        // The PDF encrypts the value first, which adds overhead
+        // Let's estimate the encrypted size (typically 1.3-1.5x larger due to base64 encoding + metadata)
+        const estimatedCipherTextLength = Math.ceil(value.length * 1.4);
+        
+        // Match the exact PDF logic: totalQRCodes = 1; for each chunk: totalQRCodes++
+        let totalQRCodes = 1; // Start with metadata QR
+        for (let i = 0; i < estimatedCipherTextLength; i += maxLengthPerQRCode) {
+            totalQRCodes++;
+        }
+        
+        return totalQRCodes; // Each QR code gets its own page
     };
 
     const setSecret = (newSecretValue) => {
@@ -184,6 +190,17 @@ function CreateVault(props) {
                     }
                 });
             }, 1000);
+        }
+    }, [wizardStep]);
+
+    // Auto-scroll to top when wizard step changes
+    useEffect(() => {
+        // Only scroll if user has scrolled down (more than 100px from top)
+        if (window.scrollY > 100) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     }, [wizardStep]);
 
@@ -364,6 +381,10 @@ function CreateVault(props) {
                     <div style={{flex:1}}>
                     {wizardStep === 1 && (
                         <div className="wizard-step-container">
+                            <div className="create-vault-header">
+                                <h1>🔐 Create New Vault</h1>
+                                <p>Encrypt your data and split the unlock keys for secure storage</p>
+                            </div>
                             <Form>
                                 <div className={'createSectionWrapper'}>
                                     <FormGroup className={'formGroup'} controlId="formBasicName">
