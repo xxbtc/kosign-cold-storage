@@ -92,8 +92,6 @@ function SecretDataEntry({
                     }
                 </div>
 
-                
-
                 <div className="data-entry-section">
                     <form>
                         <FormGroup className={'formGroup'} controlId="formBasicSecret">
