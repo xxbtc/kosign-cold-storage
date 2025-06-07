@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Layout from "../components/Layout";
-import {Container,  Button, Modal} from 'react-bootstrap';
+import {Container, Button, Modal, Alert} from 'react-bootstrap';
 import {EncryptionService} from "../services/EncryptionService";
 
 import '../style/index.css';
@@ -26,70 +26,55 @@ import CreateVault from "../components/CreateVault";
 import {PaymentService} from "../services/PaymentService";
 import Footer from "../components/Footer";
 import Cookies from 'universal-cookie';
-
+import { ProFeatureService } from '../services/ProFeatureService';
 
 function CreatePage() {
-
     const navigate = useNavigate();
-    const cookies   = new Cookies();
+    const cookies = new Cookies();
 
     const [paymentComplete, setPaymentComplete] = useState(false);
-    const [isLoading, setIsLoading]             = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [showProAlert, setShowProAlert] = useState(false);
 
-    // useEffect(()=>{
-    //     const queryString = window.location.search;
+    useEffect(() => {
+        // Check if user came from successful payment
+        const purchaseData = localStorage.getItem('kosign_pro_purchase');
+        if (purchaseData) {
+            try {
+                const data = JSON.parse(purchaseData);
+                if (data.licenseKey && !ProFeatureService.isProUser()) {
+                    // Auto-activate license if we have it from payment
+                    ProFeatureService.activateLicense(data.licenseKey).then(() => {
+                        setShowProAlert(true);
+                        localStorage.removeItem('kosign_pro_purchase'); // Clean up
+                    });
+                }
+            } catch (e) {
+                console.warn('Invalid purchase data', e);
+            }
+        }
+    }, []);
 
-    //     // Create a new URLSearchParams object from the query string
-    //     const params = new URLSearchParams(queryString);
-    //     // Retrieve the values using the parameter names
-    //     const productId             = params.get('product_id');
-    //     const product_permalink     = params.get('product_permalink');
-    //     const sale_id               = params.get('sale_id');
-    //     if (!productId || !sale_id) {
-    //         setIsLoading(false);
-    //         return;
+    const handleUpgradeClick = () => {
+        navigate('/payment');
+    };
 
-    //         //console.log('wno prodicut id or saleid...');
-    //     }
-    //     //we are here because we were redirected from gumroad after a payment
-    //     //console.log('welcome back from gumroad...');
-    //     PaymentService.setupGumroadPayment(productId, sale_id).then((response)=>{
-    //         //console.log('setupGumroadPayment', response);
-    //         setPaymentComplete(true);
-    //         setIsLoading(false);
-    //         setCookie('kosign_sale_id', sale_id);
-    //         setCookie('kosign_product_id', productId);
-    //         //alert ('apyment succeeded');
-    //     }).catch(error => {
-    //         alert ('Payment Error');
-    //         setPaymentComplete(false);
-    //         setIsLoading(false);
-    //         navigate('/');
-    //         //console.log('payment intent ERROR');
-    //         console.log(error.response.data);
-    //         console.log(error.response.status);
-    //         console.log(error.response.headers);
-    //     });
-    // },[]);
-
-    // const setCookie = (cookieName, cookieValue) => {
-    //     const expirationTime = 120 * 60 * 1000; // 120 minutes in milliseconds
-
-    //     const cookieOptions = {
-    //         maxAge: expirationTime,
-    //     };
-
-    //     cookies.set(cookieName, cookieValue, cookieOptions);
-    // };
+    const handleLicenseActivated = (features) => {
+        setShowProAlert(true);
+    };
 
     return (
         <Layout>
             <Navbar loggedIn={false}/>
-            <CreateVault isLoading={isLoading} paymentComplete={paymentComplete} />
+           
+            <CreateVault 
+                isLoading={isLoading} 
+                paymentComplete={paymentComplete}
+            />
+            
             <Footer/>
         </Layout>
     )
-
 }
 
 export default CreatePage;

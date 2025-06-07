@@ -46,7 +46,7 @@ function HomepagePricing({ pricingRef }) {
                                 <li>✓ Up to 20 key shares</li>
                                 <li>✓ Extended storage (5,000 chars)</li>
                             </ul>
-                            <button className="pricing-cta primary" onClick={() => navigate('/create')}>
+                            <button className="pricing-cta primary" onClick={() => navigate('/payment')}>
                                 Buy Once, Own Forever
                             </button>
                             <p className="pricing-note">Pay once • Keep forever • No monthly fees </p>

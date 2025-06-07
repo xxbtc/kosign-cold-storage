@@ -1,12 +1,22 @@
-
 .pricingPageWrapper {
-    background-color:#f7f7f7;
+    background-color: #0a0a0a;
 }
 
+.proStatusIndicatorWrapper {
+    background: #0a0a0a !important;
+    color: #e5e5e5;
+    padding-top: 100px;
+    padding-bottom: 10px;
+    flex:1;
+    display: flex;
+    justify-content: center;
+}
+
+
 .pricingColumn {
-    border:1px solid #ccc;
-    padding:20px;
-    background: #fff;
+    border: 1px solid #333333;
+    padding: 20px;
+    background: #1a1a1a;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -15,86 +25,170 @@
 .pricingColumn .packageTitle {
     font-family: "Graphik-Bold", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
     font-size: 2.5rem !important;
-    color:#000 !important;
+    color: #ffffff !important;
 }
+
 .pricingColumn .packageSubtitleWrapper {
     display: flex;
     flex-direction: row;
-    flex:1;
+    flex: 1;
     align-items: center;
     font-size: 2.2rem !important;
     margin: 0px 0px 0px 0px;
 }
+
 .pricingColumn .packageSubtitleWrapper .packageSubtitle {
     font-family: "Graphik-Bold", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
     font-size: 2.4rem !important;
-    color:#000 !important;
+    color: #ffffff !important;
     line-height: 2.6rem;
 }
+
 .pricingColumn .packageSubtitleWrapper .text-muted {
-    font-size:1rem;
+    font-size: 1rem;
     font-family: "Graphik", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
     line-height: 1rem;
-    flex:1;
+    flex: 1;
     padding: 20px;
+    color: #b0b0b0 !important;
 }
+
 .pricingColumn .packageSubtitleWrapper .text-muted div {
-    padding:0px 0px 4px 0px;
+    padding: 0px 0px 4px 0px;
 }
+
 .minidivider {
-    width:80px;
-    height:2px;
-    background-color: red;
+    width: 80px;
+    height: 2px;
+    background-color: #1786ff;
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
 .featureDivider {
-    height:1px;
-    background-color: #ccc;
+    height: 1px;
+    background-color: #333333;
     margin-bottom: 20px;
 }
+
 .pricingCheck {
-    color:#00CC00;
+    color: #28a745;
     margin-right: 6px;
     align-self: start;
-
 }
-.pricingFeature {
 
+.pricingFeature {
     font-family: "Graphik", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
     letter-spacing: -.5px;
-    padding:4px 0px;
+    padding: 4px 0px;
+    color: #ffffff;
 }
 
 .highlightColumn {
-    background-color: green;
-    padding:1px;
+    background-color: #1786ff;
+    padding: 1px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
 }
+
 .pricingFeature .text-muted {
     display: block;
-    font-size:0.8rem;
-
+    font-size: 0.8rem;
+    color: #b0b0b0 !important;
 }
 
 .pricingActionWrapper {
-    padding:10px 0px;
+    padding: 10px 0px;
     margin-bottom: 20px;
 }
 
-.pricingActionWrapper button{
-    width:100%;
-    background-color: #fff !important;
-    color:#1786ff !important;
+.pricingActionWrapper button {
+    width: 100%;
+    background-color: #222222 !important;
+    color: #1786ff !important;
+    border-color: #555555 !important;
 }
-.pricingActionWrapper .highlightedButton{
+
+.pricingActionWrapper .highlightedButton {
     background-color: #1786ff !important;
-    color:#fff !important;
+    color: #ffffff !important;
+    border-color: #1786ff !important;
 }
-.pricingActionWrapper button:hover{
-    width:100%;
+
+.pricingActionWrapper button:hover {
+    width: 100%;
     background-color: #1786ff !important;
-    color:#fff !important;
+    color: #ffffff !important;
+    border-color: #1786ff !important;
+}
+
+/* Pro Status Indicator Styles */
+.pro-status-indicator {
+    margin-bottom: 1.5rem;
+}
+
+.pro-status-free {
+    background-color: #1a1a1a;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    color: #ffffff;
+}
+
+.pro-status-pro {
+    background-color: #1a1a1a;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    color: #ffffff;
+}
+
+.pro-status-muted-text {
+    color: #b0b0b0;
+}
+
+.license-input-container {
+    background-color: #1a1a1a;
+    border: 2px solid #1786ff;
+    border-radius: 8px;
+    color: #ffffff;
+}
+
+.license-key-input {
+    background-color: #222222 !important;
+    border-color: #555555 !important;
+    color: #ffffff !important;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.license-key-input:focus {
+    background-color: #222222 !important;
+    border-color: #1786ff !important;
+    box-shadow: 0 0 0 0.2rem rgba(23, 134, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+
+.license-key-input::placeholder {
+    color: #888888 !important;
+}
+
+.license-key-label {
+    color: #ffffff !important;
+}
+
+.license-error-alert {
+    background-color: #2d1b1b !important;
+    border-color: #842029 !important;
+    color: #ea868f !important;
+}
+
+.pro-upgrade-btn {
+    background-color: #1786ff !important;
+    border-color: #1786ff !important;
+    color: #ffffff !important;
+}
+
+.license-link-btn {
+    color: #1786ff !important;
 }

@@ -1,0 +1,501 @@
+/* Payment Page Styles */
+.payment-page {
+    min-height: 100vh;
+    background: #0a0a0a;
+}
+
+.payment-section {
+    padding: 80px 0;
+    min-height: calc(100vh - 200px);
+}
+
+.payment-header {
+    margin-bottom: 3rem;
+}
+
+.payment-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    font-family: "Graphik-Bold", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+}
+
+.payment-subtitle {
+    font-size: 1.2rem;
+    color: #b0b0b0;
+    margin-bottom: 0;
+}
+
+/* Payment Cards */
+.payment-summary-card,
+.payment-form-card {
+    background: #1a1a1a;
+    border: 1px solid #333333;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    height: 100%;
+}
+
+.payment-summary-card h3,
+.payment-form-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+/* Order Summary */
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #333333;
+    margin-bottom: 1.5rem;
+}
+
+.item-details h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.item-details p {
+    color: #b0b0b0;
+    margin-bottom: 0;
+}
+
+.item-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.features-included {
+    margin-bottom: 2rem;
+}
+
+.features-included h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.features-included ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.features-included li {
+    padding: 0.5rem 0;
+    color: #b0b0b0;
+    font-size: 0.95rem;
+}
+
+.total-section {
+    border-top: 2px solid #333333;
+    padding-top: 1rem;
+}
+
+.total-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.total-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1786ff;
+}
+
+/* Payment Form */
+.payment-form {
+    width: 100%;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    background: #222222 !important;
+    border: 1px solid #555555 !important;
+    color: #ffffff !important;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+    background: #222222 !important;
+    border-color: #1786ff !important;
+    box-shadow: 0 0 0 0.25rem rgba(23, 134, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+
+.form-control::placeholder {
+    color: #888888 !important;
+}
+
+.card-element-container {
+    border: 2px solid #555555;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #222222;
+    transition: border-color 0.2s ease;
+}
+
+.card-element-container:focus-within {
+    border-color: #1786ff;
+    box-shadow: 0 0 0 3px rgba(23, 134, 255, 0.25);
+}
+
+.payment-submit-btn {
+    background: linear-gradient(90deg, #1786ff 0%, #1260B3 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(23, 134, 255, 0.4);
+}
+
+.payment-submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.payment-security-note {
+    margin-top: 1rem;
+}
+
+/* Success Page */
+.payment-success-section {
+    padding: 80px 0;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+}
+
+.payment-success-card {
+    background: #1a1a1a;
+    border: 1px solid #333333;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.success-icon {
+    margin-bottom: 2rem;
+}
+
+.success-checkmark {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    font-family: "Graphik-Bold", "Open Sans", "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+}
+
+.success-subtitle {
+    font-size: 1.2rem;
+    color: #b0b0b0;
+    margin-bottom: 2rem;
+}
+
+.success-features {
+    background: #222222;
+    border: 1px solid #333333;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+.success-features h4 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-list li {
+    padding: 0.5rem 0;
+    color: #b0b0b0;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.success-actions {
+    margin: 2rem 0;
+}
+
+.success-actions .btn {
+    margin: 0.5rem;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.success-note {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #333333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .payment-title {
+        font-size: 2rem;
+    }
+    
+    .payment-subtitle {
+        font-size: 1rem;
+    }
+    
+    .payment-summary-card,
+    .payment-form-card {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .success-title {
+        font-size: 2rem;
+    }
+    
+    .payment-success-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .success-actions .btn {
+        display: block;
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+}
+
+/* Loading States */
+.payment-form .spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Error States */
+.alert-danger {
+    border-radius: 8px;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    font-weight: 500;
+}
+
+/* Text utilities */
+.payment-page .text-muted {
+    color: #b0b0b0 !important;
+}
+
+/* Individual Card Field Styles */
+.card-field-group {
+    margin-bottom: 1rem;
+}
+
+.form-label-small {
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    display: block;
+}
+
+/* Updated Stripe Element Container */
+.stripe-element-container {
+    border: 2px solid #555555;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    background: #222222;
+    transition: border-color 0.2s ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.stripe-element-container:focus-within {
+    border-color: #1786ff;
+    box-shadow: 0 0 0 3px rgba(23, 134, 255, 0.25);
+}
+
+/* Ensure Stripe elements are properly styled */
+.stripe-element-container .StripeElement {
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #ffffff;
+}
+
+.stripe-element-container .StripeElement--focus {
+    outline: none;
+    border: none;
+}
+
+.stripe-element-container .StripeElement--invalid {
+    color: #f44336;
+}
+
+.stripe-element-container .StripeElement--webkit-autofill {
+    background: transparent !important;
+}
+
+/* Remove the old card-element-container styles to avoid conflicts */
+.card-element-container {
+    border: 2px solid #555555;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #222222;
+    transition: border-color 0.2s ease;
+}
+
+.card-element-container:focus-within {
+    border-color: #1786ff;
+    box-shadow: 0 0 0 3px rgba(23, 134, 255, 0.25);
+}
+
+/* Responsive adjustments for card fields */
+@media (max-width: 768px) {
+    .card-field-group .row .col-md-6 {
+        margin-bottom: 1rem;
+    }
+    
+    .card-field-group .row .col-md-6:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.license-key-section {
+    background: #1a1a1a;
+    border: 2px solid #1786ff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+.license-key-title {
+    color: #1786ff;
+    margin-bottom: 1rem;
+}
+
+.license-key-container {
+    background: #0a0a0a;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.license-key-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.license-key-code {
+    background: #222222;
+    color: #1786ff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    border: 1px solid #333333;
+}
+
+.license-key-note {
+    color: #b0b0b0;
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+.license-key-note strong {
+    color: #ffffff;
+}
+
+/* Add this to your payment.css to fix autocomplete styling */
+
+/* Fix autocomplete background colors */
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus,
+.form-control:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #222222 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1px solid #555555 !important;
+    background-color: #222222 !important;
+}
+
+/* For Firefox */
+.form-control:-moz-autofill {
+    background-color: #222222 !important;
+    color: #ffffff !important;
+    border: 1px solid #555555 !important;
+}
+
+/* Additional specificity for payment form */
+.payment-form .form-control:-webkit-autofill,
+.payment-form .form-control:-webkit-autofill:hover,
+.payment-form .form-control:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px #222222 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background-color: #222222 !important;
+    border-color: #555555 !important;
+} 

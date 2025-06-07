@@ -97,7 +97,7 @@ function Homepage(props) {
                             </h1>
                             <p className="hero-subtitle">
                                 Create passwordless vaults secured by distributed physical keys. No master passwords to remember, 
-                                no single points of failure. Designed for emergency access and inheritance planning.
+                                no single points of failure. Designed for emergency access and inheritance.
                             </p>
                             
                             {/* Social Proof Bullets */}

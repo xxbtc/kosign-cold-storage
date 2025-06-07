@@ -3,7 +3,7 @@ import { Link , useParams, useNavigate} from 'react-router-dom'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Layout from "../components/Layout";
-import {Container, Form, FormGroup, FormText, FormLabel, Button, FormCheck} from 'react-bootstrap';
+import {Container, Form, FormGroup, FormText, FormLabel, Button, FormCheck, Alert, Spinner} from 'react-bootstrap';
 import {EncryptionService} from "../services/EncryptionService";
 import Navbar from "../components/NavbarTop";
 import ReactDOMServer from 'react-dom/server';
@@ -38,10 +38,14 @@ import Html2PDF from 'html2pdf.js';
 import {Oval} from "react-loading-icons";
 import {PaymentService} from "../services/PaymentService";
 import VaultDownloadSection from './VaultDownloadSection';
+import { ProFeatureService } from '../services/ProFeatureService';
+import KosignPaymentStep from './KosignPaymentStep';
+import SecurityPreparationStep from './SecurityPreparationStep';
 
 function CreateVault(props) {
 
     const cookies   = new Cookies();
+    const navigate  = useNavigate();
 
     const [secretValue, setSecretValue] = useState('');
     const [cipherText, setCiphertext] = useState(null);
@@ -82,6 +86,15 @@ function CreateVault(props) {
     const qrPerRow      = 4;
 
     const [vaultColors, setVaultColors] = useState([]);
+
+    // Add new state for pro upgrade flow
+    const [showProUpgrade, setShowProUpgrade] = useState(false);
+    const [licenseKey, setLicenseKey] = useState('');
+    const [isValidatingLicense, setIsValidatingLicense] = useState(false);
+    const [licenseError, setLicenseError] = useState('');
+
+    // Add state for license validation
+    const [isValidatingProStatus, setIsValidatingProStatus] = useState(false);
 
     const calculateHowManyPages = (value) => {
         // This should match the exact logic in PDFVaultBackup.jsx
@@ -242,15 +255,36 @@ function CreateVault(props) {
 
     }, []);
 
-    const continueWizard = (forcepage) => {
-      
+    // Check if user is creating a pro vault (regardless of their current status)
+    const isCreatingProVault = () => {
+        return totalShareholders > ProFeatureService.FREE_LIMITS.maxShares;
+    };
+
+    // Check if user exceeds free limits AND needs to upgrade
+    const exceedsFreeLimit = () => {
+        return totalShareholders > ProFeatureService.FREE_LIMITS.maxShares && !ProFeatureService.isProUserCached();
+    };
+
+    // Add validation when component mounts or when checking pro status
+    useEffect(() => {
+        const validateProStatus = async () => {
+            if (ProFeatureService.isProUserCached()) {
+                setIsValidatingProStatus(true);
+                const isValid = await ProFeatureService.isProUser();
+                if (!isValid) {
+                    // License was invalid, force re-render to show upgrade prompt
+                    setShowProUpgrade(totalShareholders > ProFeatureService.FREE_LIMITS.maxShares);
+                }
+                setIsValidatingProStatus(false);
+            }
+        };
+
+        validateProStatus();
+    }, [totalShareholders]);
+
+    const continueWizard = async (forcepage) => {
         if (!agreeToTerms) {
-            alert ('You must agree to the terms to use this service');
-            return;
-        }
-        //forcepage is just for tetsing pursposes
-        if (forcepage) {
-            setWizardStep(forcepage);
+            alert('You must agree to the terms to use this service');
             return;
         }
 
@@ -259,20 +293,41 @@ function CreateVault(props) {
             return;
         }
 
-        //we already paid but didnt complete making th evault...
-        let cookie_sale_id       = cookies.get('kosign_sale_id');
-        let cookie_product_id    = cookies.get('kosign_product_id');
-    
-        if (wizardStep > 2 && !isPaymentComplete) {
+        // Validate pro status if user appears to be pro
+        if (ProFeatureService.isProUserCached() && totalShareholders > ProFeatureService.FREE_LIMITS.maxShares) {
+            setIsValidatingProStatus(true);
+            const isValidPro = await ProFeatureService.isProUser();
+            setIsValidatingProStatus(false);
+            
+            if (!isValidPro) {
+                // License is invalid, show upgrade prompt
+                setShowProUpgrade(true);
+                return;
+            }
+        } else if (exceedsFreeLimit()) {
+            setShowProUpgrade(true);
             return;
         }
-        
-        setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
-        setWizardStep(wizardStep + 2);
-    
 
+        //forcepage is just for testing purposes
+        if (forcepage) {
+            setWizardStep(forcepage);
+            return;
+        }
+
+        setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
+        setWizardStep(2); // Go to security check first
     };
-   
+
+    // Add new function for security step
+    const continueFromSecurity = () => {
+        setWizardStep(3); // Go to secret data entry
+    };
+
+    // Add new function for continuing from secret data entry
+    const continueFromSecretData = () => {
+        setWizardStep(4); // Go directly to encryption step
+    };
 
     const onPaymentComplete = () => {
         cookies.remove('kosign_sale_id');
@@ -363,6 +418,57 @@ function CreateVault(props) {
         await exporter.getPdf(true);
     };
 
+    const handleLicenseSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!licenseKey.trim()) {
+            setLicenseError('Please enter your license key');
+            return;
+        }
+
+        setIsValidatingLicense(true);
+        setLicenseError('');
+
+        try {
+            const result = await ProFeatureService.activateLicense(licenseKey.trim());
+            
+            if (result.success) {
+                setShowProUpgrade(false);
+                setLicenseKey('');
+                // Continue with the wizard - go to security check first
+                setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
+                setWizardStep(2); // Go to security check, not directly to step 3
+            } else {
+                setLicenseError(result.error);
+            }
+        } catch (err) {
+            setLicenseError('Failed to validate license key');
+        } finally {
+            setIsValidatingLicense(false);
+        }
+    };
+
+    const handleUpgradeClick = () => {
+        // Navigate to payment with current vault config
+        navigate('/payment', { 
+            state: { 
+                returnTo: '/create',
+                vaultConfig: {
+                    name: vaultName,
+                    shares: totalShareholders,
+                    consensus: consensus
+                }
+            }
+        });
+    };
+
+    const handleDowngradeToFree = () => {
+        const limits = ProFeatureService.getCurrentLimits();
+        setTotalShareholders(limits.maxShares);
+        setConsensus(Math.min(consensus, limits.maxShares));
+        setShowProUpgrade(false);
+    };
+
     if (props.isLoading) {
         return (
             <div className={'centerLoading createPageWrapper'} style={{background: '#0a0a0a', minHeight: '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
@@ -379,10 +485,10 @@ function CreateVault(props) {
                 <div>
 
                     <div style={{flex:1}}>
-                    {wizardStep === 1 && (
+                    {wizardStep === 1 && !showProUpgrade && (
                         <div className="wizard-step-container">
                             <div className="create-vault-header">
-                                <h1>🔐 Create New Vault</h1>
+                                <h1>Create a new vault</h1>
                                 <p>Encrypt your data and split the unlock keys for secure storage</p>
                             </div>
                             <Form>
@@ -431,8 +537,15 @@ function CreateVault(props) {
                                                 variant={'primary'} 
                                                 size={'lg'}
                                                 onClick={() => continueWizard()}
+                                                style={{
+                                                    background: isCreatingProVault() 
+                                                        ? 'linear-gradient(90deg, #1786ff 0%, #1260B3 100%)' // Bright blue
+                                                        : 'linear-gradient(90deg, #6c757d 0%, #495057 100%)', // Muted gray
+                                                    borderColor: isCreatingProVault() ? '#1786ff' : '#6c757d',
+                                                    border: 'none'
+                                                }}
                                             >
-                                                Continue
+                                                Continue ({isCreatingProVault() ? 'Pro' : 'Free'})
                                             </Button>
                                             
                                             {totalCost > 0 && (
@@ -448,18 +561,38 @@ function CreateVault(props) {
                             </Form>
                         </div>
                     )}
+
+                    {/* Replace the entire Pro Upgrade Step with this */}
+                    {showProUpgrade && (        
+                        <KosignPaymentStep 
+                            totalShareholders={totalShareholders}
+                            onPaymentSuccess={(licenseKey) => {
+                                // License key is already stored in localStorage by the component
+                                setShowProUpgrade(false);
+                                // Continue with vault creation
+                                setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
+                                setWizardStep(2); // Go to security preparation first
+                            }}
+                            onLicenseActivated={() => {
+                                // New callback for manual license activation
+                                setShowProUpgrade(false);
+                                setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
+                                setWizardStep(2); // Go to security preparation
+                            }}
+                            onBack={() => {
+                                setShowProUpgrade(false);
+                            }}
+                        />
+                    )}
                 </div>
 
-                {wizardStep === 2 ?
-                    <div>
-                        {/*<CreateLoading/>*/}
-{/*
-                        <PaymentComponent isOnline={isOnline} totalCost={totalCost} quantity={totalShareholders} onPaymentComplete={()=>onPaymentComplete()}/>
-*/}
-               
-                    </div>
-                    : null
-                }
+                {wizardStep === 2 && !showProUpgrade && (
+                    <SecurityPreparationStep
+                        isOnline={isOnline}
+                        onContinue={continueFromSecurity}
+                        onBack={() => setWizardStep(1)}
+                    />
+                )}
 
                 <div>
                 {wizardStep === 3 ?
@@ -469,7 +602,7 @@ function CreateVault(props) {
                         maxSecretChars={maxSecretChars}
                         totalPages={totalPages}
                         isOnline={isOnline}
-                        onContinue={() => continueWizard(4)}
+                        onContinue={continueFromSecretData}
                     />
                     : null}
                 </div>

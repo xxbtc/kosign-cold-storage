@@ -81,13 +81,12 @@ function SecretDataEntry({
                     {!isOnline ?
                         <div className={'alert alert-success'}>
                             <FaCheck style={{marginRight: 2, fontSize: 12}}/>&nbsp;
-                            <b>You are offline</b> - Your data will be processed securely
+                            <b>You are offline</b> - maximum security mode 
                         </div>
                         :
                         <div className={'alert alert-warning'}>
                             <MdWarningAmber style={{marginRight: 8, fontSize: 18, lineHeight:16}}/>
-                            <b>Still online</b>
-                            <p style={{marginTop: 4, marginBottom: 0}}>For maximum security, disconnect from the internet before entering sensitive data.</p>
+                            <b>You are online</b> - For your security, disconnect from the internet before entering data
                         </div>
                     }
                 </div>
@@ -106,7 +105,9 @@ function SecretDataEntry({
                             <div className="form-footer-info">
                                 <div className="security-indicator">
                                     <FaLock style={{color:'#4caf50', marginRight:6, fontSize:12}} />
-                                    <span style={{color:'#4caf50', fontWeight: 600}}>End-to-end encrypted</span>
+                                    <span style={{color:'#4caf50', fontWeight: 600}}>
+                                        Get ready to encrypt
+                                    </span>
                                 </div>
                                 <div className="character-counter">
                                     <span className={`counter-text ${maxSecretChars - secretValue.length < 100 ? 'warning' : ''}`}>

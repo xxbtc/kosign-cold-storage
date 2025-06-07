@@ -19,30 +19,29 @@ import {MdCancel} from 'react-icons/md';
 import {FaCheck} from 'react-icons/fa';
 import Cookies from 'universal-cookie';
 import {FaTwitter, FaMedium} from 'react-icons/fa';
-
-
+import { ProFeatureService } from '../services/ProFeatureService';
 
 function PricingPage() {
-
     const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn]   = useState(false);
-    const [isLoading, setIsLoading]     = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isProUser, setIsProUser] = useState(false);
 
     useEffect(() => {
-
+        setIsProUser(ProFeatureService.isProUser());
     }, []);
-
 
     return (
         <Layout>
             <Navbar loggedIn={isLoggedIn}/>
 
-
             <div className={'pageLayout pricingPageWrapper'}>
                 <Container>
                     <Row>
                         <Col xs={{span:12}} md={{span:12, offset:0}} lg={{span:12, offset:0}}>
-                            <h2 style={{textAlign:'center'}}></h2>
+                            <h2 style={{textAlign:'center'}}>Simple, Fair Pricing</h2>
+                            <p style={{textAlign:'center', color: '#888', marginBottom: '40px'}}>
+                                No subscriptions. Pay once, own forever.
+                            </p>
                         </Col>
                     </Row>
                     <div style={{paddingLeft:30, paddingRight:30, marginTop:10}}>
@@ -54,12 +53,12 @@ function PricingPage() {
                                     <div className={'packageSubtitleWrapper'}>
                                         <div className={'packageSubtitle'}>$0</div>
                                         <div className={'text-muted'}>
-                                            <div>&nbsp;</div>
+                                            <div>Forever</div>
                                         </div>
                                     </div>
                                     <div className={'pricingActionWrapper'}>
                                         <Button
-                                            variant={'primary'}
+                                            variant={'outline-primary'}
                                             size={'lg'}
                                             onClick={() => navigate('/create')}
                                         >
@@ -68,49 +67,58 @@ function PricingPage() {
                                     </div>
                                     <div className={'featureDivider'}></div>
                                     <div className={'pricingFeature'}>
-                                        <FaCheck className={'pricingCheck'}/> up to {global.freeKeys} keys
+                                        <FaCheck className={'pricingCheck'}/> Up to {ProFeatureService.FREE_LIMITS.maxShares} key shares
                                     </div>
                                     <div className={'pricingFeature'}>
-                                        <FaCheck className={'pricingCheck'}/> {global.maxCharsPerVaultFree.toLocaleString()} character limit
+                                        <FaCheck className={'pricingCheck'}/> {ProFeatureService.FREE_LIMITS.maxStorage} character limit
                                     </div>
                                 </div>
                             </Col>
 
                             <Col xs={{span:12}} md={{span:4, offset:0}} lg={{span:4, offset:0}} style={{paddingTop:10, marginBottom:40}}>
-
                                 <div className={'highlightColumn '}>
-                                    <div style={{textAlign:'center', fontWeight:'bold', paddingTop:4, paddingBottom:4, color:'#fff'}}>One-time payment</div>
+                                    <div style={{textAlign:'center', fontWeight:'bold', paddingTop:4, paddingBottom:4, color:'#fff'}}>
+                                        {isProUser ? '✨ You have Pro!' : 'One-time payment'}
+                                    </div>
                                     <div className={'pricingColumn'}>
                                         <div className={'packageTitle'}>Pro</div>
                                         <div className={'minidivider'}></div>
                                         <div className={'packageSubtitleWrapper'}>
-                                            <div className={'packageSubtitle'}>$10</div>
+                                            <div className={'packageSubtitle'}>$49</div>
                                             <div className={'text-muted'}>
-                                                <div>per key</div>
+                                                <div>One-time</div>
                                             </div>
                                         </div>
                                         <div className={'pricingActionWrapper'}>
-                                            <Button
-                                                variant={'primary'}
-                                                className={'highlightedButton'}
-                                                size={'lg'}
-                                                onClick={() => navigate('/create')}
-                                            >
-                                                Create vault
-                                            </Button>
+                                            {isProUser ? (
+                                                <Button
+                                                    variant={'success'}
+                                                    size={'lg'}
+                                                    onClick={() => navigate('/create')}
+                                                >
+                                                    Create Pro vault
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    variant={'primary'}
+                                                    className={'highlightedButton'}
+                                                    size={'lg'}
+                                                    onClick={() => navigate('/payment')}
+                                                >
+                                                    Upgrade to Pro
+                                                </Button>
+                                            )}
                                         </div>
                                         <div className={'featureDivider'}></div>
                                         <div className={'pricingFeature'}>
-                                            <FaCheck className={'pricingCheck'}/> up to 20 keys
+                                            <FaCheck className={'pricingCheck'}/> Up to {ProFeatureService.PRO_LIMITS.maxShares} key shares
                                         </div>
                                         <div className={'pricingFeature'}>
-                                            <FaCheck className={'pricingCheck'}/> 2 keys free
+                                            <FaCheck className={'pricingCheck'}/> {ProFeatureService.PRO_LIMITS.maxStorage.toLocaleString()} character limit
                                         </div>
                                         <div className={'pricingFeature'}>
-                                            <FaCheck className={'pricingCheck'}/> 5,000 character limit
+                                            <FaCheck className={'pricingCheck'}/> All features included
                                         </div>
-
-
                                     </div>
                                 </div>
                             </Col>
@@ -122,7 +130,6 @@ function PricingPage() {
             <Footer/>
         </Layout>
     )
-
 }
 
 export default PricingPage;

@@ -21,6 +21,11 @@ const PreparationStep = ({ isOnline, onContinue }) => {
     const [proceedOnline, setProceedOnline] = useState(false);
 
     const toggleCheck = (item) => {
+        // Prevent unchecking offline if user is actually offline
+        if (item === 'offline' && !isOnline && checkedItems.offline) {
+            return; // Can't uncheck offline when actually offline
+        }
+        
         // Allow checking offline if user chose to proceed online
         if (item === 'offline' && isOnline && !proceedOnline) {
             return;
@@ -124,7 +129,7 @@ const PreparationStep = ({ isOnline, onContinue }) => {
                     </div>
                 </div>
 
-                <div className={`checklist-item ${checkedItems.offline ? 'checked' : ''} ${proceedOnline ? 'warning' : ''} ${isOnline && !proceedOnline ? 'disabled' : ''}`} onClick={() => toggleCheck('offline')}>
+                <div className={`checklist-item ${checkedItems.offline ? 'checked' : ''} ${proceedOnline ? 'warning' : ''} ${isOnline && !proceedOnline ? 'disabled' : ''} ${!isOnline ? 'locked' : ''}`} onClick={() => toggleCheck('offline')}>
                     <div className="checklist-content">
                         <div className="checklist-header">
                             <FaWifi className="checklist-icon" />
