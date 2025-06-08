@@ -70,9 +70,9 @@ function PaymentComponent(props) {
             //stripePromise = loadStripe(response.stripe_pubkey);
         }).catch(error => {
             //console.log('payment intent ERROR');
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
+            // console.log(error.response.data);
+            // console.log(error.response.status);
+            // console.log(error.response.headers);
         });
     };
 
@@ -84,7 +84,6 @@ function PaymentComponent(props) {
         setIsLoading(true);
         PaymentService.applyCoupon(coupon).then((response)=>{
             if (response.result) {
-                //console.log('total cost is ', totalCost,' amountoff is', response.amountOff);
                 if (response.amountOff>=(totalCost*100)) {
                     setIsLoading(false);
                     props.onPaymentComplete();
@@ -98,13 +97,12 @@ function PaymentComponent(props) {
                     setupStripe(coupon);
                 }
             }
-            //console.log('COUPON SETUP', response);
         }).catch(error => {
             alert ('invalid coupon code');
             //console.log('coupon setup ERROR');
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
+            // console.log(error.response.data);
+            // console.log(error.response.status);
+            // console.log(error.response.headers);
         });
     };
 

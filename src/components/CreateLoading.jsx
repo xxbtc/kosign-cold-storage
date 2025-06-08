@@ -22,12 +22,20 @@ function CreateLoading(props) {
         }, 5000);
     },[]);
 
+    // Calculate responsive animation size
+    const getAnimationSize = () => {
+        const screenWidth = window.innerWidth;
+        if (screenWidth <= 480) return 200; // Small mobile
+        if (screenWidth <= 768) return 250; // Tablet
+        return 300; // Desktop
+    };
+
+    const animationSize = getAnimationSize();
+
     return (
-
-        <div className={'createSectionWrapper'} style={{marginTop:30,alignItems:'center', textAlign:'center'}}>
-
-            <div className={'alert alert-info'}>
-                <h2>
+        <div className="loading-wrapper">
+            <div className={'alert alert-info loading-alert'}>
+                <h2 className="loading-title">
                     {loadingStep===1?
                         <Typewriter
                             options={{
@@ -48,20 +56,18 @@ function CreateLoading(props) {
                 </h2>
             </div>
 
-            <div className={'animationWrapper'}>
+            <div className="loading-animation-container">
                 <Lottie
                     options={{
                         animationData: LottieAnimationLoading,
                         loop: false
                     }}
-                    width={300}
-                    height={300}
+                    width="100%"
+                    height="auto"
                 />
             </div>
         </div>
-
     )
-
 }
 
 export default CreateLoading;

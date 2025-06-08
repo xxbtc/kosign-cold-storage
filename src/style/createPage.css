@@ -2446,8 +2446,8 @@
     }
     
     .method-divider {
-        order: -1;
         margin: 0;
+        order: 0;
     }
     
     .method-divider span {
@@ -2754,4 +2754,200 @@
 
 .proceed-anyway-link:hover {
     color: #0d6efd;
+}
+
+/* Loading component mobile styles */
+.loading-container {
+    padding: 1rem !important;
+    margin-top: 1rem !important;
+}
+
+.loading-alert {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+}
+
+.loading-title {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.loading-animation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .loading-container {
+        margin-top: 0.5rem !important;
+        padding: 0.75rem !important;
+    }
+    
+    .loading-title {
+        font-size: 1.3rem;
+    }
+    
+    .loading-alert {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .loading-container {
+        padding: 0.5rem !important;
+    }
+    
+    .loading-title {
+        font-size: 1.1rem;
+    }
+    
+    .loading-alert {
+        padding: 0.5rem;
+    }
+}
+
+.loading-wrapper {
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem;
+    margin: 0 auto;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.loading-alert {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.loading-title {
+    font-size: 1.5rem;
+    margin: 0;
+    word-wrap: break-word;
+    color: #ffffff !important; /* Force white text */
+}
+
+.loading-animation-container {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* Ensure typewriter text is also white */
+.loading-title .Typewriter__wrapper,
+.loading-title .Typewriter__cursor {
+    color: #ffffff !important;
+}
+
+@media (max-width: 768px) {
+    .loading-wrapper {
+        padding: 0.5rem;
+    }
+    
+    .loading-animation-container {
+        max-width: 250px;
+    }
+    
+    .loading-title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .loading-animation-container {
+        max-width: 200px;
+    }
+    
+    .loading-title {
+        font-size: 1.1rem;
+    }
+}
+
+/* Hide everything during print except the PDF components */
+@media print {
+    /* Hide only the wizard UI, not everything */
+    .vault-download-wizard > .wizard-header,
+    .vault-download-wizard > .vault-wizard-progress,
+    .vault-download-wizard > .wizard-content,
+    .method-selection-flat,
+    .save-step-flat,
+    .test-step-simple,
+    .step-navigation,
+    .wizard-steps,
+    .section-title,
+    .method-options-side-by-side,
+    .single-action-container,
+    .security-tips-section,
+    .download-files-section,
+    .download-actions,
+    .footerContainer,
+    .navbarWrapper,
+    button,
+    .btn {
+        display: none !important;
+    }
+
+    /* Force white background on the main dark containers */
+    body, html, 
+    .createPageWrapper,
+    .createPageInnerWrapper,
+    .vault-download-wizard {
+        background: white !important;
+        background-color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    /* PRESERVE color boxes - don't override their backgrounds */
+    div[style*="backgroundColor"] {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    /* Hide the duplicate keys div - this is the main culprit */
+    #idkeybackup {
+        display: none !important;
+    }
+    
+    /* Make sure the print container doesn't have height restrictions */
+    #idvaultbackup {
+        height: auto !important;
+        max-height: none !important;
+        min-height: auto !important;
+        overflow: visible !important;
+    }
+    
+    /* Ensure all child components are visible */
+    #idvaultbackup > * {
+        height: auto !important;
+        max-height: none !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        display: block !important;
+    }
+    
+    /* Remove page break constraints that might limit content */
+    .pagebreak {
+        page-break-after: auto !important;
+        page-break-inside: avoid !important;
+        height: auto !important;
+        max-height: none !important;
+        min-height: auto !important;
+        overflow: visible !important;
+    }
+    
+    @page {
+        size: A4 !important;
+        margin: 0.125in !important;
+    }
 }

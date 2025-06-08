@@ -112,7 +112,7 @@ class ProFeatureService {
     }
 
     static getCurrentLimits() {
-        if (this.isProUser()) {
+        if (this.isProUserCached()) {
             return this.PRO_LIMITS;
         }
         return this.FREE_LIMITS;

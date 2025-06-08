@@ -298,6 +298,18 @@ const PDFKeyBackup = (props) => {
                         </div>
                         <div style={{marginTop: 8, fontWeight: 'bold'}}>{`Page 1 of 1`}</div>
                         <div style={{marginTop: 8}}>Created: {creationDate}</div>
+                        <div style={{marginTop: 4, display: 'flex', alignItems: 'center', gap: '8px'}}>
+                            <span style={{
+                                backgroundColor: '#0d6efd',
+                                color: 'white',
+                                padding: '2px 8px',
+                                borderRadius: '4px',
+                                fontSize: '14px',
+                                fontWeight: 'bold'
+                            }}>
+                                VAULT KEY
+                            </span>
+                        </div>
                     </div>
                 </div>
                 
@@ -320,9 +332,6 @@ Key Alias:          `}
                 
                 <div style={styles.QRWrapperMiddle}>
                     <div style={styles.QRWrapperInner}>
-                        <div style={styles.QRText}>
-                            VAULT KEY
-                        </div>
                         <div style={styles.QRCodeContainer}>
                             <div style={styles.QRLeftText}>
                                 KEEP SECURE

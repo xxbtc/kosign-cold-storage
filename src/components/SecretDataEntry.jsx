@@ -113,7 +113,7 @@ function SecretDataEntry({
                                     <span className={`counter-text ${maxSecretChars - secretValue.length < 100 ? 'warning' : ''}`}>
                                         {maxSecretChars - secretValue.length} characters remaining
                                     </span>
-                                    <span className="page-info">({totalPages} page{totalPages !== 1 ? 's' : ''})</span>
+                                    <span className="page-info">({totalPages?totalPages:2} page{totalPages !== 1 ? 's' : ''})</span>
                                 </div>
                             </div>
                         </FormGroup>

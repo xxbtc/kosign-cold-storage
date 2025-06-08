@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaLock, FaCheckCircle, FaPrint, FaDownload, FaShieldAlt, FaExclamationTriangle, FaArrowRight } from 'react-icons/fa';
@@ -33,6 +33,16 @@ const VaultDownloadSection = ({
     const [preferredMethod, setPreferredMethod] = useState(null); // 'print' or 'download'
     const [allPrinted, setAllPrinted] = useState(false);
 
+    // Auto-scroll to top when step changes
+    useEffect(() => {
+        // Only scroll if user has scrolled down (more than 100px from top)
+        if (window.scrollY > 100) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    }, [currentStep]);
 
     const handleVaultDownload = () => {
         downloadVault();
@@ -65,7 +75,14 @@ const VaultDownloadSection = ({
     const downloadCompleted = vaultDownloaded && keysDownloaded.size === shares.length;
     const allCompleted = (preferredMethod === 'print' && printCompleted) || (preferredMethod === 'download' && downloadCompleted);
 
-
+    // Update the method selection to scroll after state change
+    const handleMethodSelection = (method) => {
+        setPreferredMethod(method);
+        if (currentStep === 1) {
+            setCurrentStep(2);
+            // The useEffect above will handle the scroll
+        }
+    };
 
     const renderStepIndicator = () => (
         <div className="vault-wizard-progress">
@@ -108,10 +125,7 @@ const VaultDownloadSection = ({
 
             <div className="method-options-side-by-side">
                 <div className={`method-option ${preferredMethod === 'print' ? 'selected' : ''}`} 
-                     onClick={() => {
-                         setPreferredMethod('print');
-                         if (currentStep === 1) setCurrentStep(2);
-                     }}>
+                     onClick={() => handleMethodSelection('print')}>
                     <div className="option-header">
                         <FaPrint className="option-icon" />
                         <h3>Print Documents</h3>
@@ -130,10 +144,7 @@ const VaultDownloadSection = ({
                 </div>
 
                 <div className={`method-option ${preferredMethod === 'download' ? 'selected' : ''}`}
-                     onClick={() => {
-                         setPreferredMethod('download');
-                         if (currentStep === 1) setCurrentStep(2);
-                     }}>
+                     onClick={() => handleMethodSelection('download')}>
                     <div className="option-header">
                         <FaDownload className="option-icon" />
                         <h3>Download Files</h3>

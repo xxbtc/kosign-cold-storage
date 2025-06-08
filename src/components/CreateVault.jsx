@@ -58,8 +58,10 @@ function CreateVault(props) {
     const [shares, setShares] = useState([]);
     const [vaultName, setVaultName] = useState('');
     const [totalShareholders, setTotalShareholders] = useState(3);
-    //const [maxSecretChars, setMaxChars] = useState(1470);
-    const [maxSecretChars, setMaxChars] = useState(global.maxCharsPerVault);
+    const [maxSecretChars, setMaxChars] = useState(() => {
+        const limits = ProFeatureService.getCurrentLimits();
+        return limits.maxStorage;
+    });
     const [maxDescriptionChars, setMaxDescriptionChars] = useState(135);
     const [maxVaultNameChars, setMaxVaultNameChars] = useState(50);
     const [keyAliasArray, setKeyAliasArray] = useState([]);
@@ -95,6 +97,12 @@ function CreateVault(props) {
 
     // Add state for license validation
     const [isValidatingProStatus, setIsValidatingProStatus] = useState(false);
+
+    // Add effect to update limits when pro status changes
+    useEffect(() => {
+        const currentLimits = ProFeatureService.getCurrentLimits();
+        setMaxChars(currentLimits.maxStorage);
+    }, [showProUpgrade]);
 
     const calculateHowManyPages = (value) => {
         // This should match the exact logic in PDFVaultBackup.jsx
@@ -185,7 +193,7 @@ function CreateVault(props) {
             setTimeout(() => {
                 // Generate colors once when entering step 4
                 setVaultColors(generateColors());
-                
+                             
                 EncryptionService.encrypt(secretValue, false).then((encryptionResult) => {
                     setCiphertext(encryptionResult.cipherText);
                     setCipherKey(encryptionResult.cipherKey);
@@ -216,6 +224,16 @@ function CreateVault(props) {
             });
         }
     }, [wizardStep]);
+
+    // Auto-scroll to top when pro upgrade step shows
+    useEffect(() => {
+        if (showProUpgrade && window.scrollY > 100) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    }, [showProUpgrade]);
 
     useEffect(()=>{
         let tmpTotalCost = (totalShareholders * global.costPerKey) + (global.setupCost) - (global.freeKeys*global.costPerKey);
@@ -315,7 +333,8 @@ function CreateVault(props) {
             return;
         }
 
-        setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
+        const aliases = EncryptionService.generateListOfCombinedWords(totalShareholders);  
+        setKeyAliasArray(aliases);
         setWizardStep(2); // Go to security check first
     };
 
@@ -334,7 +353,6 @@ function CreateVault(props) {
         cookies.remove('kosign_product_id');
         setWizardStep(3);
         setIsPaymentComplete(true);
-        //console.log('total shareholders are ', totalShareholders);
         setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
     };
 
@@ -342,16 +360,6 @@ function CreateVault(props) {
         onPrintError: (error) => console.log(error),
         content: () => refBackupVaultPDF.current,
         removeAfterPrint: true,
-        /*print: async (printIframe) => {
-            console.log('PRINT...');
-            const document = printIframe.contentDocument;
-            if (document) {
-                const html = document.getElementById("idvaultbackup");
-                console.log(html);
-                const exporter = new Html2PDF(html,{filename:"Nota Simple.pdf"});
-                await exporter.getPdf(true);
-            }
-        },*/
     });
 
     const doPrintVault = () => {

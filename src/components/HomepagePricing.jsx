@@ -1,9 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
+import { ProFeatureService } from '../services/ProFeatureService';
 
 function HomepagePricing({ pricingRef }) {
     const navigate = useNavigate();
+    
+    // Get limits from single source of truth
+    const freeLimits = ProFeatureService.FREE_LIMITS;
+    const proLimits = ProFeatureService.PRO_LIMITS;
 
     return (
         <section className="pricing-section" ref={pricingRef}>
@@ -24,10 +29,9 @@ function HomepagePricing({ pricingRef }) {
                             </div>
                             <ul className="pricing-features">
                                 <li>✓ Single vault</li>
-                                <li>✓ Up to 2 key shares</li>
-                                <li>✓ Limited storage (~800 chars)</li>
+                                <li>✓ Up to {freeLimits.maxShares} key shares</li>
+                                <li>✓ Limited storage ({freeLimits.maxStorage} chars)</li>
                                 <li>✓ Basic thresholds (1-of-1, 2-of-2)</li>
-                                <li>✓ Open source & auditable</li>
                             </ul>
                             <button className="pricing-cta primary" onClick={() => navigate('/create')}>
                                 Start Free
@@ -44,8 +48,8 @@ function HomepagePricing({ pricingRef }) {
                             </div>
                             <ul className="pricing-features">
                                 <li>✓ Everything in Free</li>
-                                <li>✓ Up to 20 key shares</li>
-                                <li>✓ Extended storage (5,000 chars)</li>
+                                <li>✓ Up to {proLimits.maxShares} key shares</li>
+                                <li>✓ Extended storage ({proLimits.maxStorage.toLocaleString()} chars)</li>
                                 <li>✓ Flexible thresholds (2-of-3, 3-of-5, etc.)</li>
                             </ul>
                             <button className="pricing-cta primary" onClick={() => navigate('/payment')}>

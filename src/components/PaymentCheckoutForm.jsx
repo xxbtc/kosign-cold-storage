@@ -64,44 +64,12 @@ function PaymentCheckoutForm(props) {
     }, [stripe]);
 
     const payNow = async () => {
-        //console.log('paying...');
         if (!stripe || !elements) {
-            //console.log('error: stripe not loaded...');
-            // Stripe.js has not yet loaded.
-            // Make sure to disable form submission until Stripe.js has loaded.
             return;
         }
         setIsLoading(true);
         const cardElement = elements.getElement(CardElement);
-        /*const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                // Make sure to change this to your payment completion page
-                return_url: global.paymentCompleteURL,
-            },
-        });*/
-
-       /* const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                // Make sure to change this to your payment completion page
-                return_url: global.paymentCompleteURL,
-            },
-        });
-*/
-       /* stripe.confirmCardPayment(clientSecret, {
-            payment_method: {
-                card: cardElement,
-                billing_details: {
-                    name: 'Jenny Rosen',
-                },
-            },
-        }).then((result)=>{
-            console.log('result is ', result);
-        }).catch((e)=>{
-            console.log('payment error ', e);
-        })*/
-
+      
         await stripe.confirmPayment({
             elements,
             confirmParams: {
@@ -109,51 +77,11 @@ function PaymentCheckoutForm(props) {
             },
             redirect: 'if_required'
         }).then((result)=>{
-            //console.log('payment confirmed ....',result);
             props.onPaymentComplete();
         }).catch((e)=>{
             //console.log('payment error ', e);
         });
 
-        /*stripe.confirmCardSetup(props.clientSecret,{
-            payment_method: {
-                card: cardElement
-            },
-        }).then(function(result) {
-            console.log('card confirmed, creating subscription ....',result);
-
-            // Handle result.error or result.setupIntent
-            if (result.error) {
-                alert(result.error.message);
-                return;
-            }
-
-
-            PaymentService.createSubscription(result.setupIntent.payment_method).then((response)=>{
-                navigate('/thankyou');
-            }).catch(error => {
-                console.log('createSubscription ERROR');
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            });
-
-        });*/
-
-
-
-        // This point will only be reached if there is an immediate error when
-        // confirming the payment. Otherwise, your customer will be redirected to
-        // your `return_url`. For some payment methods like iDEAL, your customer will
-        // be redirected to an intermediate site first to authorize the payment, then
-        // redirected to the `return_url`.
-        /*if (error.type === "card_error" || error.type === "validation_error") {
-            setMessage(error.message);
-        } else {
-            setMessage("An unexpected error occurred.");
-        }*/
-
-        //setIsLoading(false);
     };
 
     const applyCoupon = () => {

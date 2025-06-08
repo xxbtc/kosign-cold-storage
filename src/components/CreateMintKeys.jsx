@@ -24,9 +24,9 @@ function CreateMintKeys(props) {
     const [consensus, setConsensus]                  = useState(2);
 
     useEffect(()=>{
-        // Just set the defaults and notify parent - no cookies
-        props.setShareholders(3);
-        props.setConsensus(2);
+        // Remove hardcoded initialization - let parent handle it
+        // props.setShareholders(3);  // ← Remove this line
+        // props.setConsensus(2);     // ← Remove this line
     },[]);
 
     const setShareholders = (val) => {

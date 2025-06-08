@@ -36,25 +36,6 @@ function PaymentGumRoadComponent(props) {
     let [elementOptions, setElementOptions] = useState();
 
 
-   /* useEffect(()=>{
-        const queryString = window.location.search;
-        setIsLoading(false);
-        // Create a new URLSearchParams object from the query string
-        const params = new URLSearchParams(queryString);
-        // Retrieve the values using the parameter names
-        const productId             = params.get('product_id');
-        const product_permalink     = params.get('product_permalink');
-        const sale_id               = params.get('sale_id');
-        PaymentService.setupGumroadPayment(productId, product_permalink, sale_id).then((response)=>{
-            console.log('setupGumroadPayment', response);
-            setIsLoading(false);
-        }).catch(error => {
-            console.log('payment intent ERROR');
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-        });
-    },[]);*/
 
 
     useEffect(()=>{
@@ -70,11 +51,6 @@ function PaymentGumRoadComponent(props) {
             return;
         }
     })
-
- /*   useEffect(()=>{
-        if (!clientSecret) return;
-        setIsLoading(false);
-    }, [clientSecret]);*/
 
 
     return (

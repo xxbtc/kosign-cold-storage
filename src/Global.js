@@ -11,7 +11,7 @@ global.stripePubKey = 'pk_test_I4rOTLfBxkIH2dqZ1c8iTr2400Pjy6dJbv';
 // Plan Limits - Centralized Configuration
 global.FREE_PLAN = {
     maxShares: 2,        // Free plan allows up to 2 keys
-    maxStorage: 500      // 500 character limit for free
+    maxStorage: 150      // character limit for free
 };
 
 global.PRO_PLAN = {

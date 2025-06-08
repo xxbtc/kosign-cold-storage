@@ -43,26 +43,6 @@ function Homepage(props) {
     const cookies       = new Cookies();
     const pricingRef    = useRef(null);
 
-    /* const navigate = useNavigate();
-     const location = useLocation();
-
-     const [searchParams, setSearchParams] = useSearchParams();
-     const payment_intent                = searchParams.get("payment_intent");
-     const payment_intent_client_secret  = searchParams.get("payment_intent_client_secret");
-
-     if (payment_intent) {
-         console.log('payment recevied');
-         PaymentService.getIntent(payment_intent_client_secret).then((response)=>{
-             console.log('payment intent response is ', response);
-         }).catch(error => {
-             console.log('payment intent response ERROR');
-             console.log(error.response.data);
-             console.log(error.response.status);
-             console.log(error.response.headers);
-         });
-     }
- */
-
     useEffect(() => {
         if (props.showPricing){
             pricingRef.current.scrollIntoView();

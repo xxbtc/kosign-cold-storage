@@ -35,8 +35,8 @@ const PDFVaultBackup = (props) => {
             format: VAULT_VERSIONS[CURRENT_VAULT_VERSION]
         });
 
-        console.log('Metadata QR length:', metadata.length);
-        console.log('Metadata QR is ', metadata);
+        // console.log('Metadata QR length:', metadata.length);
+        // console.log('Metadata QR is ', metadata);
 
         canvas = document.createElement('canvas');
         QRCode2.toCanvas(canvas, metadata);
@@ -95,9 +95,6 @@ const PDFVaultBackup = (props) => {
     const effectiveColors = (props.vaultColors && props.vaultColors.length > 0) 
         ? props.vaultColors 
         : defaultColors;
-
-    console.log("Vault colors:", props.vaultColors);
-    console.log("Effective colors:", effectiveColors);
 
     const styles = StyleSheet.create({
         printPage: {
@@ -496,9 +493,6 @@ const PDFVaultBackup = (props) => {
     const renderQR = (qrData, ii, i) => {
         return (
             <div key={'qrkey'+ii+'_'+i} style={styles.QRWrapperInner}>
-                <div style={styles.QRText}>
-                    {qrData.id===1 ? 'METADATA' : `SHARD #${qrData.id-1}`}
-                </div>
                 <div style={styles.QRCodeContainer}>
                     <div style={styles.QRLeftText}>
                         KEEP SECURE
@@ -593,7 +587,7 @@ const PDFVaultBackup = (props) => {
         );
     };
 
-    const renderVaultHeaderAscii = (page, forceShowFullHeader) => {
+    const renderVaultHeaderAscii = (page, forceShowFullHeader, qrType = null) => {
         // Get formatted creation date
         const creationDate = formatTime(props.createdTimestamp);
 
@@ -650,8 +644,21 @@ const PDFVaultBackup = (props) => {
                             {`     !!! IMPORTANT !!!       `}
                         </div>
                         <div style={{marginTop: 8, fontWeight: 'bold'}}>{`Page 1 of ${totalPages}`}</div>
-                        <div style={{marginTop: 8}}>Created: {creationDate}</div>
-                        <div style={{marginTop: 8}}>v{CURRENT_VAULT_VERSION}</div>
+                        <div style={{marginTop: 4, display: 'flex', alignItems: 'center', gap: '8px'}}>
+                            <span>v{CURRENT_VAULT_VERSION}</span>
+                            {qrType && (
+                                <span style={{
+                                    backgroundColor: '#0d6efd',
+                                    color: 'white',
+                                    padding: '2px 8px',
+                                    borderRadius: '4px',
+                                    fontSize: '14px',
+                                    fontWeight: 'bold'
+                                }}>
+                                    {qrType}
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
                 
@@ -698,7 +705,7 @@ Keys:               `}
     };
     
     // Modify the renderCompactHeader function to match the full header style
-    const renderCompactHeader = (pageNumber) => {
+    const renderCompactHeader = (pageNumber, qrType = null) => {
         // Get formatted creation date
         const creationDate = formatTime(props.createdTimestamp);
         
@@ -751,6 +758,20 @@ Keys:               `}
                         </div>
                         
                         <div style={{marginTop: 8, fontWeight: 'bold'}}>{`Page ${pageNumber} of ${totalPages}`}</div>
+                        {qrType && (
+                            <div style={{marginTop: 4, display: 'flex', alignItems: 'center', gap: '8px'}}>
+                                <span style={{
+                                    backgroundColor: '#0d6efd',
+                                    color: 'white',
+                                    padding: '2px 8px',
+                                    borderRadius: '4px',
+                                    fontSize: '14px',
+                                    fontWeight: 'bold'
+                                }}>
+                                    {qrType}
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </div>
                 
@@ -775,7 +796,7 @@ Vault Name:         `}
         <div style={props.qrtype==='printable'?styles.printPage:styles.downloadPage}>
             {/* First page: Metadata QR + full header/details */}
             <div style={{...styles.page, breakAfter: 'page'}}>
-                {renderVaultHeaderAscii(0, true)}
+                {renderVaultHeaderAscii(0, true, 'METADATA')}
                 
                 <div style={{
                     ...styles.QRWrapperMiddle,
@@ -808,8 +829,8 @@ Vault Name:         `}
                         ...(props.qrtype==='printable' ? styles.printPage : null)
                     }}>
                     <div style={styles.page}>
-                        {/* Compact header for non-first pages */}
-                        {renderCompactHeader(idx + 2)}
+                        {/* Compact header for non-first pages with shard number */}
+                        {renderCompactHeader(idx + 2, `SHARD #${qrData.id - 1}`)}
                         
                         <div style={{
                             ...styles.QRWrapperMiddleSecondPage,

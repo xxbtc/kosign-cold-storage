@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert, Spinner, Button } from 'react-bootstrap';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -30,16 +30,11 @@ const PaymentForm = ({ onSuccess, onError }) => {
             // Create payment intent on backend
             const response = await PaymentService.setupPayment(1, '');
             
-            console.log('Full backend response:', response);
-            console.log('Response structure:', Object.keys(response));
-            
             if (!response.client_secret) {
                 throw new Error('Failed to create payment intent');
             }
 
             const licenseKey = response.license_key;
-            console.log('License key from response:', licenseKey);
-
             // Confirm payment with Stripe
             const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
                 response.client_secret,
@@ -194,6 +189,26 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
     const [validatingLicense, setValidatingLicense] = useState(false);
     const [customerEmail, setCustomerEmail] = useState('');
     const [isConsumingLicense, setIsConsumingLicense] = useState(false);
+
+    // Auto-scroll to top when payment completes
+    useEffect(() => {
+        if (paymentComplete && window.scrollY > 100) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    }, [paymentComplete]);
+
+    // Auto-scroll to top when switching to license input
+    useEffect(() => {
+        if (showLicenseInput && window.scrollY > 100) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    }, [showLicenseInput]);
 
     const handlePaymentSuccess = (paymentIntent, email, name, licenseKey) => {
         setPaymentComplete(true);
@@ -441,7 +456,7 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
                         <span style={{ color: '#ffffff', fontWeight: 'bold' }}>$49</span>
                     </div>
                     <div style={{ color: '#888888', fontSize: '0.85rem' }}>
-                        Up to {ProFeatureService.PRO_LIMITS.maxShares} keys • Extended storage ({ProFeatureService.PRO_LIMITS.maxStorage.toLocaleString()} chars) • Lifetime access
+                        Up to {ProFeatureService.PRO_LIMITS.maxShares} keys • Extended storage •  Flexible thresholds
                     </div>
                 </div>
 
