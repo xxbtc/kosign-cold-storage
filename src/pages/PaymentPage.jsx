@@ -138,7 +138,6 @@ const CheckoutForm = ({ amount, onSuccess, onError }) => {
             </div>
 
             <div className="form-group mb-4">
-                <label className="form-label">Card Information</label>
                 
                 {/* Card Number */}
                 <div className="card-field-group mb-3">
@@ -186,7 +185,7 @@ const CheckoutForm = ({ amount, onSuccess, onError }) => {
                         Processing...
                     </>
                 ) : (
-                    `Pay $${amount} - Get Pro Features`
+                    `Pay $${amount}`
                 )}
             </button>
 
@@ -303,6 +302,7 @@ function PaymentPage() {
                                             <ul className="feature-list">
                                                 <li>✓ Up to 20 key shares</li>
                                                 <li>✓ Extended storage (5,000 chars)</li>
+                                                <li>✓ Flexible thresholds (2-of-3, 3-of-5, etc.)</li>
                                             </ul>
                                         </div>
 
@@ -373,15 +373,16 @@ function PaymentPage() {
                                                 <ul>
                                                     <li>✓ Up to 20 key shares</li>
                                                     <li>✓ Extended storage (5,000 chars)</li>
+                                                    <li>✓ Flexible thresholds <br/>(2-of-3, 3-of-5, etc.)</li>
                                                 </ul>
                                             </div>
 
-                                            <div className="total-section">
+                                            {/* <div className="total-section">
                                                 <div className="total-line">
                                                     <span>Total</span>
                                                     <span className="total-amount">$49.00</span>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </Col>
 

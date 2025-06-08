@@ -11,7 +11,7 @@ function HomepagePricing({ pricingRef }) {
                 <Row>
                     <Col className="text-center">
                         <h2 className="pricing-title">Get Started Free</h2>
-                        <p className="pricing-subtitle">Start free, upgrade as your needs grow</p>
+                        <p className="pricing-subtitle">Upgrade as your needs grow</p>
                     </Col>
                 </Row>
                 
@@ -26,6 +26,7 @@ function HomepagePricing({ pricingRef }) {
                                 <li>✓ Single vault</li>
                                 <li>✓ Up to 2 key shares</li>
                                 <li>✓ Limited storage (~800 chars)</li>
+                                <li>✓ Basic thresholds (1-of-1, 2-of-2)</li>
                                 <li>✓ Open source & auditable</li>
                             </ul>
                             <button className="pricing-cta primary" onClick={() => navigate('/create')}>
@@ -45,6 +46,7 @@ function HomepagePricing({ pricingRef }) {
                                 <li>✓ Everything in Free</li>
                                 <li>✓ Up to 20 key shares</li>
                                 <li>✓ Extended storage (5,000 chars)</li>
+                                <li>✓ Flexible thresholds (2-of-3, 3-of-5, etc.)</li>
                             </ul>
                             <button className="pricing-cta primary" onClick={() => navigate('/payment')}>
                                 Buy Once, Own Forever

@@ -29,7 +29,7 @@ const NavbarTop = (props) => {
                         </div>
                     </NavbarBrand>
                     <NavbarToggler onClick={toggle} className={'navbar-toggler'} >
-                        <MdMenu fill={'#000'}/>
+                        <MdMenu fill={'#fff'}/>
                     </NavbarToggler>
                     <Collapse isOpen={isOpen} navbar>
                         <Nav className="justify-content-end modern-nav" navbar style={{width:'100%'}}>
@@ -38,6 +38,9 @@ const NavbarTop = (props) => {
                             </NavItem>
                             <NavItem className={'nav-item'}>
                                 <Link className={"nav-link" + (location.pathname === '/unlock' ? ' active' : '')} to={'/unlock'}>Unlock</Link>
+                            </NavItem>
+                            <NavItem className={'nav-item'}>
+                                <Link className={"nav-link" + (location.pathname === '/pricing' ? ' active' : '')} to={'/pricing'}>Pricing</Link>
                             </NavItem>
                             <NavItem className={'nav-item'}>
                                 <Link className={

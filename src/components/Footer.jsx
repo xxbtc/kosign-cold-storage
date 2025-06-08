@@ -9,6 +9,12 @@ export default function Footer() {
             <nav className="footerNav">
                 <ul className="footerlist">
                     <li>
+                        <Link to={'/unlock'}>Unlock</Link>
+                    </li>
+                    <li>
+                        <Link to={'/pricing'}>Pricing</Link>
+                    </li>
+                    <li>
                         <Link to={'/legal'}>Terms of Service</Link>
                     </li>
                     <li>
