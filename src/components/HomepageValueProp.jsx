@@ -47,7 +47,7 @@ function HomepageValueProp() {
                             <div className="guarantee-badge">
                                 <span className="badge-icon">⚡</span>
                                 <span className="badge-text">
-                                    <a href="https://github.com/xxbtc/kosign-unlock" target="_blank" rel="noopener noreferrer" className="github-link">open source</a> unlock utility provides future-proof access
+                                    <a href="https://github.com/xxbtc/kosign-unlock" target="_blank" rel="noopener noreferrer" className="github-link">open source</a> tool for future-proof access
                                 </span>
                             </div>
                         </div>

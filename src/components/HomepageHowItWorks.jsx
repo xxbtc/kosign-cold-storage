@@ -25,7 +25,7 @@ function HomepageHowItWorks() {
                         <div className="step-card">
                             <div className="step-number">2</div>
                             <h3>Print</h3>
-                            <p>Print your vault and keys. Physically distribute copies across locations or trusted people/services.</p>
+                            <p>Print your vault and keys (or move them to USB drives). Physically distribute copies across locations or trusted people/services.</p>
                         </div>
                     </Col>
                     

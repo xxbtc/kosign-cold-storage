@@ -53,7 +53,7 @@ function PrivacyPage() {
 
                     <div className={'pageWrapperInner'}>
                         <p>
-                            Last update: 13 May 2023
+                            Last update: 08 June 2025
                             <br/><br/>
                             Our privacy policy applies to information we collect when you use or access our website,
                             application, or just interact with us. We may change this privacy policy from time to time.
@@ -64,156 +64,137 @@ function PrivacyPage() {
                             help protect your privacy.
                         </p>
 
-                        <h3>INFORMATION YOU PROVIDE TO US</h3>
+                        <h3>KOSIGN'S PRIVACY-FIRST DESIGN</h3>
                         <p>
-                            We collect information you provide directly to us.
-                            For example, we collect information when you participate in any
-                            interactive features of our services, fill out a form, request customer
-                            support, provide any contact or identifying information or otherwise
-                            communicate with us. The types of information we may collect include your name,
-                            email address, postal address, credit card information and other contact or
-                            identifying information you choose to provide.
+                            <strong>Your vault contents never leave your device.</strong> Kosign uses client-side encryption, 
+                            meaning all sensitive data is encrypted and decrypted directly in your browser. We cannot access, 
+                            read, or recover your vault contents - this is by design for your security and privacy.
                         </p>
 
-                        <h3>INFORMATION WE COLLECT</h3>
+                        <h3>INFORMATION YOU PROVIDE TO US</h3>
                         <p>
-                            When you access or use our services, we automatically collect information about you, including:
+                            We collect minimal information you provide directly to us, including:
+                            <ul>
+                                <li><strong>Contact Information:</strong> Email addresses when you contact support</li>
+                                <li><strong>Payment Information:</strong> Processed securely through third-party payment processors (we do not store payment details)</li>
+                            </ul>
+                        </p>
+
+                        <h3>INFORMATION WE COLLECT AUTOMATICALLY</h3>
+                        <p>
+                            When you access our services, we automatically collect standard web analytics information:
                             <ul>
                                 <li>
-                                    Log Information: We log information about your use of our services, including the type of browser you use, access times, pages viewed, your IP address and the page you visited before navigating to our services.
+                                    <strong>Basic Analytics:</strong> We use third-party analytics services to understand how users interact with our website (page views, session duration, general location data). This helps us improve the service.
                                 </li>
                                 <li>
-                                    Device Information: We may collect information about the computer or mobile device you use to access our services, including the hardware model, and operating system and version.
+                                    <strong>Technical Information:</strong> Browser type, operating system, IP address, and access times for security and performance monitoring.
                                 </li>
                                 <li>
-                                    Location Information: We may collect information about the location of your device each time you access or use one of our mobile applications or otherwise consent to the collection of this information.
-                                </li>
-                                <li>
-                                    Information Collected by Cookies and Other Tracking Technologies:
-                                    We use various technologies to collect information,
-                                    and this may include sending cookies to your computer.
-                                    Cookies are small data files stored on your hard drive or in your device memory
-                                    that helps us to improve our services and your experience, see which areas
-                                    and features of our services are popular and count visits.
-                                    We may also collect information using web beacons (also known as "tracking pixels").
-                                    Web beacons are electronic images that may be used in our services or emails and to track count visits or
-                                    understand usage and campaign effectiveness.
+                                    <strong>Cookies:</strong> We use essential cookies for website functionality and temporary storage during vault creation. We do not use tracking cookies for advertising.
                                 </li>
                             </ul>
                         </p>
 
-                        <h3>INFORMATION FROM OTHER SOURCES</h3>
+                        <h3>WHAT WE DO NOT COLLECT</h3>
                         <p>
-                            In order to provide you with access to the Service, or to provide you with better
-                            service in general, we may combine information obtained from other sources
-                            (for example, a third-party service whose application you have authorized or used
-                            to sign in) and combine that with information we collect through our services.
+                            <ul>
+                                <li><strong>Vault Contents:</strong> Your encrypted data, passwords, private keys, or any sensitive information you store in vaults</li>
+                                <li><strong>Vault Metadata:</strong> We do not store vault names, descriptions, or any information about your vault structure or contents</li>
+                                <li><strong>Decryption Keys:</strong> The keys needed to unlock your vaults remain with you and your trusted contacts</li>
+                                <li><strong>Detailed Location Data:</strong> We do not collect precise location information</li>
+                                <li><strong>Biometric Data:</strong> We do not collect fingerprints, facial recognition, or other biometric data</li>
+                            </ul>
                         </p>
 
                         <h3>USE OF INFORMATION</h3>
                         <p>
-                            We use information about you for various purposes, including to:
+                            We use collected information solely to:
                             <ul>
-                                <li>
-                                    Provide, maintain and improve our services;
-                                </li>
-                                <li>
-                                    Provide services you request, process transactions
-                                    and to send you related information;
-                                </li>
-                                <li>
-                                    Send you technical notices, updates, security alerts
-                                    and support and administrative messages;
-                                </li>
-                                <li>
-                                    Respond to your comments, questions and requests and provide customer service;
-                                </li>
-                                <li>
-                                    Communicate with you about news and information related to our service;
-                                </li>
-                                <li>
-                                    Monitor and analyze trends, usage and activities in
-                                    connection with our services; and
-                                </li>
-                                <li>
-                                    Personalize and improve our services.
-                                </li>
+                                <li>Provide and maintain our vault creation services</li>
+                                <li>Process payments for Pro features</li>
+                                <li>Respond to support requests</li>
+                                <li>Improve website performance and user experience</li>
+                                <li>Detect and prevent security threats</li>
+                                <li>Send important service updates (security notices, etc.)</li>
                             </ul>
-                            By accessing and using our services, you consent to the processing and
-                            transfer of your information in and to the United States and other countries.
+                            We do not use your information for advertising, marketing, or selling to third parties.
                         </p>
 
                         <h3>SHARING OF INFORMATION</h3>
                         <p>
+                            We share information only in these limited circumstances:
                             <ul>
-                                <li>
-                                    With third party vendors and other service providers who need access to
-                                    your information to carry out work on our behalf.
-                                </li>
-                                <li>
-                                    If we believe disclosure is reasonably necessary to comply with any
-                                    applicable law, regulation, legal process or governmental request;
-                                </li>
-                                <li>
-                                    To enforce applicable user agreements or policies, including our Terms of Service;
-                                    and to protect us, our users or the public from harm or illegal activities;
-                                </li>
-                                <li>
-                                    In connection with any merger, sale of our assets, financing or acquisition of
-                                    all or a portion of our business to another company; and
-                                </li>
-                                <li>
-                                    If we notify you through our services (or in our privacy policy)
-                                    that the information you provide will be shared in a particular
-                                    manner and you provide such information.
-                                </li>
+                                <li><strong>Payment Processing:</strong> With payment processors to handle Pro subscriptions</li>
+                                <li><strong>Analytics:</strong> Anonymized usage data with third-party analytics providers to improve our service</li>
+                                <li><strong>Legal Requirements:</strong> When required by law or to protect against illegal activities</li>
+                                <li><strong>Business Transfers:</strong> In connection with mergers or acquisitions (with user notification)</li>
                             </ul>
-                            We may also share aggregated or anonymized information that does not directly identify you.
-
-                        </p>
-
-                        <h3>THIRD PARTY ANALYTICS</h3>
-                        <p>
-                            We may allow third parties to provide analytics services.
-                            These third parties may use cookies, web beacons and other technologies to
-                            collect information about your use of the services and other websites,
-                            including your IP address, web browser, pages viewed, time spent
-                            on pages, links clicked and conversion information. This information may be
-                            used by us and third parties to, among other things, analyze and track data,
-                            determine the popularity of certain content and other websites and better
-                            understand your online activity. Our privacy policy does not apply to,
-                            and we are not responsible for, third party cookies, web beacons or other
-                            tracking technologies and we encourage you to check the privacy policies of
-                            these third parties to learn more about their privacy practices.
+                            <strong>We never share, sell, or provide access to your vault contents or decryption keys.</strong>
                         </p>
 
                         <h3>SECURITY</h3>
                         <p>
-                            We take reasonable measures to help protect personal information from loss,
-                            theft, misuse and unauthorized access, disclosure, alteration and destruction.
+                            Security is fundamental to Kosign's design:
+                            <ul>
+                                <li><strong>Client-Side Encryption:</strong> AES-256 encryption happens in your browser before any data transmission</li>
+                                <li><strong>Zero-Knowledge Architecture:</strong> We cannot decrypt your vaults even if we wanted to</li>
+                                <li><strong>Open Source Unlock Tool:</strong> The decryption software is open source and auditable</li>
+                                <li><strong>Standard Security Measures:</strong> We use industry-standard security practices to protect our systems</li>
+                            </ul>
                         </p>
 
+                        <h3>OPEN SOURCE TRANSPARENCY</h3>
+                        <p>
+                            Our unlock utility is completely open source and available at 
+                            <a href="https://github.com/xxbtc/kosign-unlock" target="_blank" rel="noopener noreferrer" className="linkage"> github.com/xxbtc/kosign-unlock</a>. 
+                            This allows security researchers and users to verify our cryptographic implementation and ensures 
+                            your vaults remain accessible even if our service becomes unavailable.
+                        </p>
 
                         <h3>COOKIES</h3>
                         <p>
-                            Most web browsers are set to accept cookies by default.
-                            If you prefer, you can usually choose to set your browser to remove or
-                            reject browser cookies. Please note that if you choose to remove or
-                            reject cookies, this could affect the availability and functionality of our services.
+                            We use cookies for:
+                            <ul>
+                                <li><strong>Essential Functions:</strong> Temporary storage during vault creation (automatically deleted)</li>
+                                <li><strong>Analytics:</strong> Third-party analytics cookies to understand website usage</li>
+                                <li><strong>User Preferences:</strong> Remembering your settings and preferences</li>
+                            </ul>
+                            You can disable cookies in your browser, though this may affect website functionality.
                         </p>
 
-                        <h3>PROMOTIONAL MATERIAL</h3>
+                        <h3>DATA RETENTION</h3>
                         <p>
-                            You may opt out of receiving any promotional emails from us by following the
-                            instructions in those emails. If you opt out, we may still send you non-promotional
-                            communications, such as those about your account or our ongoing business relations.
+                            <ul>
+                                <li><strong>Website Analytics:</strong> Automatically deleted according to our analytics provider's retention settings</li>
+                                <li><strong>Support Communications:</strong> Retained for reasonable period to provide ongoing support</li>
+                                <li><strong>Payment Records:</strong> Retained as required by law and payment processors</li>
+                                <li><strong>Vault Contents & Metadata:</strong> Never stored on our servers - retained only by you</li>
+                            </ul>
                         </p>
 
-                        <h3>
-                            QUESTIONS
-                        </h3>
+                        <h3>YOUR RIGHTS</h3>
                         <p>
-                            Questions or comments about the Privacy Policy you may contact us at: support@kosign.xyz.
+                            You have the right to:
+                            <ul>
+                                <li>Request information about data we collect</li>
+                                <li>Request deletion of your personal information</li>
+                                <li>Opt out of non-essential data collection</li>
+                                <li>Access your vault contents independently using our open source tools</li>
+                            </ul>
+                        </p>
+
+                        <h3>PROMOTIONAL COMMUNICATIONS</h3>
+                        <p>
+                            We may occasionally send important security updates or service announcements. 
+                            You can opt out of non-essential communications by contacting us, though we recommend 
+                            staying informed about security updates.
+                        </p>
+
+                        <h3>CONTACT US</h3>
+                        <p>
+                            Questions about this Privacy Policy? Contact us at: 
+                            <a href="mailto:support@kosign.xyz" className="linkage"> support@kosign.xyz</a>
                         </p>
 
                     </div>

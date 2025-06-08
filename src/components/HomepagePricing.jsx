@@ -11,7 +11,7 @@ function HomepagePricing({ pricingRef }) {
                 <Row>
                     <Col className="text-center">
                         <h2 className="pricing-title">Get Started Free</h2>
-                        <p className="pricing-subtitle">Most people start and stay free</p>
+                        <p className="pricing-subtitle">Start free, upgrade as your needs grow</p>
                     </Col>
                 </Row>
                 

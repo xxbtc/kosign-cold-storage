@@ -40,6 +40,7 @@ function Homepage(props) {
     const navigate      = useNavigate();
     const cookies       = new Cookies();
     const pricingRef    = useRef(null);
+    const paperStackRef = useRef(null);
 
     /* const navigate = useNavigate();
      const location = useLocation();
@@ -73,6 +74,37 @@ function Homepage(props) {
         cookies.remove('kosign_shares');
         cookies.remove('kosign_vaultdescription');
 
+        // Intersection Observer for paper stack animation on mobile
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        // Add opened class when element comes into view
+                        entry.target.classList.add('stack-opened');
+                    } else {
+                        // Remove opened class when element goes out of view
+                        entry.target.classList.remove('stack-opened');
+                    }
+                });
+            },
+            {
+                threshold: 0.3, // Trigger when 30% of the element is visible
+                rootMargin: '0px 0px -100px 0px' // Trigger slightly before fully in view
+            }
+        );
+
+        // Observe the paper stack on all screen sizes for cool scroll effect
+        if (paperStackRef.current) {
+            observer.observe(paperStackRef.current);
+        }
+
+        // Cleanup observer on unmount
+        return () => {
+            if (paperStackRef.current) {
+                observer.unobserve(paperStackRef.current);
+            }
+        };
+
     }, [props]);
 
     return (
@@ -86,7 +118,7 @@ function Homepage(props) {
                 
                 <Container>
                     <Row className="align-items-center">
-                        <Col lg={6} className="hero-content-col">
+                        <Col md={6} lg={6} className="hero-content-col">
                             <div className="hero-badges">
                                 <div className="hero-badge-pill">✓ No Cloud</div>
                                 <div className="hero-badge-pill">✓ No Custodians</div>
@@ -123,9 +155,9 @@ function Homepage(props) {
                             </div>
                         </Col>
                         
-                        <Col lg={6} className="hero-visual-col">
+                        <Col md={6} lg={6} className="hero-visual-col">
                             <div className="hero-visual">
-                                <div className="product-demo">
+                                <div className="product-demo" ref={paperStackRef}>
                                     <div className="paper-stack">
                                         <img src={paperKey} alt="Kosign Paper Key 2" className="demo-image page-3" />
                                         <img src={paperKey} alt="Kosign Paper Key 1" className="demo-image page-2" />
@@ -175,7 +207,6 @@ function Homepage(props) {
                 <Container>
                     <Row>
                         <Col className="text-center">
-                            <h2 className="faq-title">Your Questions Answered</h2>
                             <HomepageFAQ />
                         </Col>
                     </Row>

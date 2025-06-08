@@ -20,7 +20,7 @@ const NavbarTop = (props) => {
 
     return (
         <div className={'navbarWrapper'}>
-            <Container fluid className="px-4">
+            <Container fluid>
                 <Navbar expand="md" className={'navbarCustom modern-navbar'}>
                     <NavbarBrand href="/" className={'nav-brand'}>
                         <div className='navbarLogo'>

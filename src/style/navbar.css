@@ -16,6 +16,8 @@
     box-shadow: none;
     border: none;
     padding: 0.5rem 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .navbarCustom.modern-navbar .navbar-nav {
@@ -25,6 +27,7 @@
 .navbarCustom.modern-navbar .navbar-brand {
     padding: 0;
     margin: 0;
+    margin-right: auto;
 }
 
 .navbarLogo {
@@ -124,6 +127,8 @@
     border-radius: 8px;
     padding: 0.5rem;
     transition: all 0.3s ease;
+    margin-left: auto !important;
+    margin-right: 0 !important;
 }
 
 .navbarWrapper .navbar-toggler:hover {
@@ -232,9 +237,37 @@
     }
 }
 
-/* Mobile responsive padding to match homepage */
+/* Navbar container padding for all screen sizes */
+.navbar-container {
+    padding: 0 1.5rem;
+}
+
+/* Mobile responsive padding */
 @media (max-width: 768px) {
     .navbar-container {
         padding: 0 1rem;
     }
+}
+
+@media (max-width: 480px) {
+    .navbar-container {
+        padding: 0 0.75rem;
+    }
+}
+
+/* Override ALL Bootstrap navbar internal padding */
+.navbarWrapper .navbar {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.navbarWrapper .navbar > .container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Ensure logo and burger are properly spaced */
+.navbarWrapper .navbar-brand {
+    margin-right: auto !important;
+    padding: 0 !important;
 }

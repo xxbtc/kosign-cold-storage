@@ -9,7 +9,7 @@ import '../style/homepage.css';
 import Container from 'react-bootstrap/Container';
 import Accordion from 'react-bootstrap/Accordion';
 
-import {BsTwitter} from 'react-icons/bs';
+import {FaXTwitter} from 'react-icons/fa6';
 import {BsEnvelope} from 'react-icons/bs';
 
 
@@ -18,7 +18,7 @@ function HomepageFAQ(props) {
 
 
     return (
-        <div className={'homepageReasonsRow'} style={{paddingTop:40}}>
+        <div className={'homepageReasonsRow'}>
             <Container>
                 <Row style={{marginTop:30, textAlign:'left'}}>
                     <Col xs={{span:12}} md={{span:6, offset:0}} lg={{span:6, offset:0}} >
@@ -31,7 +31,7 @@ function HomepageFAQ(props) {
                             dependencies that plague modern security. Perfect for digital inheritance planning, emergency access, and long term storage.
                             <div style={{marginTop:20}}>
                                 <a className={'linkage'} href={'https://twitter.com/kosign_xyz'} target={'_blank'}>
-                                    <BsTwitter /> &nbsp;@kosign_xyz
+                                    <FaXTwitter /> &nbsp;@kosign_xyz
                                 </a>
                             </div>
                             <div style={{marginTop:20}}>
@@ -42,7 +42,7 @@ function HomepageFAQ(props) {
                         </div>
                     </Col>
                     <Col xs={{span:12}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
-                        <h3>Frequently Asked Questions</h3>
+                        <h3 className="faq-title-mobile-spacing">Frequently Asked Questions</h3>
                         <Accordion style={{marginTop:20, marginBottom:50}}>
                             <Accordion.Item eventKey="0" className={'accordionItem'}>
                                 <Accordion.Header>Why do I need a Kosign Vault?</Accordion.Header>
@@ -127,6 +127,29 @@ function HomepageFAQ(props) {
                                 <Accordion.Body>
                                     <p>Yes! Kosign's unlock tool is <strong>completely open source</strong> and runs directly on your computer. It is designed to be future-proof (to the extent possible) and to last generations. Even if the website becomes unavailable one day, you can always access your vaults.</p>
                                     <p>Open source unlock utility: <a className={'linkage'} href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>github.com/xxbtc/kosign-unlock</a></p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            
+                            <Accordion.Item eventKey="7" className={'accordionItem'}>
+                                <Accordion.Header>Has Kosign been audited?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>Kosign's security is built on <strong>transparency and verifiability</strong> rather than traditional closed-door audits:</p>
+                                    
+                                    <p><strong>Open Source Foundation:</strong> The core unlock utility is completely open source at <a className={'linkage'} href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>github.com/xxbtc/kosign-unlock</a>, allowing anyone to inspect, verify, and audit the cryptographic implementation.</p>
+                                    
+                                    <p><strong>AI Security Assessment (Claude Sonnet 3.5):</strong> Independent analysis of Kosign's codebase reveals strong security fundamentals:</p>
+                                    
+                                    <ul style={{margin:'1rem 0', paddingLeft:'1.5rem'}}>
+                                        <li><strong>Industry-standard encryption:</strong> AES-256 in CTR mode with proper IV generation</li>
+                                        <li><strong>Strong key derivation:</strong> PBKDF2 with 100,000 iterations and SHA-256</li>
+                                        <li><strong>Proven secret sharing:</strong> Shamir's Secret Sharing for threshold cryptography</li>
+                                        <li><strong>Client-side security:</strong> All encryption/decryption happens locally in your browser</li>
+                                        <li><strong>Memory protection:</strong> Sensitive data is properly overwritten and cleared after use</li>
+                                        <li><strong>Version control:</strong> Vault format versioning ensures long-term compatibility</li>
+                                    </ul>
+                                    
+                                    <p><strong>Recommendation:</strong> The cryptographic implementation follows industry best practices and uses well-established algorithms. The open-source nature allows for continuous community review, which is often more thorough than one-time audits. For maximum security verification, technical users can review the source code directly.</p>
+                                    
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>

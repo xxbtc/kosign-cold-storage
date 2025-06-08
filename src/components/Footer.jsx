@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import "../style/footer.css";
-import {FaTwitter, FaMedium} from 'react-icons/fa';
+import {FaXTwitter, FaMedium} from 'react-icons/fa6';
 
 export default function Footer() {
     return (
@@ -19,7 +19,7 @@ export default function Footer() {
                     </li>
                 </ul>
                 <div className="footerSocial">
-                    <a href="https://twitter.com/kosignxyz" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><FaTwitter /></a>
+                    <a href="https://twitter.com/kosignxyz" target="_blank" rel="noopener noreferrer" aria-label="X (formerly Twitter)"><FaXTwitter /></a>
                     <a href="https://kosignxyz.medium.com" target="_blank" rel="noopener noreferrer" aria-label="Medium"><FaMedium /></a>
                 </div>
             </nav>
