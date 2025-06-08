@@ -35,9 +35,7 @@ function PricingPage() {
         <Layout>
             <Navbar loggedIn={isLoggedIn}/>
 
-            <div className={'pageLayout pricingPageWrapper'}>
-                
-                
+            <div className={'pageLayout pricingPageWrapper'} style={{ minHeight: 'calc(100vh - 120px)' }}>
                 <HomepagePricing />
             </div>
 

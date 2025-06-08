@@ -1,5 +1,16 @@
 .pricingPageWrapper {
-    background-color: #0a0a0a;
+    min-height: calc(100vh - 120px); /* Adjust based on navbar/footer height */
+    background: #0a0a0a; /* Match your dark theme */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure the pricing component fills available space */
+.pricingPageWrapper .homepage-pricing {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .proStatusIndicatorWrapper {
