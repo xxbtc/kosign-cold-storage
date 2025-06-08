@@ -929,6 +929,21 @@
     margin: 8% auto 0px auto;
 }
 
+/* Mobile responsive for preparation step */
+@media (max-width: 768px) {
+    .preparation-content {
+        width: 100%;
+        margin: 0 auto 0px auto; /* Reduced from 8% to 2% */
+    }
+}
+
+@media (max-width: 480px) {
+    .preparation-content {
+        width: 100%;
+        margin: 0 auto 0px auto; /* Even less margin for small mobile */
+    }
+}
+
 .preparation-header {
     margin-bottom: 32px;
 }
@@ -1421,7 +1436,7 @@
     }
     
     .preparation-content {
-       
+       padding:0px;
         max-width: none;
     }
     
@@ -1491,8 +1506,8 @@
     }
     
     .preparation-content {
-        width: 90%;
-        padding: 24px 20px;
+        width: 100%;
+        padding: 0px 0px;
     }
     
     .preparation-header h3 {
@@ -2306,4 +2321,31 @@
 
 .unlock-layout .close-vault-button:active {
     transform: translateY(0);
+}
+
+.github-notice {
+    text-align: center;
+    padding: 1rem 0;
+    border-top: 1px solid #333;
+    margin-top: 2rem;
+}
+
+.info-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin: 1rem auto;
+    max-width: 400px;
+    text-align: center;
+}
+
+.github-link {
+    color: #1786ff !important;
+    text-decoration: none;
+}
+
+.github-link:hover {
+    color: #1260B3 !important;
+    text-decoration: underline;
 } 

@@ -17,7 +17,7 @@ import { QrReader } from 'react-qr-reader';
 
 import {AiOutlineQrcode} from 'react-icons/ai';
 
-import {FaChevronRight, FaLock, FaLockOpen, FaInfoCircle, FaCheck, FaShieldAlt, FaLightbulb} from 'react-icons/fa';
+import {FaChevronRight, FaLock, FaLockOpen, FaInfoCircle, FaCheck, FaShieldAlt, FaLightbulb, FaExclamationTriangle} from 'react-icons/fa';
 import {MdWarningAmber} from 'react-icons/md';
 
 import {ImKey} from 'react-icons/im';
@@ -55,6 +55,7 @@ function UnlockPage() {
     const [keyAliasArray, setKeyAliasArray] = useState([]);
     const [scannedKeys, setScannedKeys] = useState([]);
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
+    const [cameraError, setCameraError] = useState(null);
 
     useEffect(() => {
         const handleOnline = () => setIsOnline(navigator.onLine);
@@ -88,6 +89,17 @@ function UnlockPage() {
             return;
         }
     },[numOfQRKEYSsScanned])
+
+    // Auto-scroll to top when wizard step changes
+    useEffect(() => {
+        // Only scroll if user has scrolled down (more than 100px from top)
+        if (window.scrollY > 100) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    }, [wizardStep]);
 
     const scannedVault = (data) => {
         let jsonObject = JSON.parse(data);
@@ -147,12 +159,32 @@ function UnlockPage() {
 
     const scannedSomething = (data, error) => {
         if (error) {
+            // Only handle actual camera/permission errors, not scanning errors
+            if (error.name === 'NotAllowedError' || 
+                error.name === 'NotFoundError' || 
+                error.name === 'NotReadableError' || 
+                error.name === 'OverconstrainedError') {
+                
+                console.log('Camera Error:', error);
+                
+                if (error.name === 'NotAllowedError') {
+                    setCameraError('Camera permission denied. Please allow camera access and refresh the page.');
+                } else if (error.name === 'NotFoundError') {
+                    setCameraError('No camera found. Please check your device camera.');
+                } else if (error.name === 'NotReadableError') {
+                    setCameraError('Camera is already in use by another application.');
+                } else if (error.name === 'OverconstrainedError') {
+                    setCameraError('Camera constraints cannot be satisfied.');
+                }
+            }
+            // Ignore other errors (like "No QR code found" - these are normal)
             return;
         }
-       // console.log('scanned SOMETHING', data);
-       // console.log('processing is ', isProcessing, scanType);
+        
+        // Clear any previous camera errors when we get successful data
+        setCameraError(null);
+        
         if (isProcessing) return;
-        //isProcessing = true;
         setIsProcessing(true);
 
         if (scanType==='vault') {
@@ -393,42 +425,43 @@ function UnlockPage() {
                                     
                                     
                                     <Row className="scanner-row">
-                                        <Col md={4}>
-                                            
+                                        <Col md={4} className="scanner-column">
                                             <div className="scanner-overlay">
-                                                {isProcessing ? null : 
+                                                {isProcessing ? (
+                                                    <div className="scanner-processing">
+                                                        <Oval stroke={'#1786ff'} strokeWidth={15} />
+                                                        <span>Processing...</span>
+                                                    </div>
+                                                ) : (
                                                     <QrReader
                                                         key={'qr-scanner'}
                                                         onResult={(result, error) => scannedSomething(result?.text, error)}
+                                                        constraints={{
+                                                            audio: false,
+                                                            video: {
+                                                                facingMode: 'environment',
+                                                                width: { ideal: 1280 },
+                                                                height: { ideal: 720 }
+                                                            }
+                                                        }}
                                                         containerStyle={{
-                                                            margin:0,
-                                                            padding:0,
-                                                            height:'280px',
-                                                            width:'auto',
+                                                            margin: 0,
+                                                            padding: 0,
+                                                            height: '280px',
+                                                            width: '100%',
                                                             borderRadius: 12,
                                                         }}
                                                         videoStyle={{
-                                                            height:'auto',
-                                                            width:'auto',
+                                                            height: '100%',
+                                                            width: '100%',
                                                             margin: 0,
                                                             padding: 0,
-                                                            maxWidth: '100%',
-                                                            maxHeight: '100%',
+                                                            objectFit: 'cover',
                                                             borderRadius: 12,
-                                                           
                                                         }}
                                                     />
-                                                }
-                                                
-                                                {/* <div className="scanning-guide">
-                                                    <ul>
-                                                        <li>Hold QR code steady</li>
-                                                        <li>Keep camera lens clean</li>
-                                                        <li>Ensure privacy</li>                                                
-                                                    </ul>
-                                                </div> */}
+                                                )}
                                             </div>
-                                           
                                         </Col>
                                         
                                         <Col md={8}>
@@ -463,9 +496,22 @@ function UnlockPage() {
                                 </div>
                             ) : null}
 
+                            {cameraError && (
+                                <div className="alert alert-danger mt-3">
+                                    <FaExclamationTriangle className="me-2" />
+                                    {cameraError}
+                                </div>
+                            )}
+
                             <div className="content-footer">
-                                <div className={'alert alert-info'}>
-                                    This unlock tool is also available <a href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>on Github</a>
+                                <div className="info-card">
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <span className="me-2">🛠️</span>
+                                        <span className="me-2">This unlock utility is also available on</span>
+                                        <a href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'} rel="noopener noreferrer" className="github-link">
+                                            GitHub 
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
