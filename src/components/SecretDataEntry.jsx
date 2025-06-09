@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FormGroup, FormText, Button } from 'react-bootstrap';
 import { FaCheck, FaLock, FaWifi, FaUserSecret, FaEyeSlash, FaChevronRight } from 'react-icons/fa';
 import { MdWarningAmber } from 'react-icons/md';
+import { useSensitiveMode } from '../contexts/SensitiveModeContext';
 
 function SecretDataEntry({
     secretValue,
@@ -11,6 +12,7 @@ function SecretDataEntry({
     isOnline,
     onContinue
 }) {
+    const { enterSensitiveMode, exitSensitiveMode } = useSensitiveMode();
     const [showSecretForm, setShowSecretForm] = useState(false);
     const [checkedItems, setCheckedItems] = useState({
         location: false,
@@ -49,6 +51,16 @@ function SecretDataEntry({
             setProceedOnline(false); // Reset proceed online when actually offline
         }
     }, [isOnline, proceedOnline]);
+
+    useEffect(() => {
+        // Enter sensitive mode when component mounts
+        enterSensitiveMode();
+        
+        return () => {
+            // Exit sensitive mode when component unmounts
+            exitSensitiveMode();
+        };
+    }, []); // Empty dependency array to run only once
 
     const handleProceedOnline = () => {
         setProceedOnline(true);

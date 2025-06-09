@@ -30,6 +30,7 @@ import PreparationStep from '../components/PreparationStep';
 import ProgressStepper from '../components/ProgressStepper';
 import VaultMetadata from '../components/VaultMetadata';
 import UnlockedVault from '../components/UnlockedVault';
+import { useSensitiveMode } from '../contexts/SensitiveModeContext';
 
 function UnlockPage() {
 
@@ -56,6 +57,7 @@ function UnlockPage() {
     const [scannedKeys, setScannedKeys] = useState([]);
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
     const [cameraError, setCameraError] = useState(null);
+    const { enterSensitiveMode, exitSensitiveMode } = useSensitiveMode();
 
     useEffect(() => {
         const handleOnline = () => setIsOnline(navigator.onLine);
@@ -66,12 +68,12 @@ function UnlockPage() {
 
         return () => {
             cleanupSensitiveData();
+            // Exit sensitive mode when leaving the page
+            exitSensitiveMode();
             window.removeEventListener('online', handleOnline);
             window.removeEventListener('offline', handleOffline);
         };
-    }, []);
-
-
+    }, [exitSensitiveMode]);
 
     useEffect(()=>{
         if (!metadata) return;

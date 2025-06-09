@@ -9,8 +9,10 @@ import {
     FaKey,
     FaUserSecret 
 } from 'react-icons/fa';
+import { useSensitiveMode } from '../contexts/SensitiveModeContext';
 
 const PreparationStep = ({ isOnline, onContinue }) => {
+    const { enterSensitiveMode } = useSensitiveMode();
     const [checkedItems, setCheckedItems] = useState({
         vault: false,
         keys: false,
@@ -63,6 +65,15 @@ const PreparationStep = ({ isOnline, onContinue }) => {
             ...prev,
             offline: true
         }));
+    };
+
+    const handleContinue = () => {
+        // Only call this when user actually clicks Continue
+        enterSensitiveMode();
+        console.log('🔒 User clicked Continue - entering sensitive mode');
+        
+        // Call the parent's continue function
+        onContinue();
     };
 
     const allItemsChecked = Object.values(checkedItems).every(checked => checked);
@@ -167,7 +178,7 @@ const PreparationStep = ({ isOnline, onContinue }) => {
             <div className="action-section">
                 <Button
                     variant="primary"
-                    onClick={onContinue}
+                    onClick={handleContinue}
                     className="continue-button"
                     disabled={!allItemsChecked}
                 >
