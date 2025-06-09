@@ -1,42 +1,24 @@
-import React, { useEffect, useRef, useState, createRef} from 'react'
-import { Link , useParams, useNavigate} from 'react-router-dom'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Layout from "../components/Layout";
-import {Container, Form, FormGroup, FormText, FormLabel, Button, FormCheck, Alert, Spinner} from 'react-bootstrap';
+import React, { useEffect, useRef, useState} from 'react'
+import { Link , useNavigate} from 'react-router-dom'
+import {Form, FormGroup, FormText, Button} from 'react-bootstrap';
 import {EncryptionService} from "../services/EncryptionService";
 import Navbar from "../components/NavbarTop";
 import ReactDOMServer from 'react-dom/server';
-import { TbCircleNumber1, TbCircleNumber2, TbCircleNumber3, TbCircleNumber4 } from 'react-icons/tb';
+
 import '../style/index.css';
 import '../style/createPage.css';
 import '../style/forms.css';
 import '../style/dashboardPage.css';
 import Cookies from 'universal-cookie';
 
-//import ShareKeyshare from "../components/ShareKeyshare";
-
-import Lottie from 'lottie-react-web'
-import LottieAnimationVault from '../animations/31217-vault'
 import CreateMintKeys from "../components/CreateMintKeys";
 import CreateLoading from "../components/CreateLoading";
 import SecretDataEntry from "../components/SecretDataEntry";
 import PDFVaultBackup from '../components/PDFVaultBackup';
-import * as htmlToImage from "html-to-image";
-import ProgressBar from 'react-bootstrap/ProgressBar'
-
-import {FaChevronRight, FaLock, FaLockOpen, FaInfoCircle, FaCheck} from 'react-icons/fa';
-import {MdWarningAmber} from 'react-icons/md';
-import PaymentCheckoutForm from "./PaymentCheckoutForm";
-import PaymentComponent from "./PaymentComponent";
-import LottieAnimationLoading from "../animations/93270-password-lock-animation";
-import LottieAnimationReady from "../animations/97240-success";
-import {PDFDownloadLink, PDFViewer} from "@react-pdf/renderer";
 import PDFKeyBackup from "../components/PDFKeyBackup";
 import {useReactToPrint} from 'react-to-print';
 import Html2PDF from 'html2pdf.js';
 import {Oval} from "react-loading-icons";
-import {PaymentService} from "../services/PaymentService";
 import VaultDownloadSection from './VaultDownloadSection';
 import { ProFeatureService } from '../services/ProFeatureService';
 import KosignPaymentStep from './KosignPaymentStep';
