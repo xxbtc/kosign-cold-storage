@@ -62,18 +62,12 @@ const CheckoutForm = ({ amount, onSuccess, onError }) => {
             } else if (paymentIntent.status === 'succeeded') {
                 // Call confirmPayment to update backend with success details
                 try {
-                    await fetch(`${global.baseApiURL}kosign/pay/confirmPayment`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: new URLSearchParams({
-                            client_secret: response.client_secret,
-                            payment_intent_id: paymentIntent.id,
-                            email: email,
-                            name: name
-                        })
-                    });
+                    await PaymentService.confirmPayment(
+                        response.client_secret,
+                        paymentIntent.id,
+                        email,
+                        name
+                    );
                 } catch (confirmError) {
                     console.warn('Failed to confirm payment in backend:', confirmError);
                     // Don't fail the whole process for this
