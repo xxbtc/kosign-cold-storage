@@ -11,6 +11,7 @@ import Accordion from 'react-bootstrap/Accordion';
 
 import {FaXTwitter} from 'react-icons/fa6';
 import {BsEnvelope} from 'react-icons/bs';
+import logoIMG from "../images/kosign-trefoil.png";
 
 
 function HomepageFAQ(props) {
@@ -22,7 +23,10 @@ function HomepageFAQ(props) {
             <Container>
                 <Row style={{marginTop:30, textAlign:'left'}}>
                     <Col xs={{span:12}} md={{span:6, offset:0}} lg={{span:6, offset:0}} >
-                        <h3>About Kosign</h3>
+                        <div style={{display: 'flex', alignItems: 'center', marginBottom: 20}}>
+                            <img src={logoIMG} alt="Kosign Logo" style={{height: 40, marginRight: 15}} />
+                            <h3 style={{margin: 0}}>About Kosign</h3>
+                        </div>
                         <div style={{paddingRight:60, marginTop:40}}>
                             Kosign provides the foundational security layer that makes all your other security tools actually secure. 
                             Our passwordless, offline cold storage vaults are secured by distributed physical keys instead of master passwords.

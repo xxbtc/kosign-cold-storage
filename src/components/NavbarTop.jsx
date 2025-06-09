@@ -10,7 +10,7 @@ import {
     Container
 } from 'reactstrap';
 import { MdMenu } from "react-icons/md";
-import logoIMG from "../images/paperlock_small.jpg";
+import logoIMG from "../images/kosign-trefoil-small.png";
 import '../style/navbar.css';
 
 const NavbarTop = (props) => {
