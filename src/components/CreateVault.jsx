@@ -497,7 +497,7 @@ function CreateVault(props) {
                         <div className="wizard-step-container">
                             <div className="create-vault-header">
                                 <h1>Create a new vault</h1>
-                                <p>Secure your digital life with distributed physical keys - no master passwords needed</p>
+                                <p>Secure your digital life</p>
                             </div>
                             <Form>
                                 <div className={'createSectionWrapper'}>
