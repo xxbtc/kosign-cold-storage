@@ -100,31 +100,30 @@ function Homepage(props) {
                     <Row className="align-items-center">
                         <Col md={6} lg={6} className="hero-content-col">
                             <div className="hero-badges">
-                                <div className="hero-badge-pill">✓ No Cloud</div>
-                                <div className="hero-badge-pill">✓ No Custodians</div>
+                                <div className="hero-badge-pill">✓ Open source</div>
+                                <div className="hero-badge-pill">✓ Non-custodial</div>
                                 <div className="hero-badge-pill">✓ 100% Offline</div>
                             </div>
                             <h1 className="hero-title">
-                                The Foundational Backup for Your Digital Life
+                                The Foundational Vault for Digital Assets
                             </h1>
                             <p className="hero-subtitle">
-                                Create passwordless vaults secured by distributed physical keys. No master passwords to remember, 
-                                no single points of failure. Designed for emergency access and inheritance.
+                                Store passwords and digital assets offline in a cold storage paper vault. Designed to last generations.
                             </p>
                             
                             {/* Social Proof Bullets */}
                             <div className="hero-proof-bullets">
                                 <div className="proof-bullet">
                                     <FaCheck className="proof-icon" />
-                                    <span>Open source cold storage technology</span>
+                                    <span>Open source encryption</span>
                                 </div>
                                 <div className="proof-bullet">
                                     <FaCheck className="proof-icon" />
-                                    <span>Distributed keys for social recovery</span>
+                                    <span>Store passwords, digital assets, and critical data</span>
                                 </div>
                                 <div className="proof-bullet">
                                     <FaCheck className="proof-icon" />
-                                    <span>Designed for secure inheritance</span>
+                                    <span>Social recovery and secure inheritance</span>
                                 </div>
                             </div>
 

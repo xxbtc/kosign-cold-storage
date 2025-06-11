@@ -39,7 +39,7 @@ function HomepageValueProp() {
             <Container>
                 <Row className="text-center mb-5">
                     <Col>
-                        <h2 className="value-prop-title">Secure Your Digital Legacy Forever</h2>
+                        <h2 className="value-prop-title">Bulletproof Backup for Your Digital Life</h2>
                         <p className="value-prop-subtitle">
                             Distributed paper vaults that outlast hardware failures, company bankruptcies, and generational changes
                         </p>
@@ -88,8 +88,8 @@ function HomepageValueProp() {
                                                 <div className="scenario-card">
                                                     <div className="scenario-icon">🔐</div>
                                                     <div className="scenario-content">
-                                                        <h5>"Where do I write down my password manager's master password?"</h5>
-                                                        <p>Paper in drawer? That's a single point of failure.<br/>
+                                                        <h5>"Where do I store my password manager's master password?"</h5>
+                                                        <p>
                                                         Another password manager? Then where's THAT password?</p>
                                                     </div>
                                                 </div>
@@ -98,17 +98,15 @@ function HomepageValueProp() {
                                                     <div className="scenario-icon">📱</div>
                                                     <div className="scenario-content">
                                                         <h5>"Where do I store my 2FA backup codes?"</h5>
-                                                        <p>In my password manager? But I need 2FA to GET INTO my password manager!<br/>
-                                                        Written down on a post-it? That's unencrypted and a single point of failure.</p>
+                                                        <p>In my password manager? But I need 2FA to GET INTO my password manager!</p>
                                                     </div>
                                                 </div>
                                                 
                                                 <div className="scenario-card">
-                                                    <div className="scenario-icon">💀</div>
+                                                    <div className="scenario-icon">💎</div>
                                                     <div className="scenario-content">
-                                                        <h5>"What if I get hit by a bus tomorrow?"</h5>
-                                                        <p>My family needs my crypto, photos, and accounts.<br/>
-                                                        But giving them passwords now makes everything insecure.</p>
+                                                        <h5>"Where do I safely store my crypto seed phrase?"</h5>
+                                                        <p>Cleartext paper? Risky if found. Split it in half? double the trouble.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -126,8 +124,8 @@ function HomepageValueProp() {
                                                     <span className="answer-text">Access 2FA codes independently - no circular dependencies</span>
                                                 </div>
                                                 <div className="answer-item">
-                                                    <span className="answer-icon">👨‍👩‍👧‍👦</span>
-                                                    <span className="answer-text">Family gets vault copies but needs multiple people to open them</span>
+                                                    <span className="answer-icon">🔄</span>
+                                                    <span className="answer-text">Make unlimited secure backup copies - they're useless without distributed keys</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -311,8 +309,8 @@ function HomepageValueProp() {
                                                     </div>
                                                 </div>
                                                 <div className="quorum-result">
-                                                    <span className="quorum-math">Any 3 keys = Access</span>
-                                                    <span className="quorum-security">No single person can access alone</span>
+                                                    <span className="quorum-math">Vault + keys = access</span>
+                                                    <span className="quorum-security">No single person can access alone.</span>
                                                 </div>
                                             </div>
                                         </div>
