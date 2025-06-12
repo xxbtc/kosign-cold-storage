@@ -105,7 +105,7 @@ function Homepage(props) {
                                 <div className="hero-badge-pill">✓ 100% Offline</div>
                             </div>
                             <h1 className="hero-title">
-                                The Foundational Vault for Digital Assets
+                                Foundational Vault for Digital Assets
                             </h1>
                             <p className="hero-subtitle">
                                 Store passwords and digital assets offline in a cold storage paper vault. Designed to last generations.
