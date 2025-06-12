@@ -90,6 +90,19 @@ function HomepageFAQ(props) {
                                 </Accordion.Body>
                             </Accordion.Item>
 
+                            <Accordion.Item eventKey="8" className={'accordionItem'}>
+                                <Accordion.Header>What if my vault gets destroyed in a fire/flood?</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>This is exactly why Kosign is designed to let you safely make multiple backup copies of your vault!</p>
+                                    <ul style={{margin:'1rem 0', paddingLeft:'1.5rem'}}>
+                                        <li><strong>Multiple copies are safe:</strong> Unlike regular paper backups (like seed phrases), Kosign vaults are encrypted so you can safely store copies in different locations</li>
+                                        <li><strong>Flexible storage:</strong> Store copies in safety deposit boxes, with trusted family/friends, or in secure locations</li>
+                                        <li><strong>Digital backup option:</strong> You can also store vault copies on USB drives or other digital media</li>
+                                    </ul>
+                                    <p>The distributed nature of Kosign means no single disaster can lock you out of your assets.</p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
                             <Accordion.Item eventKey="3" className={'accordionItem'}>
                                 <Accordion.Header>What is social recovery?</Accordion.Header>
                                 <Accordion.Body>

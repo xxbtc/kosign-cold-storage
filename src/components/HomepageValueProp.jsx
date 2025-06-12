@@ -131,7 +131,7 @@ function HomepageValueProp() {
                                         </div>
                                         
                                         <div className="breakthrough-highlight">
-                                            <strong>💡 The Result:</strong> Your family and friends become part of your security foundation, not a weakness. Distributed keys ensure no single point of failure.
+                                            <strong>💡 The Result:</strong> Make unlimited secure backup copies and store them wherever you want - they're useless without the distributed keys. No single disaster can lock you out.
                                         </div>
                                     </div>
                                 </div>

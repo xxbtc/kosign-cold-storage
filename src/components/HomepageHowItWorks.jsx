@@ -24,8 +24,8 @@ function HomepageHowItWorks() {
                     <Col xl={4} lg={4} md={6} sm={12} className="mb-4">
                         <div className="step-card">
                             <div className="step-number">2</div>
-                            <h3>Print</h3>
-                            <p>Print your vault and keys (or move them to USB drives). Physically distribute copies across locations or trusted people/services.</p>
+                            <h3>Print & Distribute</h3>
+                            <p>Print copies of your encrypted vault and keys. Store them in different secure locations or with trusted people to protect against loss, fire, or natural disasters.</p>
                         </div>
                     </Col>
                     
