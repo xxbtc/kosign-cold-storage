@@ -13,6 +13,7 @@ import LegalPage from "./pages/LegalPage";
 import PricingPage from "./pages/PricingPage";
 import PaymentPage from "./pages/PaymentPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import SecurityPage from "./pages/SecurityPage";
 
 function App() {
     let location = useLocation();
@@ -35,6 +36,7 @@ function App() {
 
                 <Route exact path="/unlock" element={<UnlockPage/>}/>
                 <Route exact path="/pricing" element={<PricingPage />}/>
+                <Route exact path="/security" element={<SecurityPage />}/>
                 <Route exact path="/payment" element={<PaymentPage />}/>
                 <Route exact path="/legal" element={<LegalPage />}/>
                 <Route exact path="/privacy" element={<PrivacyPage />}/>
