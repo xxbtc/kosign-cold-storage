@@ -115,15 +115,15 @@ function Homepage(props) {
                             <div className="hero-proof-bullets">
                                 <div className="proof-bullet">
                                     <FaCheck className="proof-icon" />
-                                    <span>Open source encryption</span>
+                                    <span>Back-up critical data</span>
                                 </div>
                                 <div className="proof-bullet">
                                     <FaCheck className="proof-icon" />
-                                    <span>Store passwords, digital assets, and critical data</span>
+                                    <span>Social recovery & inheritance</span>
                                 </div>
                                 <div className="proof-bullet">
                                     <FaCheck className="proof-icon" />
-                                    <span>Social recovery and secure inheritance</span>
+                                    <span>Open source unlock app</span>
                                 </div>
                             </div>
 
