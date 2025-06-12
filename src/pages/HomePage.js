@@ -29,6 +29,7 @@ import HomepageTestimonials from '../components/HomepageTestimonials';
 import HomepagePricing from '../components/HomepagePricing';
 import HomepageValueProp from '../components/HomepageValueProp';
 import HomepageHowItWorks from '../components/HomepageHowItWorks';
+import HomepageEncryptedPaperBenefits from '../components/HomepageEncryptedPaperBenefits';
 import {FaCheck} from 'react-icons/fa';
 import Cookies from "universal-cookie";
 import {FaTwitter, FaMedium} from 'react-icons/fa';
@@ -151,6 +152,9 @@ function Homepage(props) {
 
             {/* Core Value Proposition */}
             <HomepageValueProp />
+
+            {/* Encrypted Paper Benefits Section
+            <HomepageEncryptedPaperBenefits /> */}
 
             {/* How It Works Section */}
             <HomepageHowItWorks />

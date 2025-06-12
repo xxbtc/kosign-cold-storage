@@ -1431,13 +1431,12 @@ body {
 }
 
 .insight-header h4 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #ffffff;
     margin-bottom: 1rem;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    font-size: 1.6rem;
 }
 
 .insight-header p {
@@ -1446,288 +1445,118 @@ body {
     margin: 0;
 }
 
-.paradox-flow {
-  display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 0px;
-   
-}
-
-.flow-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.breakthrough-highlight {
+    margin-top: 2rem;
     text-align: center;
-    padding: 0.75rem;
-    background: #222222;
+    padding: 1.2rem 1rem;
+    background: linear-gradient(135deg, rgba(23, 134, 255, 0.1) 0%, rgba(76, 175, 80, 0.1) 100%);
     border-radius: 12px;
-    width:30%;
-    min-height: 160px;
-    transition: all 0.3s ease;
+    color: #e5e5e5;
+    line-height: 1.6;
+    font-size: 1rem;
+    border: 1px solid rgba(23, 134, 255, 0.2);
 }
 
-.flow-step.danger {
-    border: 2px solid rgba(244, 67, 54, 0.3);
+/* Foundational Problems Grid (Accordion) */
+.foundational-problems-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem 2.2rem;
+    margin: 2rem 0 1.5rem 0;
 }
-
-.flow-step:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(244, 67, 54, 0.2);
+.foundational-problem {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: #232a36;
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+    box-shadow: 0 2px 8px rgba(23,134,255,0.05);
+    border: 1.5px solid #232a36;
 }
-
-.step-emoji {
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
+.foundational-problem .problem-icon {
+    font-size: 1.7rem;
+    color: #1786ff;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
 }
-
-.step-text strong {
-    display: block;
-    color: #ffffff;
-    font-size: 0.9rem;
+.foundational-problem strong {
+    color: #fff;
+    font-size: 1.08rem;
     font-weight: 700;
     margin-bottom: 0.15rem;
-    line-height: 1.1;
-    word-wrap: break-word;
-    hyphens: auto;
+    display: block;
 }
-
-.step-text span {
+.foundational-problem .problem-desc {
     color: #b0b0b0;
-    font-size: 0.75rem;
+    font-size: 0.97rem;
+    margin-top: 0.1rem;
+    font-weight: 400;
 }
 
-.flow-arrow {
-    font-size: 1.25rem;
-    color: #f44336;
-    font-weight: bold;
-    margin: 0 0.1rem;
-}
-
-.solution-showcase {
-    margin-bottom: 2rem;
-}
-
-.solution-showcase h4 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #ffffff;
-  text-align: center;
-    margin-bottom: 2rem;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    font-size: 1.6rem;
-}
-
-.solution-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-}
-
-.solution-item {
-    background: #222222;
-    border: 2px solid rgba(76, 175, 80, 0.3);
-    border-radius: 12px;
-    padding: 1.5rem;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.solution-item:hover {
-    transform: translateY(-2px);
-    border-color: #4caf50;
-    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2);
-}
-
-.solution-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-.solution-content h5 {
-    font-size: 1.1rem;
-  font-weight: 700;
-    color: #ffffff;
-  margin-bottom: 0.5rem;
-}
-
-.solution-content p {
-    color: #b0b0b0;
-    font-size: 0.9rem;
-    margin: 0;
-    line-height: 1.4;
-}
-
-/* Responsive adjustments for new components */
+/* Mobile responsiveness for foundational problems */
 @media (max-width: 768px) {
-    .paradox-flow {
-    flex-direction: column;
+    .foundational-problems-grid {
+        grid-template-columns: 1fr;
         gap: 1rem;
-        padding: 1.5rem;
+        margin: 1.5rem 0 1rem 0;
     }
-    
-    .flow-arrow {
-        transform: rotate(90deg);
-        margin: 0.5rem 0;
-    }
-    
-    .flow-step {
-        width: 100% !important;
-        min-width: none;
+    .foundational-problem {
         padding: 1rem;
+        gap: 0.75rem;
     }
-    
-    .solution-grid {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 1rem;
-    }
-    
-    .solution-item {
-        padding: 1rem;
-    }
-    
-    .insight-header h4 {
+    .foundational-problem .problem-icon {
         font-size: 1.5rem;
+        margin-top: 0;
     }
-    
-    .solution-showcase h4 {
-        font-size: 1.5rem;
+    .foundational-problem strong {
+        font-size: 1rem;
+    }
+    .foundational-problem .problem-desc {
+        font-size: 0.9rem;
     }
 }
 
 @media (max-width: 480px) {
-    .solution-grid {
-        grid-template-columns: 1fr;
+    .foundational-problems-grid {
+        gap: 0.75rem;
+        margin: 1rem 0;
     }
-    
-    .paradox-flow {
-        padding: 1rem;
+    .foundational-problem {
+        padding: 0.75rem;
+        gap: 0.5rem;
+        flex-direction: column;
+        text-align: center;
     }
-    
-    .flow-step {
-        width: 100% !important;
-        min-width: none;
-        padding: 0.8rem;
+    .foundational-problem .problem-icon {
+        font-size: 1.25rem;
+        align-self: center;
+        margin-bottom: 0.25rem;
     }
-    
-    .step-emoji {
-        font-size: 1.5rem;
+    .foundational-problem strong {
+        font-size: 0.95rem;
+        text-align: center;
     }
-}
-
-/* Hardware Wallet specific styles */
-.flow-step.success {
-    border: 2px solid rgba(76, 175, 80, 0.3);
-}
-
-.flow-step.warning {
-    border: 2px solid rgba(255, 152, 0, 0.3);
-}
-
-.flow-step.success:hover {
-    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2);
-}
-
-.flow-step.warning:hover {
-    box-shadow: 0 4px 16px rgba(255, 152, 0, 0.2);
-}
-
-.hw-comparison {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.comparison-section {
-    background: #222222;
-    border-radius: 16px;
-    padding: 1.5rem;
-    border: 2px solid rgba(244, 67, 54, 0.3);
-}
-
-.comparison-section.success {
-    border-color: rgba(76, 175, 80, 0.3);
-    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(23, 134, 255, 0.02) 100%);
-}
-
-.comparison-section h4 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 1.25rem;
-    text-align: center;
-}
-
-.comparison-points {
-  display: flex;
-  flex-direction: column;
-    gap: 1rem;
-}
-
-.point-item {
-    display: flex;
-  align-items: center;
-    gap: 1rem;
-    padding: 0.75rem;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.point-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateX(4px);
-}
-
-.point-icon {
-    font-size: 1.25rem;
-    flex-shrink: 0;
-}
-
-.point-item span:last-child {
-    color: #b0b0b0;
-    font-size: 0.95rem;
-  font-weight: 500;
-}
-
-/* Responsive adjustments for hardware wallet section */
-@media (max-width: 768px) {
-    .hw-comparison {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .comparison-section {
-        padding: 1.5rem;
-    }
-    
-    .comparison-section h4 {
-        font-size: 1.2rem;
-    }
-    
-    .point-item {
-        padding: 0.5rem;
+    .foundational-problem .problem-desc {
+        font-size: 0.85rem;
+        text-align: center;
     }
 }
 
 /* Inheritance section specific styles */
 .inheritance-challenge {
-  display: flex;
+    display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 2rem;
-    background: rgba(244, 67, 54, 0.05);
-    border-radius: 16px;
-    border: 1px solid rgba(244, 67, 54, 0.2);
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    border: none;
 }
 
 .challenge-item {
     display: flex;
-  align-items: center;
+    align-items: center;
     gap: 1.5rem;
     padding: 1rem;
     background: #222222;
@@ -1749,14 +1578,21 @@ body {
 .challenge-text strong {
     display: block;
     color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 700;
     margin-bottom: 0.25rem;
 }
 
 .challenge-text span {
     color: #b0b0b0;
     font-size: 0.9rem;
+}
+
+.quorum-example-text {
+    color: #fff;
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+    text-align: center;
 }
 
 .quorum-showcase {
@@ -1795,17 +1631,17 @@ body {
 }
 
 .key-holders {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
 }
 
 .key-holder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 1rem;
     background: #222222;
     border-radius: 12px;
@@ -1821,19 +1657,19 @@ body {
 }
 
 .holder-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
 }
 
 .key-holder span:last-child {
     color: #e5e5e5;
     font-size: 0.85rem;
     font-weight: 600;
-  text-align: center;
+    text-align: center;
 }
 
 .quorum-result {
-  display: flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
@@ -1852,7 +1688,7 @@ body {
 .quorum-security {
     color: #b0b0b0;
     font-size: 0.9rem;
-  text-align: center;
+    text-align: center;
 }
 
 .inheritance-benefits {
@@ -1862,7 +1698,7 @@ body {
 }
 
 .benefit-item {
-  display: flex;
+    display: flex;
     align-items: flex-start;
     gap: 1rem;
     padding: 1.5rem;
@@ -1886,7 +1722,7 @@ body {
 
 .benefit-content h5 {
     font-size: 1.1rem;
-  font-weight: 700;
+    font-weight: 700;
     color: #ffffff;
     margin-bottom: 0.5rem;
 }
@@ -1957,7 +1793,7 @@ body {
     
     .challenge-item {
         flex-direction: column;
-  text-align: center;
+        text-align: center;
         gap: 0.5rem;
         padding: 1rem;
     }
@@ -1969,14 +1805,14 @@ body {
 
 /* Impossible scenarios styles */
 .impossible-scenarios {
-  display: flex;
+    display: flex;
     flex-direction: column;
     gap: 1.5rem;
     margin: 2rem 0;
 }
 
 .scenario-card {
-  display: flex;
+    display: flex;
     align-items: flex-start;
     gap: 1.5rem;
     padding: 2rem;
@@ -2014,16 +1850,16 @@ body {
 }
 
 .solution-answers {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
     gap: 1.5rem;
     margin-top: 2rem;
 }
 
 .answer-item {
     display: flex;
-  align-items: center;
-  gap: 1.5rem;
+    align-items: center;
+    gap: 1.5rem;
     padding: 1.5rem;
     background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(23, 134, 255, 0.05) 100%);
     border: 2px solid rgba(76, 175, 80, 0.3);
@@ -2079,5 +1915,385 @@ body {
     
     .answer-text {
         font-size: 1rem;
-  }
+    }
+}
+
+.challenge-card {
+    background: linear-gradient(135deg, #181c22 0%, #232a36 100%);
+    color: #e5e5e5;
+    border-radius: 14px;
+    border: 1.5px solid #232a36;
+    box-shadow: 0 2px 8px rgba(23,134,255,0.07);
+    padding: 1.1rem 1.5rem;
+    margin-bottom: 1.2rem;
+}
+.challenge-card h5 {
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.challenge-card .challenge-icon {
+    font-size: 2.2rem;
+    color: #1786ff;
+    margin-bottom: 1rem;
+}
+.challenge-card .problem strong,
+.challenge-card .solution strong {
+    color: #4caf50;
+}
+.challenge-card .problem p,
+.challenge-card .solution p {
+    color: #b0b0b0;
+}
+.challenge-card:hover {
+    box-shadow: 0 8px 32px rgba(23, 134, 255, 0.18);
+    border-left: 4px solid #4caf50;
+}
+
+/* Core Problems Feature Bar */
+.core-problems-bar {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+}
+.core-problem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, #181c22 0%, #232a36 100%);
+    border-radius: 14px;
+    padding: 1.1rem 1.7rem;
+    min-width: 210px;
+    box-shadow: 0 2px 8px rgba(23,134,255,0.07);
+    border: 1.5px solid #232a36;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+.core-problem:hover {
+    border-color: #1786ff;
+    box-shadow: 0 6px 24px rgba(23, 134, 255, 0.13);
+}
+.core-icon {
+    font-size: 2.1rem;
+    color: #1786ff;
+    flex-shrink: 0;
+}
+.core-problem strong {
+    color: #fff;
+    font-size: 1.08rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+.core-desc {
+    color: #b0b0b0;
+    font-size: 0.97rem;
+    margin-top: 0.18rem;
+    font-weight: 400;
+}
+@media (max-width: 900px) {
+    .core-problems-bar {
+        gap: 1.2rem;
+    }
+    .core-problem {
+        min-width: 160px;
+        padding: 1rem 1.1rem;
+    }
+}
+@media (max-width: 600px) {
+    .core-problems-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    .core-problem {
+        width: 100%;
+        min-width: 0;
+        justify-content: flex-start;
+    }
+}
+
+/* Refined Challenge Cards (Accordion) */
+.challenge-card.refined {
+    background: linear-gradient(135deg, #181c22 0%, #232a36 100%);
+    color: #e5e5e5;
+    border-radius: 14px;
+    border: 1.5px solid #232a36;
+    box-shadow: 0 2px 8px rgba(23,134,255,0.07);
+    padding: 1.1rem 1.5rem;
+    margin-bottom: 1.2rem;
+}
+.challenge-card.refined .challenge-header strong,
+.challenge-card.refined .challenge-icon {
+    color: #7ecfff;
+}
+.challenge-card.refined .problem,
+.challenge-card.refined .solution {
+    color: #e5e5e5;
+    font-size: 1.01rem;
+    margin-bottom: 0.3rem;
+}
+.challenge-card.refined .problem b,
+.challenge-card.refined .solution b {
+    color: #4caf50;
+    font-weight: 700;
+}
+.benefits-list.refined {
+    list-style: none;
+    padding: 0;
+    margin: 1.2rem 0 0 0;
+}
+.benefits-list.refined li {
+    color: #e5e5e5;
+    font-size: 1.01rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+.benefits-list.refined .benefit-icon {
+    color: #4caf50;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+/* Hardware Wallet Comparison Section (keep) */
+.hw-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+.comparison-section {
+    background: #222222;
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 2px solid rgba(244, 67, 54, 0.3);
+}
+.comparison-section.success {
+    border-color: rgba(76, 175, 80, 0.3);
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(23, 134, 255, 0.02) 100%);
+}
+.comparison-section h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+    text-align: center;
+}
+.comparison-points {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.point-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+.point-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(4px);
+}
+.point-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+.point-item span:last-child {
+    color: #b0b0b0;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+@media (max-width: 768px) {
+    .hw-comparison {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    .comparison-section {
+        padding: 1.5rem;
+    }
+    .comparison-section h4 {
+        font-size: 1.2rem;
+    }
+    .point-item {
+        padding: 0.5rem;
+    }
+}
+
+/* Hardware Wallet Paradox Flow (restore and keep) */
+.paradox-flow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0px;
+}
+.flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.75rem;
+    background: #222222;
+    border-radius: 12px;
+    width: 30%;
+    min-height: 160px;
+    transition: all 0.3s ease;
+}
+.flow-step.danger {
+    border: 2px solid rgba(244, 67, 54, 0.3);
+}
+.flow-step.success {
+    border: 2px solid rgba(76, 175, 80, 0.3);
+}
+.flow-step.warning {
+    border: 2px solid rgba(255, 152, 0, 0.3);
+}
+.flow-step:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(244, 67, 54, 0.2);
+}
+.step-emoji {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+.step-text strong {
+    display: block;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+    line-height: 1.1;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+.step-text span {
+    color: #b0b0b0;
+    font-size: 0.75rem;
+}
+.flow-arrow {
+    font-size: 1.25rem;
+    color: #f44336;
+    font-weight: bold;
+    margin: 0 0.1rem;
+}
+@media (max-width: 768px) {
+    .paradox-flow {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+    .flow-arrow {
+        transform: rotate(90deg);
+        margin: 0.5rem 0;
+    }
+    .flow-step {
+        width: 100% !important;
+        min-width: none;
+        padding: 1rem;
+    }
+}
+@media (max-width: 480px) {
+    .flow-step {
+        width: 100% !important;
+        min-width: none;
+        padding: 0.8rem;
+    }
+    .step-emoji {
+        font-size: 1.5rem;
+    }
+}
+
+/* Encrypted Paper Benefits Section - Compact */
+.encrypted-paper-benefits-section {
+    background: #0a0a0a;
+    padding: 2rem 0;
+    position: relative;
+}
+
+.encrypted-benefits-compact {
+    text-align: center;
+}
+
+.encrypted-benefits-compact-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    font-family: "Graphik-Bold", system-ui, -apple-system, sans-serif;
+}
+
+.encrypted-benefits-inline {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.encrypted-benefit-compact {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left;
+}
+
+.encrypted-benefit-icon-small {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.encrypted-benefit-compact div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.encrypted-benefit-compact strong {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.encrypted-benefit-compact span {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .encrypted-benefits-inline {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    
+    .encrypted-benefit-compact {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .encrypted-benefits-compact-title {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .encrypted-paper-benefits-section {
+        padding: 1.5rem 0;
+    }
+    
+    .encrypted-benefits-compact-title {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+    
+    .encrypted-benefits-inline {
+        gap: 1rem;
+    }
 }

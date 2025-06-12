@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+// import logoIMG from "../images/kosign-trefoil-small.png";
 
 function HomepageValueProp() {
     // Handle expandable sections
@@ -37,11 +38,12 @@ function HomepageValueProp() {
     return (
         <section className="value-prop-section">
             <Container>
+                {/* Title Section */}
                 <Row className="text-center mb-5">
                     <Col>
                         <h2 className="value-prop-title">Bulletproof Backup for Your Digital Life</h2>
                         <p className="value-prop-subtitle">
-                            Distributed paper vaults that outlast hardware failures, company bankruptcies, and generational changes
+                            Vaults that outlast hardware failures, company bankruptcies, and generational changes
                         </p>
                         <div className="open-source-guarantee">
                             <div className="guarantee-badge">
@@ -51,10 +53,9 @@ function HomepageValueProp() {
                                 </span>
                             </div>
                         </div>
-                        
                     </Col>
                 </Row>
-                
+
                 {/* Accordion Cards */}
                 <Row className="justify-content-center">
                     <Col lg={10} xl={10}>
@@ -78,61 +79,56 @@ function HomepageValueProp() {
                                 
                                 <div className="accordion-body">
                                     <div className="accordion-detail-content">
-                                        <div className="problem-insight">
+                                        <div>
                                             <div className="insight-header">
-                                                <h4>🤔 The Impossible Questions</h4>
-                                                <p>Every security setup leads to these unanswerable questions:</p>
+                                                {/* <h4>🔒 The Foundational Security Paradox</h4> */}
+                                                <p>Every digital security setup leads to the same impossible questions:</p>
                                             </div>
-                                            
-                                            <div className="impossible-scenarios">
-                                                <div className="scenario-card">
-                                                    <div className="scenario-icon">🔐</div>
-                                                    <div className="scenario-content">
-                                                        <h5>"Where do I store my password manager's master password?"</h5>
-                                                        <p>
-                                                        Another password manager? Then where's THAT password?</p>
+                                            <div className="foundational-problems-grid">
+                                                <div className="foundational-problem">
+                                                    <span className="problem-icon">🔐</span>
+                                                    <div>
+                                                        <strong>Master Password Trap</strong>
+                                                        <div className="problem-desc">Where do you store your password manager's master password?</div>
                                                     </div>
                                                 </div>
-                                                
-                                                <div className="scenario-card">
-                                                    <div className="scenario-icon">📱</div>
-                                                    <div className="scenario-content">
-                                                        <h5>"Where do I store my 2FA backup codes?"</h5>
-                                                        <p>In my password manager? But I need 2FA to GET INTO my password manager!</p>
+                                                <div className="foundational-problem">
+                                                    <span className="problem-icon">📱</span>
+                                                    <div>
+                                                        <strong>2FA Backup Problem</strong>
+                                                        <div className="problem-desc">If you lose your phone, you lose your 2FA codes—and access to your accounts.</div>
                                                     </div>
                                                 </div>
-                                                
-                                                <div className="scenario-card">
-                                                    <div className="scenario-icon">💎</div>
-                                                    <div className="scenario-content">
-                                                        <h5>"Where do I safely store my crypto seed phrase?"</h5>
-                                                        <p>Cleartext paper? Risky if found. Split it in half? double the trouble.</p>
+                                                <div className="foundational-problem">
+                                                    <span className="problem-icon">💎</span>
+                                                    <div>
+                                                        <strong>Seed Phrase Paradox</strong>
+                                                        <div className="problem-desc">Split or copy your seed phrase? Both increase risk.</div>
+                                                    </div>
+                                                </div>
+                                                <div className="foundational-problem">
+                                                    <span className="problem-icon">🔑</span>
+                                                    <div>
+                                                        <strong>Encryption Key Dilemma</strong>
+                                                        <div className="problem-desc">Where do you put keys that can't be stored on the device they protect?</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        
-                                        <div className="solution-showcase">
-                                            <h4>✅ Kosign Answers Every Question</h4>
-                                            <div className="solution-answers">
-                                                <div className="answer-item">
-                                                    <span className="answer-icon">🔐</span>
-                                                    <span className="answer-text">Store master passwords in encrypted passwordless vaults with distributed keys</span>
-                                                </div>
-                                                <div className="answer-item">
-                                                    <span className="answer-icon">📱</span>
-                                                    <span className="answer-text">Access 2FA codes independently - no circular dependencies</span>
-                                                </div>
-                                                <div className="answer-item">
-                                                    <span className="answer-icon">🔄</span>
-                                                    <span className="answer-text">Make unlimited secure backup copies - they're useless without distributed keys</span>
-                                                </div>
+                                            <div className="breakthrough-highlight">
+                                                <span className="breakthrough-icon" style={{display:'inline-block',verticalAlign:'middle',marginRight:'0.5em'}}>
+                                                    <span role="img" aria-label="target" style={{fontSize: '1.5em', verticalAlign: 'middle'}}>🎯</span>
+                                                </span>
+                                                <strong>A Safer Way Forward:</strong> Encrypted paper vaults break the loop—safe to duplicate, store anywhere, and always recoverable.
                                             </div>
                                         </div>
-                                        
-                                        <div className="breakthrough-highlight">
-                                            <strong>💡 The Result:</strong> Make unlimited secure backup copies and store them wherever you want - they're useless without the distributed keys. No single disaster can lock you out.
-                                        </div>
+                                        {/* <div className="key-benefits refined">
+                                            <h4>The Power of Encrypted Paper</h4>
+                                            <ul className="benefits-list refined">
+                                                <li><span className="benefit-icon">🔒</span> <b>Safe to Duplicate:</b> Make as many backup copies as you want—they're all encrypted.</li>
+                                                <li><span className="benefit-icon">🏢</span> <b>Store Anywhere:</b> Safety deposit boxes, home safes, trusted people—your choice.</li>
+                                                <li><span className="benefit-icon">🛡️</span> <b>Disaster Proof:</b> No single fire, flood, or loss can lock you out.</li>
+                                            </ul>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +153,7 @@ function HomepageValueProp() {
                                     <div className="accordion-detail-content">
                                         <div className="problem-insight">
                                             <div className="insight-header">
-                                                <h4>💎 The Hardware Wallet Paradox</h4>
+                                                {/* <h4>💎 The Hardware Wallet Paradox</h4> */}
                                                 <p>Hardware wallets are the "gold standard" for crypto security, but they have a <strong>massive blind spot</strong></p>
                                             </div>
                                             
@@ -240,7 +236,7 @@ function HomepageValueProp() {
                                         <div className="value-icon">👨‍👩‍👧‍👦</div>
                                         <div className="accordion-text">
                                             <h3>Digital Inheritance Without Trust</h3>
-                                            <p>Give vault copies to family without worrying about their security practices. Distributed keys with social recovery keep your assets secure until needed.</p>
+                                            <p>Leave secure access for family or trusted people—without giving up control today. Distributed keys keep your assets safe until the time is right.</p>
                                         </div>
                                     </div>
                                     <div className="accordion-toggle">
@@ -309,7 +305,7 @@ function HomepageValueProp() {
                                                     </div>
                                                 </div>
                                                 <div className="quorum-result">
-                                                    <span className="quorum-math">Vault + keys = access</span>
+                                                    <span className="quorum-math">Vault + Any 3 keys = Access</span>
                                                     <span className="quorum-security">No single person can access alone.</span>
                                                 </div>
                                             </div>
