@@ -119,7 +119,7 @@ const SecurityPreparationStep = ({ isOnline, onContinue, onBack }) => {
                                     <p className="checklist-description">
                                         {isOnline && !proceedOnline ? (
                                             <>
-                                                Turn on airplane mode or disconnect WiFi for maximum security.{' '}
+                                                Disconnect network cables, turn off wifi, bluetooth and mobile data for maximum security.{' '}
                                                 <button 
                                                     className="proceed-anyway-link"
                                                     onClick={(e) => {

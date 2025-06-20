@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { FaLock, FaCheckCircle, FaPrint, FaDownload, FaShieldAlt, FaExclamationTriangle, FaArrowRight } from 'react-icons/fa';
 import PDFVaultBackup from './PDFVaultBackup';
 import PDFKeyBackup from './PDFKeyBackup';
+import { ProFeatureService } from '../services/ProFeatureService';
 
 const VaultDownloadSection = ({
     hasPressedVaultPrint,
@@ -32,6 +33,11 @@ const VaultDownloadSection = ({
     const [currentStep, setCurrentStep] = useState(1);
     const [preferredMethod, setPreferredMethod] = useState(null); // 'print' or 'download'
     const [allPrinted, setAllPrinted] = useState(false);
+
+    // Clear pro session when vault creation is complete
+    useEffect(() => {
+        ProFeatureService.clearProSession();
+    }, []);
 
     // Auto-scroll to top when step changes
     useEffect(() => {

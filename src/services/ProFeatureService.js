@@ -8,6 +8,11 @@ class ProFeatureService {
     }
 
     static async isProUser() {
+        // Check for active pro session first (after payment)
+        if (this.hasActiveProSession()) {
+            return true;
+        }
+
         // Check if there's a pending license
         const isPending = localStorage.getItem('kosign_pro_pending') === 'true';
         const licenseKey = localStorage.getItem('kosign_pro_pending_key');
@@ -38,7 +43,17 @@ class ProFeatureService {
 
     // Add a synchronous version for immediate checks (but should be used sparingly)
     static isProUserCached() {
+        // Check for active pro session first
+        if (this.hasActiveProSession()) {
+            return true;
+        }
+        // Fall back to pending license check
         return localStorage.getItem('kosign_pro_pending') === 'true';
+    }
+
+    // Check if user has an active pro session (after payment completion)
+    static hasActiveProSession() {
+        return localStorage.getItem('kosign_pro_session_active') === 'true';
     }
 
     static getProStatus() {
@@ -91,8 +106,14 @@ class ProFeatureService {
             const data = await PaymentService.consumeLicense(pendingKey);
 
             if (data.result) {
-                // Clear ALL pro status - license is now consumed and can't be used again
-                this.clearProStatus();
+                // Clear the consumable license data
+                localStorage.removeItem('kosign_pro_pending');
+                localStorage.removeItem('kosign_pro_pending_key');
+                localStorage.removeItem('kosign_pro_data');
+                
+                // Set active pro session (persists until vault creation complete)
+                localStorage.setItem('kosign_pro_session_active', 'true');
+                
                 return { success: true };
             } else {
                 return { success: false, error: data.msg };
@@ -104,11 +125,16 @@ class ProFeatureService {
     }
 
     static clearProStatus() {
-        // Remove all pro-related localStorage items
+        // Remove all pro-related localStorage items (for license validation failures)
         localStorage.removeItem('kosign_pro_active');
         localStorage.removeItem('kosign_pro_pending');
         localStorage.removeItem('kosign_pro_pending_key');
         localStorage.removeItem('kosign_pro_data');
+    }
+
+    static clearProSession() {
+        // Clear the pro session (called when vault creation is complete)
+        localStorage.removeItem('kosign_pro_session_active');
     }
 
     static getCurrentLimits() {

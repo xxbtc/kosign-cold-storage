@@ -559,6 +559,9 @@ function CreateVault(props) {
                             onPaymentSuccess={(licenseKey) => {
                                 // License key is already stored in localStorage by the component
                                 setShowProUpgrade(false);
+                                // Update limits immediately after payment
+                                const currentLimits = ProFeatureService.getCurrentLimits();
+                                setMaxChars(currentLimits.maxStorage);
                                 // Continue with vault creation
                                 setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
                                 setWizardStep(2); // Go to security preparation first
@@ -566,6 +569,9 @@ function CreateVault(props) {
                             onLicenseActivated={() => {
                                 // New callback for manual license activation
                                 setShowProUpgrade(false);
+                                // Update limits immediately after license activation
+                                const currentLimits = ProFeatureService.getCurrentLimits();
+                                setMaxChars(currentLimits.maxStorage);
                                 setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
                                 setWizardStep(2); // Go to security preparation
                             }}

@@ -17,7 +17,7 @@ function HomepageHowItWorks() {
                         <div className="step-card">
                             <div className="step-number">1</div>
                             <h3>Go Offline</h3>
-                            <p>Turn on airplane mode, then add passwords, crypto keys, and important information to your vault.</p>
+                            <p>Disconnect your network, then add passwords, crypto keys, and important information to your vault.</p>
                         </div>
                     </Col>
                     

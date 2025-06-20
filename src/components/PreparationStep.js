@@ -149,7 +149,7 @@ const PreparationStep = ({ isOnline, onContinue }) => {
                                 <p className="checklist-description">
                                     {isOnline && !proceedOnline ? (
                                         <>
-                                            Turn on airplane mode or disconnect your WiFi and mobile data.{' '}
+                                            Disconnect network cables, turn off wifi, bluetooth and mobile data.{' '}
                                             <button 
                                                 className="proceed-anyway-link"
                                                 onClick={(e) => {
