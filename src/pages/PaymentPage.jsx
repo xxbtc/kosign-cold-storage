@@ -7,6 +7,7 @@ import Layout from '../components/Layout';
 import Navbar from '../components/NavbarTop';
 import Footer from '../components/Footer';
 import { PaymentService } from '../services/PaymentService';
+import { AnalyticsService } from '../services/AnalyticsService';
 import '../style/index.css';
 import '../style/payment.css';
 
@@ -303,7 +304,10 @@ function PaymentPage() {
                                         <div className="success-actions">
                                             <button 
                                                 className="btn btn-primary btn-lg me-3"
-                                                onClick={() => navigate('/create')}
+                                                onClick={() => {
+                                                    AnalyticsService.trackCTAClick('payment');
+                                                    navigate('/create');
+                                                }}
                                             >
                                                 Create Your Pro Vault
                                             </button>

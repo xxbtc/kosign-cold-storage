@@ -19,7 +19,7 @@ function App() {
     let location = useLocation();
     
     useEffect(() => {
-        let pageTitle = 'cold storage data vaults';
+        let pageTitle = 'Cold Storage Vault for Digital Assets and Passwords';
         if (location.pathname.split("/")[1]) {
             let tmpTitle = location.pathname.split("/")[1]; //without the "/"
             pageTitle = tmpTitle.charAt(0).toUpperCase() + tmpTitle.slice(1)

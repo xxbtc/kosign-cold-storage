@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ProFeatureService } from '../services/ProFeatureService';
+import { AnalyticsService } from '../services/AnalyticsService';
 
 function HomepagePricing({ pricingRef }) {
     const navigate = useNavigate();
@@ -33,7 +34,10 @@ function HomepagePricing({ pricingRef }) {
                                 <li>✓ Limited storage ({freeLimits.maxStorage} chars)</li>
                                 <li>✓ Basic thresholds (1-of-1, 2-of-2)</li>
                             </ul>
-                            <button className="pricing-cta primary" onClick={() => navigate('/create')}>
+                            <button className="pricing-cta primary" onClick={() => {
+                                AnalyticsService.trackCTAClick('pricing');
+                                navigate('/create');
+                            }}>
                                 Start Free
                             </button>
                             <p className="pricing-note">Perfect for most users • No credit card required</p>

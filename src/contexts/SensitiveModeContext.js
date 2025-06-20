@@ -33,6 +33,7 @@ export const SensitiveModeProvider = ({ children }) => {
         if (!isSensitiveMode) { // Only enter if not already in sensitive mode
             setIsSensitiveMode(true);
             removeAnalyticsScripts();
+            window.kosignSensitiveMode = true; // Set global flag for AnalyticsService
             console.log('🔒 Entered sensitive mode - analytics disabled');
         }
     }, [isSensitiveMode, removeAnalyticsScripts]);
@@ -40,6 +41,7 @@ export const SensitiveModeProvider = ({ children }) => {
     const exitSensitiveMode = useCallback(() => {
         if (isSensitiveMode) { // Only exit if currently in sensitive mode
             setIsSensitiveMode(false);
+            window.kosignSensitiveMode = false; // Clear global flag
             console.log('🔓 Exited sensitive mode - analytics re-enabled');
         }
     }, [isSensitiveMode]);

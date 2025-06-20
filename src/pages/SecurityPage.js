@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 import '../style/index.css';
 import '../style/homepage.css';
 import '../style/security.css';
+import { AnalyticsService } from '../services/AnalyticsService';
 
 function SecurityPage() {
     const navigate = useNavigate();
@@ -666,7 +667,10 @@ function SecurityPage() {
                             </div>
                             
                             <div className="security-cta-section">
-                                <button className="security-cta-primary" onClick={() => navigate('/create')}>
+                                <button className="security-cta-primary" onClick={() => {
+                                    AnalyticsService.trackCTAClick('security');
+                                    navigate('/create');
+                                }}>
                                     Create Your Secure Vault
                                 </button>
                                 <p className="security-cta-subtitle">

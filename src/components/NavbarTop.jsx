@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { AnalyticsService } from '../services/AnalyticsService'
 import {
     Collapse,
     Navbar,
@@ -17,6 +18,7 @@ const NavbarTop = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
     const location = useLocation();
+    const navigate = useNavigate();
 
     return (
         <div className={'navbarWrapper'}>
@@ -43,10 +45,16 @@ const NavbarTop = (props) => {
                                 <Link className={"nav-link" + (location.pathname === '/pricing' ? ' active' : '')} to={'/pricing'}>Pricing</Link>
                             </NavItem>
                             <NavItem className={'nav-item'}>
-                                <Link className={
-                                    "nav-link" +
-                                    (location.pathname === '/create' ? ' active' : ' nav-link-cta')
-                                } to={'/create'}>Create Vault</Link>
+                                <Link 
+                                    className={
+                                        "nav-link" +
+                                        (location.pathname === '/create' ? ' active' : ' nav-link-cta')
+                                    } 
+                                    to={'/create'}
+                                    onClick={() => AnalyticsService.trackCTAClick('navbar')}
+                                >
+                                    Create Vault
+                                </Link>
                             </NavItem>
                         </Nav>
                     </Collapse>

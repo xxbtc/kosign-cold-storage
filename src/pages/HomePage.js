@@ -35,6 +35,7 @@ import {FaCheck} from 'react-icons/fa';
 import Cookies from "universal-cookie";
 import {FaTwitter, FaMedium} from 'react-icons/fa';
 import HomepageReasonsNew from "../components/HomepageReasonsNew";
+import { AnalyticsService } from '../services/AnalyticsService';
 
 
 function Homepage(props) {
@@ -130,7 +131,10 @@ function Homepage(props) {
                             </div>
 
                             <div className="hero-cta-group">
-                                <button className="hero-cta-primary" onClick={() => navigate('/create')}>
+                                <button className="hero-cta-primary" onClick={() => {
+                                    AnalyticsService.trackCTAClick('homepage_hero');
+                                    navigate('/create');
+                                }}>
                                     Create Your Vault
                                 </button>
                             </div>
@@ -212,7 +216,10 @@ function Homepage(props) {
                                 Secure your passwords, crypto, and digital legacy in 10 minutes.
                             </p>
                             <div className="final-cta-buttons">
-                                <button className="final-cta-primary" onClick={() => navigate('/create')}>
+                                <button className="final-cta-primary" onClick={() => {
+                                    AnalyticsService.trackCTAClick('homepage_final');
+                                    navigate('/create');
+                                }}>
                                     Create Your Vault Now
                                 </button>
                             </div>
