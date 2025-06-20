@@ -60,6 +60,12 @@ const PDFKeyBackup = (props) => {
             padding: 0,
             overflow: 'hidden',
         },
+        printPageBreak: {
+            pageBreakBefore: 'always',
+            pageBreakInside: 'avoid',
+            breakInside: 'avoid',
+            breakBefore: 'page',
+        },
         page: {
             flexDirection: 'column',
             backgroundColor: '#fff',
@@ -325,8 +331,10 @@ Key Alias:          `}
     };
 
     return (
-        <div className="pagebreak" 
-             style={props.qrtype === 'printable' ? styles.printPage : styles.downloadPage}>
+        <div style={{
+                 ...(props.qrtype === 'printable' ? styles.printPage : styles.downloadPage),
+                 ...(props.qrtype === 'printable' ? styles.printPageBreak : {})
+             }}>
             <div style={styles.page}>
                 {renderKeyHeaderAscii()}
                 

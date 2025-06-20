@@ -486,7 +486,6 @@ const PDFVaultBackup = (props) => {
             pageBreakBefore: 'always',
             pageBreakInside: 'avoid',
             breakInside: 'avoid',
-            breakBefore: 'page',
         },
     });
 
@@ -795,7 +794,7 @@ Vault Name:         `}
     return (
         <div style={props.qrtype==='printable'?styles.printPage:styles.downloadPage}>
             {/* First page: Metadata QR + full header/details */}
-            <div style={{...styles.page, breakAfter: 'page'}}>
+            <div style={styles.page}>
                 {renderVaultHeaderAscii(0, true, 'METADATA')}
                 
                 <div style={{
@@ -824,10 +823,7 @@ Vault Name:         `}
             {/* Shard pages: One per page, compact header */}
             {qrArray.flat().slice(1).map((qrData, idx) => (
                 <div key={'shardpage_' + idx} 
-                    style={{
-                        ...styles.printPageBreak,
-                        ...(props.qrtype==='printable' ? styles.printPage : null)
-                    }}>
+                    style={props.qrtype==='printable' ? styles.printPageBreak : {}}>
                     <div style={styles.page}>
                         {/* Compact header for non-first pages with shard number */}
                         {renderCompactHeader(idx + 2, `SHARD #${qrData.id - 1}`)}
