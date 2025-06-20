@@ -15,6 +15,9 @@ export default function Footer() {
                         <Link to={'/pricing'}>Pricing</Link>
                     </li>
                     <li>
+                        <Link to={'/security'}>Security</Link>
+                    </li>
+                    <li>
                         <Link to={'/legal'}>Terms of Service</Link>
                     </li>
                     <li>

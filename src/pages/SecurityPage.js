@@ -60,9 +60,9 @@ function SecurityPage() {
                 <Container>
                     <Row className="text-center">
                         <Col>
-                            <h1 className="security-hero-title">Complete Security Analysis</h1>
+                            <h1 className="security-hero-title">Complete Threat Model</h1>
                             <p className="security-hero-subtitle">
-                                Comprehensive threat modeling and mitigation strategies for digital asset protection
+                                From house fires to hackers, we've thought of everything so you don't have to
                             </p>
                             <div className="security-hero-stats">
                                 <div className="security-stat">
@@ -71,12 +71,9 @@ function SecurityPage() {
                                 </div>
                                 <div className="security-stat">
                                     <span className="stat-number">100%</span>
-                                    <span className="stat-label">Coverage</span>
+                                    <span className="stat-label">Mitigation Coverage</span>
                                 </div>
-                                <div className="security-stat">
-                                    <span className="stat-number">AES-256</span>
-                                    <span className="stat-label">Encryption</span>
-                                </div>
+                                
                             </div>
                         </Col>
                     </Row>
@@ -638,33 +635,12 @@ function SecurityPage() {
                 <Container>
                     <Row>
                         <Col className="text-center">
-                            <h2 className="security-summary-title">Comprehensive Protection Strategy</h2>
+                            <h2 className="security-summary-title">Built to Handle Real-World Threats</h2>
                             <p className="security-summary-desc">
-                                Kosign's distributed encryption architecture addresses every major threat category through layered defense systems.
+                                Whether it's a house fire, computer hack, or family emergency, your most important digital assets stay safe and accessible when you need them most.
                             </p>
                             
-                            <div className="protection-stats">
-                                <div className="protection-stat">
-                                    <span className="stat-icon">🛡️</span>
-                                    <span className="stat-value">100%</span>
-                                    <span className="stat-label">Threat Coverage</span>
-                                </div>
-                                <div className="protection-stat">
-                                    <span className="stat-icon">🔒</span>
-                                    <span className="stat-value">256-bit</span>
-                                    <span className="stat-label">AES Encryption</span>
-                                </div>
-                                <div className="protection-stat">
-                                    <span className="stat-icon">📍</span>
-                                    <span className="stat-value">Multi-Site</span>
-                                    <span className="stat-label">Storage</span>
-                                </div>
-                                <div className="protection-stat">
-                                    <span className="stat-icon">👥</span>
-                                    <span className="stat-value">Social</span>
-                                    <span className="stat-label">Recovery</span>
-                                </div>
-                            </div>
+                            
                             
                             <div className="security-cta-section">
                                 <button className="security-cta-primary" onClick={() => {
@@ -673,9 +649,9 @@ function SecurityPage() {
                                 }}>
                                     Create Your Secure Vault
                                 </button>
-                                <p className="security-cta-subtitle">
+                                {/* <p className="security-cta-subtitle">
                                     Start with our threat-resistant foundation in minutes
-                                </p>
+                                </p> */}
                             </div>
                         </Col>
                     </Row>
