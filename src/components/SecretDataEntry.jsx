@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { FormGroup, FormText, Button, Card, Form } from 'react-bootstrap';
-import { FaCheck, FaLock, FaToggleOn, FaToggleOff, FaEye, FaKey, FaWallet, FaStickyNote, FaCode, FaPlus } from 'react-icons/fa';
+import { FormGroup, FormText, Button, Card, Form, Tab, Tabs } from 'react-bootstrap';
+import { FaCheck, FaLock, FaEye, FaKey, FaWallet, FaStickyNote, FaCode, FaPlus, FaEdit, FaCogs } from 'react-icons/fa';
 import { MdWarningAmber } from 'react-icons/md';
 
 import DataSection from './DataSection';
@@ -19,11 +19,11 @@ function SecretDataEntry({
     isOnline,
     onContinue
 }) {
-    const [simpleMode, setSimpleMode] = useState(false);
+    const [activeTab, setActiveTab] = useState('structured');
     const [showPreview, setShowPreview] = useState(false);
     const [syncWarning, setSyncWarning] = useState('');
     const [showSyncConfirm, setShowSyncConfirm] = useState(false);
-    const [pendingModeSwitch, setPendingModeSwitch] = useState(null);
+    const [pendingTabSwitch, setPendingTabSwitch] = useState(null);
     
     // Structured data state
     const [structuredData, setStructuredData] = useState({
@@ -132,9 +132,9 @@ function SecretDataEntry({
         return result;
     }, [structuredData]);
 
-    // Calculate current character usage based on mode
+    // Calculate current character usage based on active tab
     const getCurrentText = () => {
-        if (simpleMode) {
+        if (activeTab === 'simple') {
             return secretValue;
         } else {
             return convertToText();
@@ -143,7 +143,7 @@ function SecretDataEntry({
 
     // Simple character counting - just count the actual string length
     const getUserContentLength = () => {
-        if (simpleMode) {
+        if (activeTab === 'simple') {
             return secretValue.length;
         } else {
             // In structured mode, count the JSON string that would be generated
@@ -159,15 +159,15 @@ function SecretDataEntry({
 
     // Update the main secret value when structured data changes (only in structured mode)
     useEffect(() => {
-        if (!simpleMode) {
+        if (activeTab === 'structured') {
             const formattedText = convertToText();
             console.log('useEffect - updating secret in structured mode:', formattedText);
             console.log('useEffect - length:', formattedText.length);
             setSecret(formattedText);
         }
-    }, [structuredData, convertToText]); // Removed simpleMode to avoid conflicts during mode switching
+    }, [structuredData, convertToText]); // Keep activeTab out to avoid conflicts during tab switching
 
-    // Note: Mode switching is now handled manually in handleModeSwitch to avoid useEffect conflicts
+    // Note: Tab switching is now handled manually in handleTabSwitch to avoid useEffect conflicts
 
     const toggleFieldVisibility = (section, index, field) => {
         const key = `${section}-${index}-${field}`;
@@ -304,42 +304,42 @@ function SecretDataEntry({
         }));
     };
 
-    // Handle mode switching with bidirectional sync
-    const handleModeSwitch = (newMode) => {
+    // Handle tab switching with bidirectional sync
+    const handleTabSwitch = (newTab) => {
         setSyncWarning(''); // Clear any previous warnings
         
-        if (newMode === false) {
-            // Switching TO structured mode FROM simple mode
+        if (newTab === 'structured') {
+            // Switching TO structured tab FROM simple tab
             // Try to parse the current secretValue back to structured data
             const parsedData = parseTextToStructured(secretValue);
             
             if (parsedData) {
                 // Successfully parsed - update structured data
                 setStructuredData(parsedData);
-                setSimpleMode(false);
+                setActiveTab('structured');
             } else if (secretValue.trim()) {
                 // Failed to parse but has content - show confirmation dialog BEFORE clearing
-                setPendingModeSwitch(newMode);
+                setPendingTabSwitch(newTab);
                 setShowSyncConfirm(true);
             } else {
-                // Empty content - just switch modes
-                setSimpleMode(false);
+                // Empty content - just switch tabs
+                setActiveTab('structured');
             }
         } else {
-            // Switching TO simple mode FROM structured mode
+            // Switching TO simple tab FROM structured tab
             // Store compact JSON but user will see formatted version
             const compactJson = convertToText();
-            console.log('Mode switch - about to call setSecret with:', compactJson);
+            console.log('Tab switch - about to call setSecret with:', compactJson);
             console.log('Length of JSON:', compactJson.length);
             setSecret(compactJson);
-            setSimpleMode(true);
+            setActiveTab('simple');
         }
     };
 
-    // Confirm the mode switch after user sees the warning
-    const confirmModeSwitch = () => {
-        if (pendingModeSwitch === false) {
-            // Clear structured data and switch to structured mode
+    // Confirm the tab switch after user sees the warning
+    const confirmTabSwitch = () => {
+        if (pendingTabSwitch === 'structured') {
+            // Clear structured data and switch to structured tab
             setStructuredData({
                 passwords: [],
                 wallets: [],
@@ -347,19 +347,19 @@ function SecretDataEntry({
                 apiKeys: [],
                 custom: []
             });
-            setSimpleMode(false);
+            setActiveTab('structured');
             setSyncWarning('Previous text could not be parsed as structured data. Starting fresh.');
         }
         
         // Clean up
         setShowSyncConfirm(false);
-        setPendingModeSwitch(null);
+        setPendingTabSwitch(null);
     };
 
-    // Cancel the mode switch
-    const cancelModeSwitch = () => {
+    // Cancel the tab switch
+    const cancelTabSwitch = () => {
         setShowSyncConfirm(false);
-        setPendingModeSwitch(null);
+        setPendingTabSwitch(null);
     };
 
     if (showPreview) {
@@ -472,18 +472,18 @@ function SecretDataEntry({
                         <Button 
                             variant="outline-secondary" 
                             size="lg"
-                            onClick={cancelModeSwitch}
+                            onClick={cancelTabSwitch}
                             className="flex-fill"
                         >
-                            ← Stay in Simple Mode
+                            ← Stay in Simple Tab
                         </Button>
                         <Button 
                             variant="primary" 
                             size="lg"
-                            onClick={confirmModeSwitch}
+                            onClick={confirmTabSwitch}
                             className="flex-fill"
                         >
-                            Clear & Switch to Structured Mode
+                            Clear & Switch to Structured Tab
                         </Button>
                     </div>
                 </div>
@@ -497,98 +497,7 @@ function SecretDataEntry({
         );
     }
 
-    if (simpleMode) {
-        return (
-            <div className={'createWrapper'}>
-                <div className="secret-entry-header">
-                    <div className="header-icon">
-                        <FaLock />
-                    </div>
-                    <h3>Enter Your Secret Data</h3>
-                    <p className="header-subtitle">
-                        Enter the sensitive information you want to encrypt and store securely in your vault
-                    </p>
-                </div>
-
-                <div className="mode-toggle mb-3">
-                    <Button 
-                        variant="outline-primary" 
-                        onClick={() => handleModeSwitch(false)}
-                        className="d-flex align-items-center"
-                    >
-                        <FaToggleOff className="me-2" />
-                        Switch to Structured Mode (Recommended)
-                    </Button>
-                </div>
-
-                <div className="security-status-section">
-                    {!isOnline ?
-                        <div className={'alert alert-success'}>
-                            <FaCheck style={{marginRight: 2, fontSize: 12}}/>&nbsp;
-                            <b>You are offline</b> - maximum security mode 
-                        </div>
-                        :
-                        <div className={'alert alert-warning'}>
-                            <MdWarningAmber style={{marginRight: 8, fontSize: 18, lineHeight:16}}/>
-                            <b>You are online</b> - For your security, disconnect from the internet before entering data
-                        </div>
-                    }
-                </div>
-
-                <div className="data-entry-section">
-                    <form>
-                        <FormGroup className={'formGroup'} controlId="formBasicSecret">
-                            <label className="form-label">Secret Data</label>
-                            <textarea
-                                value={secretValue}
-                                onChange={(e) => setSecret(e.target.value)}
-                                className={'form-control secretTextInput'}
-                                placeholder={'Enter your sensitive data here...\n\nExamples:\n• Password: mySecurePassword123\n• Recovery phrase: word1 word2 word3...\n• Private note: Important information...'}
-                                rows={10}
-
-                            />
-                            <div className="form-footer-info">
-                                <div className="security-indicator">
-                                    <FaLock style={{color:'#4caf50', marginRight:6, fontSize:12}} />
-                                    <span style={{color:'#4caf50', fontWeight: 600}}>
-                                        Get ready to encrypt
-                                    </span>
-                                </div>
-                                <div className="character-counter">
-                                    <span className={`counter-text ${isOverLimit ? 'error' : isNearLimit ? 'warning' : ''}`}>
-                                        {isOverLimit ? 
-                                            `${Math.abs(remainingChars)} characters over limit!` :
-                                            `${remainingChars} characters remaining`
-                                        }
-                                    </span>
-                                    <span className="page-info">({totalPages?totalPages:2} page{totalPages !== 1 ? 's' : ''})</span>
-                                </div>
-                            </div>
-                        </FormGroup>
-                        
-                        <div className="continue-section">
-                            <Button 
-                                variant={'primary'} 
-                                size={'lg'}
-                                onClick={onContinue}
-                                className="continue-btn"
-                                disabled={!secretValue.trim() || isOverLimit}
-                            >
-                                Encrypt & Continue
-                            </Button>
-                            {!secretValue.trim() ? (
-                                <p className="continue-note">Enter some secret data to continue</p>
-                            ) : isOverLimit ? (
-                                <p className="continue-note">Reduce data size to continue</p>
-                            ) : null}
-                        </div>
-                    </form>
-                </div>
-            </div>
-        );
-    }
-
-    // Structured mode
+    // Main tabbed interface
     return (
         <div className={'createWrapper'}>
             <div className="secret-entry-header">
@@ -597,23 +506,11 @@ function SecretDataEntry({
                 </div>
                 <h3>Enter Your Secret Data</h3>
                 <p className="header-subtitle">
-                    Organize your sensitive information into structured categories for better security and usability
+                    Choose how you'd like to organize your sensitive information
                 </p>
             </div>
 
-            <div className="mode-toggle mb-3">
-                <Button 
-                    variant="outline-secondary" 
-                    size="sm"
-                    onClick={() => handleModeSwitch(true)}
-                    className="d-flex align-items-center"
-                >
-                    <FaToggleOn className="me-2" />
-                    Simple Text Mode
-                </Button>
-            </div>
-
-            <div className="security-status-section">
+            <div className="security-status-section mb-3">
                 {!isOnline ?
                     <div className={'alert alert-success'}>
                         <FaCheck style={{marginRight: 2, fontSize: 12}}/>&nbsp;
@@ -633,6 +530,24 @@ function SecretDataEntry({
                     </div>
                 )}
             </div>
+
+            {/* Tabbed Interface */}
+            <Tabs 
+                activeKey={activeTab} 
+                onSelect={handleTabSwitch}
+                fill
+            >
+                <Tab 
+                    eventKey="structured" 
+                    title={
+                        <span className="d-flex align-items-center">
+                            <FaCogs className="me-2" />
+                            Structured Entry
+                            <small className="ms-2 text-muted">(Recommended)</small>
+                        </span>
+                    }
+                >
+                    {/* Structured Mode Content */}
 
             {/* Passwords Section */}
             <DataSection
@@ -762,7 +677,38 @@ function SecretDataEntry({
                 ))}
             </DataSection>
 
-            {/* Footer section */}
+
+
+                </Tab>
+
+                <Tab 
+                    eventKey="simple" 
+                    title={
+                        <span className="d-flex align-items-center">
+                            <FaEdit className="me-2" />
+                            Simple Text
+                        </span>
+                    }
+                >
+                    {/* Simple Mode Content */}
+                    <div className="data-entry-section">
+                        <form>
+                            <FormGroup className={'formGroup'} controlId="formBasicSecret">
+                                <label className="form-label">Secret Data</label>
+                                <textarea
+                                    value={secretValue}
+                                    onChange={(e) => setSecret(e.target.value)}
+                                    className={'form-control secretTextInput'}
+                                    placeholder={'Enter your sensitive data here...\n\nExamples:\n• Password: mySecurePassword123\n• Recovery phrase: word1 word2 word3...\n• Private note: Important information...'}
+                                    rows={12}
+                                />
+                            </FormGroup>
+                        </form>
+                    </div>
+                </Tab>
+            </Tabs>
+
+            {/* Footer section - shared between both tabs */}
             {isOverLimit && (
                 <div className="alert alert-danger">
                     <MdWarningAmber style={{marginRight: 8, fontSize: 18, lineHeight:16}}/>

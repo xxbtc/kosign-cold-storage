@@ -2893,7 +2893,7 @@
 
 /* Accordion Styles */
 .accordion-header {
-    padding: 0.75rem 0;
+    padding: 0.75rem 1rem;
     border-radius: 8px;
     background-color: transparent;
     transition: all 0.2s ease;
@@ -3134,6 +3134,108 @@
     
     .loading-title {
         font-size: 1.1rem;
+    }
+}
+
+/* Dark Theme Tab Styles */
+.createPageWrapper .nav-tabs {
+    background: transparent;
+    margin-bottom: 0;
+    border: none;
+}
+
+.createPageWrapper .nav-tabs .nav-link {
+    background: #1a1a1a;
+    border: 1px solid #333333;
+    border-bottom: none;
+    color: #b0b0b0;
+    padding: 1rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 8px 8px 0 0;
+    margin-right: 4px;
+    position: relative;
+}
+
+.createPageWrapper .nav-tabs .nav-link:hover {
+    background: #2a2a2a;
+    color: #ffffff;
+    border-color: #555555;
+    transform: translateY(-1px);
+}
+
+.createPageWrapper .nav-tabs .nav-link.active {
+    background: #0a0a0a;
+    color: #ffffff;
+    border: 1px solid #333333;
+    border-bottom: 1px solid #0a0a0a;
+    margin-bottom: -1px;
+    box-shadow: 0 -2px 8px rgba(23, 134, 255, 0.2);
+    z-index: 10;
+    position: relative;
+}
+
+.createPageWrapper .nav-tabs .nav-link.active::before {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #1786ff, #4caf50);
+    border-radius: 2px 2px 0 0;
+}
+
+.createPageWrapper .nav-tabs .nav-link .me-2 {
+    font-size: 1rem;
+    margin-right: 0.5rem !important;
+}
+
+.createPageWrapper .nav-tabs .nav-link small {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    font-weight: 400;
+}
+
+.createPageWrapper .nav-tabs .nav-link.active small {
+    opacity: 0.9;
+    color: #4caf50;
+}
+
+.createPageWrapper .tab-content {
+    background: #0a0a0a;
+    border: 1px solid #333333;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 1.5rem;
+    min-height: 400px;
+}
+
+/* Responsive tab styling */
+@media (max-width: 768px) {
+    .createPageWrapper .nav-tabs .nav-link {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .createPageWrapper .nav-tabs .nav-link small {
+        display: none;
+    }
+    
+    .createPageWrapper .tab-content {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .createPageWrapper .nav-tabs .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        margin-right: 2px;
+    }
+    
+    .createPageWrapper .nav-tabs .nav-link .me-2 {
+        font-size: 0.9rem;
     }
 }
 
