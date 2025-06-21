@@ -447,8 +447,135 @@ function WalletEntryCard({
         return { isValid, message, wordCount, type, details };
     };
 
+    // Private key validation for various formats
+    const validatePrivateKey = (privateKey) => {
+        if (!privateKey || !privateKey.trim()) {
+            return { isValid: true, message: '', type: 'empty' }; // Optional field
+        }
+
+        const cleanKey = privateKey.trim();
+        let message = '';
+        let isValid = false;
+        let type = 'invalid';
+        let format = '';
+        let details = [];
+
+        // Check for common private key formats
+        
+        // 1. Raw Hex (64 characters, 32 bytes)
+        const hexPattern = /^[0-9a-fA-F]{64}$/;
+        if (hexPattern.test(cleanKey)) {
+            // Additional validation: ensure it's not all zeros or all Fs
+            if (cleanKey === '0'.repeat(64)) {
+                message = 'Invalid - all zeros';
+                type = 'invalid_zero';
+                details = ['Private key cannot be all zeros'];
+            } else if (cleanKey.toLowerCase() === 'f'.repeat(64)) {
+                message = 'Invalid - all Fs';
+                type = 'invalid_max';
+                details = ['Private key cannot be all Fs (max value)'];
+            } else {
+                message = 'Valid hex private key ✨';
+                isValid = true;
+                type = 'valid';
+                format = 'Raw Hex (64 chars)';
+            }
+        }
+        
+        // 2. WIF (Wallet Import Format) - Bitcoin
+        else if (cleanKey.length >= 51 && cleanKey.length <= 52) {
+            // WIF starts with 5, K, or L for Bitcoin mainnet
+            const wifPattern = /^[5KL][1-9A-HJ-NP-Za-km-z]{50,51}$/;
+            if (wifPattern.test(cleanKey)) {
+                // Basic WIF format validation
+                if (cleanKey.startsWith('5')) {
+                    message = 'Valid WIF (uncompressed) ✨';
+                    isValid = true;
+                    type = 'valid';
+                    format = 'WIF Uncompressed';
+                } else if (cleanKey.startsWith('K') || cleanKey.startsWith('L')) {
+                    message = 'Valid WIF (compressed) ✨';
+                    isValid = true;
+                    type = 'valid';
+                    format = 'WIF Compressed';
+                }
+            } else {
+                message = 'Invalid WIF format';
+                type = 'invalid_wif';
+                details = ['WIF should start with 5, K, or L and be 51-52 characters'];
+            }
+        }
+        
+        // 3. Base58 format (other cryptocurrencies)
+        else if (cleanKey.length >= 44 && cleanKey.length <= 58) {
+            const base58Pattern = /^[1-9A-HJ-NP-Za-km-z]+$/;
+            if (base58Pattern.test(cleanKey)) {
+                message = 'Valid Base58 format ✨';
+                isValid = true;
+                type = 'valid';
+                format = 'Base58 Encoded';
+            } else {
+                message = 'Invalid Base58 characters';
+                type = 'invalid_base58';
+                details = ['Contains invalid Base58 characters (0, O, I, l)'];
+            }
+        }
+        
+        // 4. Ethereum private key (0x prefix)
+        else if (cleanKey.startsWith('0x') && cleanKey.length === 66) {
+            const ethHexPattern = /^0x[0-9a-fA-F]{64}$/;
+            if (ethHexPattern.test(cleanKey)) {
+                const keyWithoutPrefix = cleanKey.slice(2);
+                if (keyWithoutPrefix === '0'.repeat(64)) {
+                    message = 'Invalid - all zeros';
+                    type = 'invalid_zero';
+                    details = ['Private key cannot be all zeros'];
+                } else if (keyWithoutPrefix.toLowerCase() === 'f'.repeat(64)) {
+                    message = 'Invalid - all Fs';
+                    type = 'invalid_max';
+                    details = ['Private key cannot be all Fs (max value)'];
+                } else {
+                    message = 'Valid Ethereum private key ✨';
+                    isValid = true;
+                    type = 'valid';
+                    format = 'Ethereum (0x prefixed)';
+                }
+            } else {
+                message = 'Invalid Ethereum hex format';
+                type = 'invalid_eth_hex';
+                details = ['Should be 0x followed by 64 hex characters'];
+            }
+        }
+        
+        // 5. Check for common mistakes
+        else if (cleanKey.length < 32) {
+            message = 'Too short for private key';
+            type = 'too_short';
+            details = ['Private keys are typically 32+ bytes (64+ hex chars)'];
+        } else if (cleanKey.length > 100) {
+            message = 'Too long for private key';
+            type = 'too_long';
+            details = ['Private keys are typically under 100 characters'];
+        } else {
+            // Check if it looks like hex but wrong length
+            const partialHexPattern = /^[0-9a-fA-F]+$/;
+            if (partialHexPattern.test(cleanKey)) {
+                message = `Invalid hex length (${cleanKey.length} chars)`;
+                type = 'invalid_hex_length';
+                details = [`Expected 64 characters for raw hex, got ${cleanKey.length}`];
+            } else {
+                message = 'Unrecognized format';
+                type = 'unknown_format';
+                details = ['Supported: Raw Hex (64 chars), WIF, Base58, Ethereum (0x prefix)'];
+            }
+        }
+
+        return { isValid, message, type, format, details };
+    };
+
     const seedValidation = validateSeedPhrase(entry.seed);
     const wordValidation = getWordValidation(entry.seed);
+    const privateKeyValidation = validatePrivateKey(entry.privateKey);
 
     // Get appropriate badge color based on validation type
     const getBadgeVariant = (validation) => {
@@ -476,20 +603,48 @@ function WalletEntryCard({
         const hasPrivateKey = !!entry.privateKey;
         const hasAddress = !!entry.address;
         
-        return { name, hasSeed, hasPrivateKey, hasAddress };
+        // Check private key validity if provided
+        const privateKeyStatus = hasPrivateKey ? 
+            (validatePrivateKey(entry.privateKey).isValid ? 'valid' : 'invalid') : 
+            'none';
+        
+        return { name, hasSeed, hasPrivateKey, hasAddress, privateKeyStatus };
     }, [entry.name, entry.seed, entry.privateKey, entry.address]);
 
     // Check for validation issues (reactive to entry changes)
     const hasValidationIssues = React.useMemo(() => {
-        // Basic field validation
-        if (!entry.name || !entry.seed) {
+        // Basic field validation - name is required
+        if (!entry.name) {
             return true;
         }
         
-        // Advanced seed phrase validation
-        const seedValidation = validateSeedPhrase(entry.seed);
-        return !seedValidation.isValid;
-    }, [entry.name, entry.seed]);
+        // Must have either a valid seed phrase OR a valid private key (or both)
+        const hasSeed = !!entry.seed;
+        const hasPrivateKey = !!entry.privateKey;
+        
+        // If neither seed nor private key is provided
+        if (!hasSeed && !hasPrivateKey) {
+            return true;
+        }
+        
+        // Validate seed phrase if provided
+        if (hasSeed) {
+            const seedValidation = validateSeedPhrase(entry.seed);
+            if (!seedValidation.isValid) {
+                return true;
+            }
+        }
+        
+        // Validate private key if provided
+        if (hasPrivateKey) {
+            const privateKeyValidation = validatePrivateKey(entry.privateKey);
+            if (!privateKeyValidation.isValid) {
+                return true;
+            }
+        }
+        
+        return false;
+    }, [entry.name, entry.seed, entry.privateKey]);
 
     return (
         <Card className="mb-3 entry-card">
@@ -518,8 +673,17 @@ function WalletEntryCard({
                             </div>
                             {!isExpanded && (
                                 <small className="text-muted">
-                                    {summaryInfo.hasSeed ? 'Seed phrase set' : 'No seed phrase'}
-                                    {summaryInfo.hasPrivateKey && ' • Private key set'}
+                                    {summaryInfo.hasSeed && 'Seed phrase set'}
+                                    {summaryInfo.hasSeed && summaryInfo.hasPrivateKey && ' • '}
+                                    {summaryInfo.hasPrivateKey && (
+                                        <>
+                                            {'Private key '}
+                                            <span className={summaryInfo.privateKeyStatus === 'valid' ? 'text-success' : 'text-danger'}>
+                                                {summaryInfo.privateKeyStatus === 'valid' ? '✓' : '✗'}
+                                            </span>
+                                        </>
+                                    )}
+                                    {!summaryInfo.hasSeed && !summaryInfo.hasPrivateKey && 'No credentials set'}
                                     {summaryInfo.hasAddress && ' • Address set'}
                                 </small>
                             )}
@@ -552,7 +716,7 @@ function WalletEntryCard({
 
                         <Form.Group className="mb-2">
                     <div className="d-flex justify-content-between align-items-center">
-                        <Form.Label>Seed Phrase</Form.Label>
+                        <Form.Label>Seed Phrase <small className="text-muted">(or use private key below)</small></Form.Label>
                         <div className="d-flex gap-2">
                             {/* Elegant word count indicator */}
                             {entry.seed && wordValidation.totalWords > 0 && (
@@ -733,13 +897,67 @@ function WalletEntryCard({
                 </Form.Group>
 
                 <Form.Group className="mb-2">
-                    <Form.Label>Private Key (optional)</Form.Label>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <Form.Label>Private Key <small className="text-muted">(or use seed phrase above)</small></Form.Label>
+                        {entry.privateKey && (
+                            <div className="d-flex gap-2">
+                                {/* Format indicator badge */}
+                                {privateKeyValidation.format && (
+                                    <Badge bg="info" className="d-flex align-items-center">
+                                        {privateKeyValidation.format}
+                                    </Badge>
+                                )}
+                                {/* Validation status badge */}
+                                {(() => {
+                                    const backgroundColor = 
+                                        privateKeyValidation.type === 'invalid_zero' || 
+                                        privateKeyValidation.type === 'invalid_max' ||
+                                        privateKeyValidation.type === 'invalid_wif' ||
+                                        privateKeyValidation.type === 'invalid_base58' ||
+                                        privateKeyValidation.type === 'invalid_eth_hex' ||
+                                        privateKeyValidation.type === 'invalid_hex_length' ? '#dc3545' :
+                                        privateKeyValidation.type === 'too_short' ||
+                                        privateKeyValidation.type === 'too_long' ||
+                                        privateKeyValidation.type === 'unknown_format' ? '#fd7e14' :
+                                        privateKeyValidation.isValid ? '#198754' : undefined;
+                                    
+                                    const color = backgroundColor ? '#ffffff' : undefined;
+
+                                    return (
+                                        <span 
+                                            className="d-flex align-items-center"
+                                            style={{
+                                                backgroundColor: backgroundColor,
+                                                color: color,
+                                                border: 'none',
+                                                padding: '0.375rem 0.75rem',
+                                                fontSize: '0.75rem',
+                                                fontWeight: '600',
+                                                borderRadius: '0.375rem',
+                                                lineHeight: '1'
+                                            }}
+                                        >
+                                            {privateKeyValidation.isValid ? (
+                                                <><FaCheck className="me-1" /> {privateKeyValidation.message}</>
+                                            ) : (
+                                                <><FaExclamationTriangle className="me-1" /> {privateKeyValidation.message}</>
+                                            )}
+                                        </span>
+                                    );
+                                })()}
+                            </div>
+                        )}
+                    </div>
                     <InputGroup>
                         <Form.Control
                             type={isFieldVisible('privateKey') ? "text" : "password"}
-                            placeholder="••••••••••"
+                            placeholder="Raw hex, WIF, Base58, or 0x prefixed..."
                             value={entry.privateKey}
                             onChange={(e) => handleFieldChange('privateKey', e.target.value)}
+                            className={entry.privateKey ? (privateKeyValidation.isValid ? 'is-valid' : 'is-invalid') : ''}
+                            style={{ 
+                                fontFamily: 'monospace'
+                            }}
                         />
                         <Button 
                             variant="outline-secondary"
@@ -748,6 +966,41 @@ function WalletEntryCard({
                             {isFieldVisible('privateKey') ? <FaHide /> : <FaEye />}
                         </Button>
                     </InputGroup>
+                    
+                    {/* Private key validation feedback */}
+                    {entry.privateKey && !privateKeyValidation.isValid && privateKeyValidation.details && privateKeyValidation.details.length > 0 && (
+                        <Form.Text className={
+                            privateKeyValidation.type === 'invalid_zero' || 
+                            privateKeyValidation.type === 'invalid_max' ||
+                            privateKeyValidation.type === 'invalid_wif' ||
+                            privateKeyValidation.type === 'invalid_base58' ||
+                            privateKeyValidation.type === 'invalid_eth_hex' ||
+                            privateKeyValidation.type === 'invalid_hex_length' ? 'text-danger' : 'text-warning'
+                        }>
+                            <small>
+                                <strong>
+                                    {privateKeyValidation.type === 'invalid_zero' && '🚫 Invalid private key:'}
+                                    {privateKeyValidation.type === 'invalid_max' && '🚫 Invalid private key:'}
+                                    {privateKeyValidation.type === 'invalid_wif' && '⚠️ WIF format issue:'}
+                                    {privateKeyValidation.type === 'invalid_base58' && '⚠️ Base58 issue:'}
+                                    {privateKeyValidation.type === 'invalid_eth_hex' && '⚠️ Ethereum format issue:'}
+                                    {privateKeyValidation.type === 'invalid_hex_length' && '⚠️ Hex length issue:'}
+                                    {privateKeyValidation.type === 'too_short' && '⚠️ Length issue:'}
+                                    {privateKeyValidation.type === 'too_long' && '⚠️ Length issue:'}
+                                    {privateKeyValidation.type === 'unknown_format' && '❓ Format issue:'}
+                                </strong> {privateKeyValidation.details[0]}
+                            </small>
+                        </Form.Text>
+                    )}
+                    
+                    {/* Success message for valid private keys */}
+                    {entry.privateKey && privateKeyValidation.isValid && (
+                        <Form.Text className="text-success">
+                            <small>
+                                <strong>✅ Valid private key!</strong> Format: {privateKeyValidation.format}
+                            </small>
+                        </Form.Text>
+                    )}
                 </Form.Group>
 
                 <Form.Group className="mb-2">
