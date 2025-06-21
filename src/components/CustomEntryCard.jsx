@@ -101,10 +101,14 @@ function CustomEntryCard({
                         <Form.Control
                             as="textarea"
                             rows={3}
-                            type={isFieldVisible('value') ? "text" : "password"}
                             placeholder="Your sensitive data..."
                             value={entry.value}
                             onChange={(e) => handleFieldChange('value', e.target.value)}
+                            style={{
+                                fontFamily: isFieldVisible('value') ? 'inherit' : 'monospace',
+                                WebkitTextSecurity: isFieldVisible('value') ? 'none' : 'disc',
+                                textSecurity: isFieldVisible('value') ? 'none' : 'disc'
+                            }}
                         />
                         <Button 
                             variant="outline-secondary"
