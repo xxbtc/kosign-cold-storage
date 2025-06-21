@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, Button } from 'react-bootstrap';
-import { FaPlus } from 'react-icons/fa';
+import { Card, Button, ButtonGroup } from 'react-bootstrap';
+import { FaPlus, FaExpandArrowsAlt, FaCompressArrowsAlt } from 'react-icons/fa';
 
 function DataSection({ 
     title, 
@@ -9,7 +9,9 @@ function DataSection({
     onAdd, 
     addButtonText, 
     emptyMessage, 
-    children 
+    children,
+    onExpandAll,
+    onCollapseAll
 }) {
     return (
         <Card className="mb-4 section-card">
@@ -19,13 +21,33 @@ function DataSection({
                     <h5 className="mb-0">{title}</h5>
                     <span className="badge bg-secondary ms-2">{count}</span>
                 </div>
-                <Button 
-                    variant="primary" 
-                    size="sm"
-                    onClick={onAdd}
-                >
-                    <FaPlus className="me-1" /> {addButtonText}
-                </Button>
+                <div className="d-flex gap-2">
+                    {count > 1 && (
+                        <ButtonGroup size="sm">
+                            <Button 
+                                variant="outline-secondary"
+                                onClick={onExpandAll}
+                                title="Expand All"
+                            >
+                                <FaExpandArrowsAlt />
+                            </Button>
+                            <Button 
+                                variant="outline-secondary"
+                                onClick={onCollapseAll}
+                                title="Collapse All"
+                            >
+                                <FaCompressArrowsAlt />
+                            </Button>
+                        </ButtonGroup>
+                    )}
+                    <Button 
+                        variant="primary" 
+                        size="sm"
+                        onClick={onAdd}
+                    >
+                        <FaPlus className="me-1" /> {addButtonText}
+                    </Button>
+                </div>
             </Card.Header>
             <Card.Body>
                 {count === 0 ? (

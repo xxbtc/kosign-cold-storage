@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Form, InputGroup, Button, Badge, ListGroup } from 'react-bootstrap';
-import { FaTrash, FaEye, FaEyeSlash as FaHide, FaCheck, FaExclamationTriangle } from 'react-icons/fa';
+import { Card, Form, InputGroup, Button, Badge, ListGroup, Collapse } from 'react-bootstrap';
+import { FaTrash, FaEye, FaEyeSlash as FaHide, FaCheck, FaExclamationTriangle, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 // Import bip39 library (already available in the project)
 let bip39;
@@ -227,7 +227,9 @@ function WalletEntryCard({
     onUpdate, 
     onRemove, 
     isFieldVisible, 
-    onToggleVisibility 
+    onToggleVisibility,
+    isExpanded = false,
+    onToggleExpanded
 }) {
     const [showAutocomplete, setShowAutocomplete] = useState(false);
     const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
@@ -467,31 +469,88 @@ function WalletEntryCard({
         return '';
     };
 
+    // Get summary info for collapsed state (reactive to entry changes)
+    const summaryInfo = React.useMemo(() => {
+        const name = entry.name || 'Untitled Wallet';
+        const hasSeed = !!entry.seed;
+        const hasPrivateKey = !!entry.privateKey;
+        const hasAddress = !!entry.address;
+        
+        return { name, hasSeed, hasPrivateKey, hasAddress };
+    }, [entry.name, entry.seed, entry.privateKey, entry.address]);
+
+    // Check for validation issues (reactive to entry changes)
+    const hasValidationIssues = React.useMemo(() => {
+        // Basic field validation
+        if (!entry.name || !entry.seed) {
+            return true;
+        }
+        
+        // Advanced seed phrase validation
+        const seedValidation = validateSeedPhrase(entry.seed);
+        return !seedValidation.isValid;
+    }, [entry.name, entry.seed]);
+
     return (
         <Card className="mb-3 entry-card">
             <Card.Body>
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                    <h6 className="mb-0">Wallet #{index + 1}</h6>
+                {/* Accordion Header */}
+                <div 
+                    className="d-flex justify-content-between align-items-center accordion-header"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => onToggleExpanded && onToggleExpanded(index)}
+                >
+                    <div className="d-flex align-items-center flex-grow-1">
+                        <div className="me-2">
+                            {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
+                        </div>
+                        <div className="flex-grow-1">
+                            <div className="d-flex align-items-center">
+                                <h6 className="mb-0 me-2">
+                                    {summaryInfo.name}
+                                </h6>
+                                {hasValidationIssues && (
+                                    <FaExclamationTriangle className="text-warning me-2" size={14} />
+                                )}
+                                {!hasValidationIssues && (
+                                    <FaCheck className="text-success me-2" size={14} />
+                                )}
+                            </div>
+                            {!isExpanded && (
+                                <small className="text-muted">
+                                    {summaryInfo.hasSeed ? 'Seed phrase set' : 'No seed phrase'}
+                                    {summaryInfo.hasPrivateKey && ' • Private key set'}
+                                    {summaryInfo.hasAddress && ' • Address set'}
+                                </small>
+                            )}
+                        </div>
+                    </div>
                     <Button 
                         variant="outline-danger" 
                         size="sm"
-                        onClick={handleRemove}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemove();
+                        }}
                     >
                         <FaTrash />
                     </Button>
                 </div>
-                
-                <Form.Group className="mb-2">
-                    <Form.Label>Wallet Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="e.g., Main Bitcoin Wallet, MetaMask"
-                        value={entry.name}
-                        onChange={(e) => handleFieldChange('name', e.target.value)}
-                    />
-                </Form.Group>
 
-                <Form.Group className="mb-2">
+                {/* Accordion Content */}
+                <Collapse in={isExpanded}>
+                    <div className="mt-3">
+                        <Form.Group className="mb-2">
+                            <Form.Label>Wallet Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="e.g., Main Bitcoin Wallet, MetaMask"
+                                value={entry.name}
+                                onChange={(e) => handleFieldChange('name', e.target.value)}
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-2">
                     <div className="d-flex justify-content-between align-items-center">
                         <Form.Label>Seed Phrase</Form.Label>
                         <div className="d-flex gap-2">
@@ -701,16 +760,18 @@ function WalletEntryCard({
                     />
                 </Form.Group>
 
-                <Form.Group className="mb-0">
-                    <Form.Label>Context Notes</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={2}
-                        placeholder="Purpose of this wallet, backup info, etc..."
-                        value={entry.notes}
-                        onChange={(e) => handleFieldChange('notes', e.target.value)}
-                    />
-                </Form.Group>
+                        <Form.Group className="mb-0">
+                            <Form.Label>Context Notes</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={2}
+                                placeholder="Purpose of this wallet, backup info, etc..."
+                                value={entry.notes}
+                                onChange={(e) => handleFieldChange('notes', e.target.value)}
+                            />
+                        </Form.Group>
+                    </div>
+                </Collapse>
             </Card.Body>
         </Card>
     );

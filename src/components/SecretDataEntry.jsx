@@ -36,6 +36,15 @@ function SecretDataEntry({
 
     // Show/hide states for sensitive fields
     const [visibleFields, setVisibleFields] = useState({});
+    
+    // Accordion states for each section
+    const [expandedEntries, setExpandedEntries] = useState({
+        passwords: {},
+        wallets: {},
+        notes: {},
+        apiKeys: {},
+        custom: {}
+    });
 
 
 
@@ -202,6 +211,17 @@ function SecretDataEntry({
                 [section]: [...prev[section], newEntry]
             };
             console.log('Updated structured data:', updated);
+            
+            // Auto-expand the new entry
+            const newIndex = updated[section].length - 1;
+            setExpandedEntries(prevExpanded => ({
+                ...prevExpanded,
+                [section]: {
+                    ...prevExpanded[section],
+                    [newIndex]: true
+                }
+            }));
+            
             return updated;
         });
     };
@@ -244,6 +264,44 @@ function SecretDataEntry({
 
     const getRemoveEntryForSection = (section) => (index) => {
         removeEntry(section, index);
+    };
+
+    // Accordion management functions
+    const toggleEntryExpanded = (section, index) => {
+        setExpandedEntries(prev => ({
+            ...prev,
+            [section]: {
+                ...prev[section],
+                [index]: !prev[section][index]
+            }
+        }));
+    };
+
+    const isEntryExpanded = (section, index) => {
+        return expandedEntries[section][index] || false;
+    };
+
+    const getToggleExpandedForSection = (section) => (index) => {
+        toggleEntryExpanded(section, index);
+    };
+
+    // Bulk accordion actions
+    const expandAllInSection = (section) => {
+        const newExpanded = {};
+        structuredData[section].forEach((_, index) => {
+            newExpanded[index] = true;
+        });
+        setExpandedEntries(prev => ({
+            ...prev,
+            [section]: newExpanded
+        }));
+    };
+
+    const collapseAllInSection = (section) => {
+        setExpandedEntries(prev => ({
+            ...prev,
+            [section]: {}
+        }));
     };
 
     // Handle mode switching with bidirectional sync
@@ -584,6 +642,8 @@ function SecretDataEntry({
                 onAdd={() => addEntry('passwords')}
                 addButtonText="Add Password"
                 emptyMessage="No passwords added yet. Click 'Add Password' to get started."
+                onExpandAll={() => expandAllInSection('passwords')}
+                onCollapseAll={() => collapseAllInSection('passwords')}
             >
                 {structuredData.passwords.map((entry, index) => (
                     <PasswordEntryCard
@@ -594,6 +654,8 @@ function SecretDataEntry({
                         onRemove={getRemoveEntryForSection('passwords')}
                         isFieldVisible={getFieldVisibilityForEntry('passwords', index)}
                         onToggleVisibility={getToggleVisibilityForEntry('passwords', index)}
+                        isExpanded={isEntryExpanded('passwords', index)}
+                        onToggleExpanded={getToggleExpandedForSection('passwords')}
                     />
                 ))}
             </DataSection>
@@ -606,6 +668,8 @@ function SecretDataEntry({
                 onAdd={() => addEntry('wallets')}
                 addButtonText="Add Wallet"
                 emptyMessage="No wallets added yet. Click 'Add Wallet' to get started."
+                onExpandAll={() => expandAllInSection('wallets')}
+                onCollapseAll={() => collapseAllInSection('wallets')}
             >
                 {structuredData.wallets.map((entry, index) => (
                     <WalletEntryCard
@@ -616,6 +680,8 @@ function SecretDataEntry({
                         onRemove={getRemoveEntryForSection('wallets')}
                         isFieldVisible={getFieldVisibilityForEntry('wallets', index)}
                         onToggleVisibility={getToggleVisibilityForEntry('wallets', index)}
+                        isExpanded={isEntryExpanded('wallets', index)}
+                        onToggleExpanded={getToggleExpandedForSection('wallets')}
                     />
                 ))}
             </DataSection>
@@ -628,6 +694,8 @@ function SecretDataEntry({
                 onAdd={() => addEntry('notes')}
                 addButtonText="Add Note"
                 emptyMessage="No notes added yet. Click 'Add Note' to get started."
+                onExpandAll={() => expandAllInSection('notes')}
+                onCollapseAll={() => collapseAllInSection('notes')}
             >
                 {structuredData.notes.map((entry, index) => (
                     <NoteEntryCard
@@ -636,6 +704,8 @@ function SecretDataEntry({
                         index={index}
                         onUpdate={getUpdateEntryForSection('notes')}
                         onRemove={getRemoveEntryForSection('notes')}
+                        isExpanded={isEntryExpanded('notes', index)}
+                        onToggleExpanded={getToggleExpandedForSection('notes')}
                     />
                 ))}
             </DataSection>
@@ -648,6 +718,8 @@ function SecretDataEntry({
                 onAdd={() => addEntry('apiKeys')}
                 addButtonText="Add API Key"
                 emptyMessage="No API keys added yet. Click 'Add API Key' to get started."
+                onExpandAll={() => expandAllInSection('apiKeys')}
+                onCollapseAll={() => collapseAllInSection('apiKeys')}
             >
                 {structuredData.apiKeys.map((entry, index) => (
                     <ApiKeyEntryCard
@@ -658,6 +730,8 @@ function SecretDataEntry({
                         onRemove={getRemoveEntryForSection('apiKeys')}
                         isFieldVisible={getFieldVisibilityForEntry('apiKeys', index)}
                         onToggleVisibility={getToggleVisibilityForEntry('apiKeys', index)}
+                        isExpanded={isEntryExpanded('apiKeys', index)}
+                        onToggleExpanded={getToggleExpandedForSection('apiKeys')}
                     />
                 ))}
             </DataSection>
@@ -670,6 +744,8 @@ function SecretDataEntry({
                 onAdd={() => addEntry('custom')}
                 addButtonText="Add Custom"
                 emptyMessage="No custom entries added yet. Click 'Add Custom' to get started."
+                onExpandAll={() => expandAllInSection('custom')}
+                onCollapseAll={() => collapseAllInSection('custom')}
             >
                 {structuredData.custom.map((entry, index) => (
                     <CustomEntryCard
@@ -680,6 +756,8 @@ function SecretDataEntry({
                         onRemove={getRemoveEntryForSection('custom')}
                         isFieldVisible={getFieldVisibilityForEntry('custom', index)}
                         onToggleVisibility={getToggleVisibilityForEntry('custom', index)}
+                        isExpanded={isEntryExpanded('custom', index)}
+                        onToggleExpanded={getToggleExpandedForSection('custom')}
                     />
                 ))}
             </DataSection>

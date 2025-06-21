@@ -2891,6 +2891,36 @@
     color: #ffffff !important;
 }
 
+/* Accordion Styles */
+.accordion-header {
+    padding: 0.75rem 0;
+    border-radius: 8px;
+    background-color: transparent;
+    transition: all 0.2s ease;
+}
+
+.accordion-header:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.accordion-header .text-muted {
+    font-size: 0.875rem;
+    color: #888 !important;
+}
+
+.accordion-header h6 {
+    color: #ffffff;
+    margin-bottom: 0;
+}
+
+.accordion-header .text-success {
+    color: #28a745 !important;
+}
+
+.accordion-header .text-warning {
+    color: #ffc107 !important;
+}
+
 .mode-toggle .btn {
     background: transparent !important;
     border: 1px solid #404040 !important;
