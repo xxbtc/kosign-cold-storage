@@ -23,11 +23,13 @@ import VaultDownloadSection from './VaultDownloadSection';
 import { ProFeatureService } from '../services/ProFeatureService';
 import KosignPaymentStep from './KosignPaymentStep';
 import SecurityPreparationStep from './SecurityPreparationStep';
+import { useSensitiveMode } from '../contexts/SensitiveModeContext';
 
 function CreateVault(props) {
 
     const cookies   = new Cookies();
     const navigate  = useNavigate();
+    const { enterSensitiveMode, exitSensitiveMode } = useSensitiveMode();
 
     const [secretValue, setSecretValue] = useState('');
     const [cipherText, setCiphertext] = useState(null);
@@ -102,11 +104,14 @@ function CreateVault(props) {
     };
 
     const setSecret = (newSecretValue) => {
-        if (newSecretValue.length > secretValue.length) {
-            if ((secretValue.length >= maxSecretChars) || (newSecretValue.length - 1 >= maxSecretChars)) {
-                return;
-            }
-        }
+        console.log('Parent setSecret called:');
+        console.log('  - Current secretValue length:', secretValue.length);
+        console.log('  - New value length:', newSecretValue.length);
+        console.log('  - Max chars allowed:', maxSecretChars);
+        
+        // Always allow the update - let the UI handle the character limit warnings
+        // Users should see their full data and make informed decisions about what to remove
+        console.log('  - ALLOWED: Always updating secret value (UI will handle limit warnings)');
         setTotalPages(calculateHowManyPages(newSecretValue));
         setSecretValue(newSecretValue);
     };
@@ -195,6 +200,28 @@ function CreateVault(props) {
             }, 1000);
         }
     }, [wizardStep]);
+
+    // Enter sensitive mode after vault configuration and NEVER exit until component unmounts
+    useEffect(() => {
+        if (wizardStep >= 2) {
+            // Once we enter step 2+, we're in sensitive mode for the entire process
+            enterSensitiveMode();
+        }
+        
+        // Only cleanup on component unmount, never during wizard steps
+        return () => {
+            if (wizardStep >= 2) {
+                exitSensitiveMode();
+            }
+        };
+    }, []); // Empty dependency array - only run on mount/unmount
+
+    // Trigger sensitive mode when advancing to step 2+
+    useEffect(() => {
+        if (wizardStep >= 2) {
+            enterSensitiveMode();
+        }
+    }, [wizardStep, enterSensitiveMode]);
 
     // Auto-scroll to top when wizard step changes
     useEffect(() => {
@@ -532,7 +559,8 @@ function CreateVault(props) {
                                                         ? 'linear-gradient(90deg, #1786ff 0%, #1260B3 100%)' // Bright blue
                                                         : 'linear-gradient(90deg, #6c757d 0%, #495057 100%)', // Muted gray
                                                     borderColor: isCreatingProVault() ? '#1786ff' : '#6c757d',
-                                                    border: 'none'
+                                                    borderWidth: '1px',
+                                                    borderStyle: 'solid'
                                                 }}
                                             >
                                                 Continue ({isCreatingProVault() ? 'Pro' : 'Free'})
