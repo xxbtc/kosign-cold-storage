@@ -229,7 +229,11 @@ function WalletEntryCard({
     isFieldVisible, 
     onToggleVisibility,
     isExpanded = false,
-    onToggleExpanded
+    onToggleExpanded,
+    entryMode = 'view',
+    onSave,
+    onCancel,
+    onEdit
 }) {
     const [showAutocomplete, setShowAutocomplete] = useState(false);
     const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
@@ -598,7 +602,7 @@ function WalletEntryCard({
 
     // Get summary info for collapsed state (reactive to entry changes)
     const summaryInfo = React.useMemo(() => {
-        const name = entry.name || 'Untitled Wallet';
+        const name = entry.name || 'New Wallet Entry';
         const hasSeed = !!entry.seed;
         const hasPrivateKey = !!entry.privateKey;
         const hasAddress = !!entry.address;
@@ -611,8 +615,15 @@ function WalletEntryCard({
         return { name, hasSeed, hasPrivateKey, hasAddress, privateKeyStatus };
     }, [entry.name, entry.seed, entry.privateKey, entry.address]);
 
-    // Check for validation issues (reactive to entry changes)
+    // Check for validation issues (only show if entry has content)
     const hasValidationIssues = React.useMemo(() => {
+        // Don't show validation errors if entry is completely empty (new entry)
+        const hasAnyContent = entry.name || entry.seed || entry.privateKey || entry.address || entry.notes;
+        if (!hasAnyContent) return false;
+        
+        // Only show validation issues if we're in view mode
+        if (entryMode !== 'view') return false;
+        
         // Basic field validation - name is required
         if (!entry.name) {
             return true;
@@ -644,6 +655,31 @@ function WalletEntryCard({
         }
         
         return false;
+    }, [entry.name, entry.seed, entry.privateKey, entry.address, entry.notes, entryMode]);
+
+    // Check if entry can be saved (for Save button)
+    const canSave = React.useMemo(() => {
+        if (!entry.name) return false;
+        
+        const hasSeed = !!entry.seed;
+        const hasPrivateKey = !!entry.privateKey;
+        
+        // Must have either seed or private key
+        if (!hasSeed && !hasPrivateKey) return false;
+        
+        // Validate seed phrase if provided
+        if (hasSeed) {
+            const seedValidation = validateSeedPhrase(entry.seed);
+            if (!seedValidation.isValid) return false;
+        }
+        
+        // Validate private key if provided
+        if (hasPrivateKey) {
+            const privateKeyValidation = validatePrivateKey(entry.privateKey);
+            if (!privateKeyValidation.isValid) return false;
+        }
+        
+        return true;
     }, [entry.name, entry.seed, entry.privateKey]);
 
     return (
@@ -667,7 +703,7 @@ function WalletEntryCard({
                                 {hasValidationIssues && (
                                     <FaExclamationTriangle className="text-warning me-2" size={14} />
                                 )}
-                                {!hasValidationIssues && (
+                                {!hasValidationIssues && entryMode === 'view' && (
                                     <FaCheck className="text-success me-2" size={14} />
                                 )}
                             </div>
@@ -689,16 +725,57 @@ function WalletEntryCard({
                             )}
                         </div>
                     </div>
-                    <Button 
-                        variant="outline-danger" 
-                        size="sm"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemove();
-                        }}
-                    >
-                        <FaTrash />
-                    </Button>
+                    <div className="d-flex gap-2">
+                        {entryMode === 'view' && (
+                            <>
+                                <Button 
+                                    variant="outline-primary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onEdit();
+                                    }}
+                                >
+                                    Edit
+                                </Button>
+                                <Button 
+                                    variant="outline-danger" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleRemove();
+                                    }}
+                                >
+                                    <FaTrash />
+                                </Button>
+                            </>
+                        )}
+                        {entryMode === 'edit' && (
+                            <>
+                                <Button 
+                                    variant="outline-secondary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onCancel();
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button 
+                                    variant="primary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSave();
+                                    }}
+                                    disabled={!canSave}
+                                >
+                                    Save
+                                </Button>
+                            </>
+                        )}
+                    </div>
                 </div>
 
                 {/* Accordion Content */}
@@ -711,6 +788,11 @@ function WalletEntryCard({
                                 placeholder="e.g., Main Bitcoin Wallet, MetaMask"
                                 value={entry.name}
                                 onChange={(e) => handleFieldChange('name', e.target.value)}
+                                disabled={entryMode === 'view'}
+                                spellCheck={false}
+                                autoCorrect="off"
+                                autoCapitalize="off"
+                                autoComplete="off"
                             />
                         </Form.Group>
 
@@ -788,6 +870,10 @@ function WalletEntryCard({
                                 onPaste={handlePaste}
                                 className={getFormControlClass(seedValidation)}
                                 spellCheck={false}
+                                autoCorrect="off"
+                                autoCapitalize="off"
+                                autoComplete="off"
+                                disabled={entryMode === 'view'}
                                 style={{ 
                                     fontFamily: 'monospace',
                                     WebkitTextSecurity: isFieldVisible('seed') ? 'none' : 'disc'
@@ -955,6 +1041,11 @@ function WalletEntryCard({
                             value={entry.privateKey}
                             onChange={(e) => handleFieldChange('privateKey', e.target.value)}
                             className={entry.privateKey ? (privateKeyValidation.isValid ? 'is-valid' : 'is-invalid') : ''}
+                            disabled={entryMode === 'view'}
+                            spellCheck={false}
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            autoComplete="off"
                             style={{ 
                                 fontFamily: 'monospace'
                             }}
@@ -1010,6 +1101,11 @@ function WalletEntryCard({
                         placeholder="Wallet address"
                         value={entry.address}
                         onChange={(e) => handleFieldChange('address', e.target.value)}
+                        disabled={entryMode === 'view'}
+                        spellCheck={false}
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        autoComplete="off"
                     />
                 </Form.Group>
 
@@ -1021,6 +1117,11 @@ function WalletEntryCard({
                                 placeholder="Purpose of this wallet, backup info, etc..."
                                 value={entry.notes}
                                 onChange={(e) => handleFieldChange('notes', e.target.value)}
+                                disabled={entryMode === 'view'}
+                                spellCheck={false}
+                                autoCorrect="off"
+                                autoCapitalize="off"
+                                autoComplete="off"
                             />
                         </Form.Group>
                     </div>

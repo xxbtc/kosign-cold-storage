@@ -8,7 +8,11 @@ function NoteEntryCard({
     onUpdate, 
     onRemove,
     isExpanded = false,
-    onToggleExpanded
+    onToggleExpanded,
+    entryMode = 'view',
+    onSave,
+    onCancel,
+    onEdit
 }) {
     const handleFieldChange = (field, value) => {
         onUpdate(index, field, value);
@@ -20,15 +24,25 @@ function NoteEntryCard({
 
     // Get summary info for collapsed state (reactive to entry changes)
     const summaryInfo = React.useMemo(() => {
-        const title = entry.title || 'Untitled Note';
+        const title = entry.title || 'New Note Entry';
         const hasContent = !!entry.content;
         
         return { title, hasContent };
     }, [entry.title, entry.content]);
 
-    // Check for validation issues (reactive to entry changes)
+    // Check for validation issues (only show if entry has content)
     const hasValidationIssues = React.useMemo(() => {
-        return !entry.title || !entry.content;
+        // Don't show validation errors if entry is completely empty (new entry)
+        const hasAnyContent = entry.title || entry.content;
+        if (!hasAnyContent) return false;
+        
+        // Only show validation issues if we're in view mode
+        return entryMode === 'view' && (!entry.title || !entry.content);
+    }, [entry.title, entry.content, entryMode]);
+
+    // Check if entry can be saved (for Save button)
+    const canSave = React.useMemo(() => {
+        return entry.title && entry.content;
     }, [entry.title, entry.content]);
 
     return (
@@ -52,7 +66,7 @@ function NoteEntryCard({
                                 {hasValidationIssues && (
                                     <FaExclamationTriangle className="text-warning me-2" size={14} />
                                 )}
-                                {!hasValidationIssues && (
+                                {!hasValidationIssues && entryMode === 'view' && (
                                     <FaCheck className="text-success me-2" size={14} />
                                 )}
                             </div>
@@ -63,16 +77,57 @@ function NoteEntryCard({
                             )}
                         </div>
                     </div>
-                    <Button 
-                        variant="outline-danger" 
-                        size="sm"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemove();
-                        }}
-                    >
-                        <FaTrash />
-                    </Button>
+                    <div className="d-flex gap-2">
+                        {entryMode === 'view' && (
+                            <>
+                                <Button 
+                                    variant="outline-primary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onEdit();
+                                    }}
+                                >
+                                    Edit
+                                </Button>
+                                <Button 
+                                    variant="outline-danger" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleRemove();
+                                    }}
+                                >
+                                    <FaTrash />
+                                </Button>
+                            </>
+                        )}
+                        {entryMode === 'edit' && (
+                            <>
+                                <Button 
+                                    variant="outline-secondary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onCancel();
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button 
+                                    variant="primary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSave();
+                                    }}
+                                    disabled={!canSave}
+                                >
+                                    Save
+                                </Button>
+                            </>
+                        )}
+                    </div>
                 </div>
 
                 {/* Accordion Content */}
@@ -85,6 +140,11 @@ function NoteEntryCard({
                                 placeholder="Note title"
                                 value={entry.title}
                                 onChange={(e) => handleFieldChange('title', e.target.value)}
+                                disabled={entryMode === 'view'}
+                                spellCheck={false}
+                                autoCorrect="off"
+                                autoCapitalize="off"
+                                autoComplete="off"
                             />
                         </Form.Group>
 
@@ -96,19 +156,15 @@ function NoteEntryCard({
                                 placeholder="Your secure note content..."
                                 value={entry.content}
                                 onChange={(e) => handleFieldChange('content', e.target.value)}
+                                disabled={entryMode === 'view'}
+                                spellCheck={false}
+                                autoCorrect="off"
+                                autoCapitalize="off"
+                                autoComplete="off"
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-0">
-                            <Form.Label>Context Notes</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={2}
-                                placeholder="Why this note is important, when to use it, etc..."
-                                value={entry.notes}
-                                onChange={(e) => handleFieldChange('notes', e.target.value)}
-                            />
-                        </Form.Group>
+
                     </div>
                 </Collapse>
             </Card.Body>

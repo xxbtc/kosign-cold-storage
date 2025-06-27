@@ -57,7 +57,7 @@ function TestPage() {
                                     'josdf-asdkfjs', 'adsfkjlsj-lskdjlsfj', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh',
                                     'josdf-asdkfjs', 'adsfkjlsj-lskdjlsfj', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh', 'skfljsjhf-jdshsfkjh'
                                 ]}
-                                maxLengthPerQRCode  = {600}
+                                maxLengthPerQRCode  = {150}
                             />
 
                             {/*<div>

@@ -32,6 +32,10 @@ import VaultMetadata from '../components/VaultMetadata';
 import UnlockedVault from '../components/UnlockedVault';
 import { useSensitiveMode } from '../contexts/SensitiveModeContext';
 
+// NEW: Import format-specific components
+import SingleQRUnlock from '../components/SingleQRUnlock';
+import LegacyMultiQRUnlock from '../components/LegacyMultiQRUnlock';
+
 function UnlockPage() {
 
     const navigate              = useNavigate();
@@ -77,11 +81,15 @@ function UnlockPage() {
 
     useEffect(()=>{
         if (!metadata) return;
-        if (numOfQRsScanned>=metadata.qrcodes) {
-      //      console.log('i set the scan type to key');
+        
+        // NEW: Handle both single QR and legacy multi-QR formats
+        const totalVaultQRs = metadata.data ? 1 : metadata.qrcodes;
+        
+        if (numOfQRsScanned >= totalVaultQRs) {
+            console.log(`Scanned ${numOfQRsScanned} of ${totalVaultQRs} vault QRs - transitioning to key scanning`);
             setScanType('key');
         }
-    }, [numOfQRsScanned]);
+    }, [numOfQRsScanned, metadata]);
 
     useEffect(() => {
         if (!metadata) return;
@@ -107,7 +115,7 @@ function UnlockPage() {
         let jsonObject = JSON.parse(data);
 
         if ((numOfQRsScanned===0) && (jsonObject.id !==1)) {
-            alert ('please scan the metadata QR from your vault backup');
+            alert ('please scan the vault QR from your backup');
             setTimeout(() => setIsProcessing(false), 300);
             return;
         }
@@ -124,15 +132,33 @@ function UnlockPage() {
             }
             
             setMetadata(jsonObject);
+            
+            // NEW: Check if this is a single QR code format (has data field)
+            if (jsonObject.data) {
+                console.log('Detected new single QR format - setting cipher data immediately');
+                console.log('Single QR vault detected - cipher data length:', jsonObject.data.length);
+                setCipherData(jsonObject.data);
+                // For single QR format, we've scanned all vault data
+                setNumOfQRsScanned(1);
+                // Skip to key scanning phase
+                setScanType('key');
+            } else {
+                console.log('Detected legacy multi-QR format - expecting data shards');
+                console.log('Legacy vault detected - expected QR codes:', jsonObject.qrcodes);
+                // Legacy format - expect separate data shards
+                setNumOfQRsScanned(1);
+            }
         } else {
+            // Legacy format: Handle data shards
             if (jsonObject.id !== (numOfQRsScanned+1)) {
                 alert('please scan shard #' + (numOfQRsScanned));
                 setTimeout(() => setIsProcessing(false), 300);
                 return;
             }
             setCipherData(cipherData+jsonObject.data);
+            setNumOfQRsScanned(jsonObject.id);
         }
-        setNumOfQRsScanned(jsonObject.id);
+        
         setTimeout(() => setIsProcessing(false), 300);
     };
 
@@ -146,14 +172,17 @@ function UnlockPage() {
             return;
         }
 
-        unlockShares.push(data.key);
-        setUnlockShares(unlockShares);
+        // Fix: Use spread operator to create new arrays instead of mutating existing ones
+        const newUnlockShares = [...unlockShares, data.key];
+        setUnlockShares(newUnlockShares);
 
-        let tmpScannedKeys = scannedKeys;
-
-        tmpScannedKeys.push(data.ident);
-        setScannedKeys(tmpScannedKeys);
-       // console.log('unlock sharesi snow ', unlockShares);
+        const newScannedKeys = [...scannedKeys, data.ident];
+        setScannedKeys(newScannedKeys);
+        
+        console.log('Key scanned:', data.ident);
+        console.log('Total keys scanned:', newScannedKeys.length);
+        console.log('Threshold needed:', metadata?.threshold);
+        
         setNumOfQRKEYSsScanned(numOfQRKEYSsScanned+1);
         setTimeout(() => setIsProcessing(false), 300);
     }
@@ -310,6 +339,46 @@ function UnlockPage() {
         }, 0);
     };
 
+    // Helper functions for dynamic progress calculation
+    const getTotalVaultQRs = () => {
+        if (!metadata) return 1;
+        return metadata.data ? 1 : metadata.qrcodes;
+    };
+
+    const getTotalQRsNeeded = () => {
+        if (!metadata) return 1;
+        const vaultQRs = metadata.data ? 1 : metadata.qrcodes;
+        return vaultQRs + metadata.threshold;
+    };
+
+    const getCurrentProgress = () => {
+        if (!metadata) return 0;
+        return numOfQRsScanned + numOfQRKEYSsScanned;
+    };
+
+    const getVaultFormatInfo = () => {
+        if (!metadata) return 'Unknown';
+        return metadata.data ? 'Single QR Format' : 'Legacy Multi-QR Format';
+    };
+
+    // NEW: Vault format detection and manual override
+    const [forceFormat, setForceFormat] = useState(null); // 'single' or 'legacy'
+    
+    const getVaultFormat = () => {
+        // If user manually selected a format, use that
+        if (forceFormat) return forceFormat;
+        
+        // If no metadata yet, default to single QR format (v2)
+        if (!metadata) return 'single';
+        
+        // Once metadata is scanned, detect format automatically
+        return metadata.data ? 'single' : 'legacy';
+    };
+
+    const isUsingUnifiedComponent = () => {
+        return getVaultFormat() === 'single';
+    };
+
     if (unlocked) {
         return (
             <Layout>
@@ -423,89 +492,53 @@ function UnlockPage() {
                                     }}
                                 />
                             ) : wizardStep === 2 ? (
-                                <div className="scanning-content">
-                                    
-                                    
-                                    <Row className="scanner-row">
-                                        <Col md={4} className="scanner-column">
-                                            <div className="scanner-overlay">
-                                                {isProcessing ? (
-                                                    <div className="scanner-processing">
-                                                        <Oval stroke={'#1786ff'} strokeWidth={15} />
-                                                        <span>Processing...</span>
-                                                    </div>
-                                                ) : (
-                                                    <QrReader
-                                                        key={'qr-scanner'}
-                                                        onResult={(result, error) => scannedSomething(result?.text, error)}
-                                                        constraints={{
-                                                            audio: false,
-                                                            video: {
-                                                                facingMode: 'environment',
-                                                                width: { ideal: 1280 },
-                                                                height: { ideal: 720 }
-                                                            }
-                                                        }}
-                                                        containerStyle={{
-                                                            margin: 0,
-                                                            padding: 0,
-                                                            height: '280px',
-                                                            width: '100%',
-                                                            borderRadius: 12,
-                                                        }}
-                                                        videoStyle={{
-                                                            height: '100%',
-                                                            width: '100%',
-                                                            margin: 0,
-                                                            padding: 0,
-                                                            objectFit: 'cover',
-                                                            borderRadius: 12,
-                                                        }}
-                                                    />
-                                                )}
-                                            </div>
-                                        </Col>
-                                        
-                                        <Col md={8}>
-                                            <div className="current-action">
-                                                <Oval stroke={'#1786ff'} strokeWidth={15} className={'loading'}  />
-                                                {scanType === 'vault' ?
-                                                    <span>
-                                                        {numOfQRsScanned === 0 ?
-                                                            <span>Scan the <b>metadata</b> QR on your vault</span>
-                                                            :
-                                                            <span>Scan <b>shard #{numOfQRsScanned}</b> from your vault</span>
-                                                        }
-                                                    </span>
-                                                    :
-                                                    <span>Scan key #{numOfQRKEYSsScanned + 1} of {metadata.threshold} required</span>
-                                                }
-                                            </div>
-                                        
-                                            <div className="scan-status-section">
-                                                <VaultMetadata 
-                                                    metadata={metadata} 
-                                                    VAULT_VERSIONS={VAULT_VERSIONS}
-                                                    getClassType={getClassType}
-                                                    getKeyClass={getKeyClass}
-                                                    numOfQRsScanned={numOfQRsScanned}
-                                                    numOfQRKEYSsScanned={numOfQRKEYSsScanned}
-                                                    scanType={scanType}
-                                                />
-                                            </div>
-                                        </Col>
-                                    </Row>
+                                <div className="scanning-wrapper">
+                                    {/* NEW: Component routing based on vault format */}
+                                    {isUsingUnifiedComponent() ? (
+                                        <SingleQRUnlock
+                                            metadata={metadata}
+                                            numOfQRsScanned={numOfQRsScanned}
+                                            numOfQRKEYSsScanned={numOfQRKEYSsScanned}
+                                            scanType={scanType}
+                                            isProcessing={isProcessing}
+                                            cameraError={cameraError}
+                                            scannedKeys={scannedKeys}
+                                            onScanResult={scannedSomething}
+                                        />
+                                    ) : (
+                                        <LegacyMultiQRUnlock
+                                            metadata={metadata}
+                                            numOfQRsScanned={numOfQRsScanned}
+                                            numOfQRKEYSsScanned={numOfQRKEYSsScanned}
+                                            scanType={scanType}
+                                            isProcessing={isProcessing}
+                                            cameraError={cameraError}
+                                            scannedKeys={scannedKeys}
+                                            onScanResult={scannedSomething}
+                                            getClassType={getClassType}
+                                            getKeyClass={getKeyClass}
+                                            VAULT_VERSIONS={VAULT_VERSIONS}
+                                        />
+                                    )}
                                 </div>
                             ) : null}
 
-                            {cameraError && (
-                                <div className="alert alert-danger mt-3">
-                                    <FaExclamationTriangle className="me-2" />
-                                    {cameraError}
-                                </div>
-                            )}
-
                             <div className="content-footer">
+                                {/* Format Selection - In footer during scanning */}
+                                {wizardStep === 2 && !metadata && (
+                                    <div className="format-selection-footer">
+                                        <span className="format-text">
+                                            Vault format: {getVaultFormat() === 'single' ? 'V2' : 'V1 (legacy format)'} • 
+                                        </span>
+                                        <button 
+                                            className="format-link"
+                                            onClick={() => setForceFormat(getVaultFormat() === 'single' ? 'legacy' : 'single')}
+                                        >
+                                            Switch to {getVaultFormat() === 'single' ? 'V1 (legacy format)' : 'V2'}
+                                        </button>
+                                    </div>
+                                )}
+                                
                                 <div className="info-card">
                                     <div className="d-flex align-items-center justify-content-center">
                                         <span className="me-2">🛠️</span>

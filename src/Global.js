@@ -11,12 +11,12 @@ global.stripePubKey = 'pk_test_I4rOTLfBxkIH2dqZ1c8iTr2400Pjy6dJbv';
 // Plan Limits - Centralized Configuration
 global.FREE_PLAN = {
     maxShares: 2,        // Free plan allows up to 2 keys
-    maxStorage: 150      // character limit for free
+    maxStorage: 120      // Optimized for seed phrases (12-24 words = ~120 chars)
 };
 
 global.PRO_PLAN = {
     maxShares: 20,       // Pro plan allows up to 20 keys  
-    maxStorage: 5000     // 5000 character limit for pro
+    maxStorage: 300      // Multiple items or longer seeds (still single-page focused)
 };
 
 // Legacy settings (can be removed once ProFeatureService is updated)

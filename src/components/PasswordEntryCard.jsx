@@ -10,7 +10,11 @@ function PasswordEntryCard({
     isFieldVisible, 
     onToggleVisibility,
     isExpanded = false,
-    onToggleExpanded
+    onToggleExpanded,
+    entryMode = 'view',
+    onSave,
+    onCancel,
+    onEdit
 }) {
     const handleFieldChange = (field, value) => {
         onUpdate(index, field, value);
@@ -26,16 +30,26 @@ function PasswordEntryCard({
 
     // Get summary info for collapsed state (reactive to entry changes)
     const summaryInfo = React.useMemo(() => {
-        const service = entry.service || 'Untitled';
+        const service = entry.service || 'New Password Entry';
         const username = entry.username || '';
         const hasPassword = !!entry.password;
         
         return { service, username, hasPassword };
     }, [entry.service, entry.username, entry.password]);
 
-    // Check for validation issues (reactive to entry changes)
+    // Check for validation issues (only show if not in edit mode or has some content)
     const hasValidationIssues = React.useMemo(() => {
-        return !entry.service || !entry.password;
+        // Don't show validation errors if entry is completely empty (new entry)
+        const hasAnyContent = entry.service || entry.username || entry.password || entry.url || entry.notes;
+        if (!hasAnyContent) return false;
+        
+        // Only show validation issues if we're in view mode or trying to save
+        return entryMode === 'view' && (!entry.service || !entry.password);
+    }, [entry.service, entry.password, entry.username, entry.url, entry.notes, entryMode]);
+
+    // Check if entry can be saved (for Save button)
+    const canSave = React.useMemo(() => {
+        return entry.service && entry.password;
     }, [entry.service, entry.password]);
 
     return (
@@ -59,7 +73,7 @@ function PasswordEntryCard({
                                 {hasValidationIssues && (
                                     <FaExclamationTriangle className="text-warning me-2" size={14} />
                                 )}
-                                {!hasValidationIssues && (
+                                {!hasValidationIssues && entryMode === 'view' && (
                                     <FaCheck className="text-success me-2" size={14} />
                                 )}
                             </div>
@@ -71,16 +85,57 @@ function PasswordEntryCard({
                             )}
                         </div>
                     </div>
-                    <Button 
-                        variant="outline-danger" 
-                        size="sm"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemove();
-                        }}
-                    >
-                        <FaTrash />
-                    </Button>
+                    <div className="d-flex gap-2">
+                        {entryMode === 'view' && (
+                            <>
+                                <Button 
+                                    variant="outline-primary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onEdit();
+                                    }}
+                                >
+                                    Edit
+                                </Button>
+                                <Button 
+                                    variant="outline-danger" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleRemove();
+                                    }}
+                                >
+                                    <FaTrash />
+                                </Button>
+                            </>
+                        )}
+                        {entryMode === 'edit' && (
+                            <>
+                                <Button 
+                                    variant="outline-secondary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onCancel();
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button 
+                                    variant="primary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSave();
+                                    }}
+                                    disabled={!canSave}
+                                >
+                                    Save
+                                </Button>
+                            </>
+                        )}
+                    </div>
                 </div>
 
                 {/* Accordion Content */}
@@ -93,6 +148,11 @@ function PasswordEntryCard({
                                 placeholder="e.g., Gmail, Bank of America"
                                 value={entry.service}
                                 onChange={(e) => handleFieldChange('service', e.target.value)}
+                                disabled={entryMode === 'view'}
+                                spellCheck={false}
+                                autoCorrect="off"
+                                autoCapitalize="off"
+                                autoComplete="off"
                             />
                         </Form.Group>
 
@@ -103,6 +163,11 @@ function PasswordEntryCard({
                                 placeholder="your@email.com"
                                 value={entry.username}
                                 onChange={(e) => handleFieldChange('username', e.target.value)}
+                                disabled={entryMode === 'view'}
+                                spellCheck={false}
+                                autoCorrect="off"
+                                autoCapitalize="off"
+                                autoComplete="off"
                             />
                         </Form.Group>
 
@@ -114,6 +179,11 @@ function PasswordEntryCard({
                                     placeholder="••••••••••"
                                     value={entry.password}
                                     onChange={(e) => handleFieldChange('password', e.target.value)}
+                                    disabled={entryMode === 'view'}
+                                    spellCheck={false}
+                                    autoCorrect="off"
+                                    autoCapitalize="off"
+                                    autoComplete="off"
                                 />
                                 <Button 
                                     variant="outline-secondary"
@@ -131,6 +201,11 @@ function PasswordEntryCard({
                                 placeholder="https://example.com"
                                 value={entry.url}
                                 onChange={(e) => handleFieldChange('url', e.target.value)}
+                                disabled={entryMode === 'view'}
+                                spellCheck={false}
+                                autoCorrect="off"
+                                autoCapitalize="off"
+                                autoComplete="off"
                             />
                         </Form.Group>
 
@@ -142,6 +217,11 @@ function PasswordEntryCard({
                                 placeholder="Any additional context"
                                 value={entry.notes}
                                 onChange={(e) => handleFieldChange('notes', e.target.value)}
+                                disabled={entryMode === 'view'}
+                                spellCheck={false}
+                                autoCorrect="off"
+                                autoCapitalize="off"
+                                autoComplete="off"
                             />
                         </Form.Group>
                     </div>

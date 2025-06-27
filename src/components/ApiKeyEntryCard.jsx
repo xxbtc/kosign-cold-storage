@@ -10,7 +10,11 @@ function ApiKeyEntryCard({
     isFieldVisible, 
     onToggleVisibility,
     isExpanded = false,
-    onToggleExpanded
+    onToggleExpanded,
+    entryMode = 'view',
+    onSave,
+    onCancel,
+    onEdit
 }) {
     const handleFieldChange = (field, value) => {
         onUpdate(index, field, value);
@@ -26,16 +30,26 @@ function ApiKeyEntryCard({
 
     // Get summary info for collapsed state (reactive to entry changes)
     const summaryInfo = React.useMemo(() => {
-        const service = entry.service || 'Untitled API Key';
+        const service = entry.service || 'New API Key Entry';
         const hasKey = !!entry.key;
         const hasSecret = !!entry.secret;
         
         return { service, hasKey, hasSecret };
     }, [entry.service, entry.key, entry.secret]);
 
-    // Check for validation issues (reactive to entry changes)
+    // Check for validation issues (only show if entry has content)
     const hasValidationIssues = React.useMemo(() => {
-        return !entry.service || !entry.key;
+        // Don't show validation errors if entry is completely empty (new entry)
+        const hasAnyContent = entry.service || entry.key || entry.secret || entry.notes;
+        if (!hasAnyContent) return false;
+        
+        // Only show validation issues if we're in view mode
+        return entryMode === 'view' && (!entry.service || !entry.key);
+    }, [entry.service, entry.key, entry.secret, entry.notes, entryMode]);
+
+    // Check if entry can be saved (for Save button)
+    const canSave = React.useMemo(() => {
+        return entry.service && entry.key;
     }, [entry.service, entry.key]);
 
     return (
@@ -59,7 +73,7 @@ function ApiKeyEntryCard({
                                 {hasValidationIssues && (
                                     <FaExclamationTriangle className="text-warning me-2" size={14} />
                                 )}
-                                {!hasValidationIssues && (
+                                {!hasValidationIssues && entryMode === 'view' && (
                                     <FaCheck className="text-success me-2" size={14} />
                                 )}
                             </div>
@@ -71,16 +85,57 @@ function ApiKeyEntryCard({
                             )}
                         </div>
                     </div>
-                    <Button 
-                        variant="outline-danger" 
-                        size="sm"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemove();
-                        }}
-                    >
-                        <FaTrash />
-                    </Button>
+                    <div className="d-flex gap-2">
+                        {entryMode === 'view' && (
+                            <>
+                                <Button 
+                                    variant="outline-primary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onEdit();
+                                    }}
+                                >
+                                    Edit
+                                </Button>
+                                <Button 
+                                    variant="outline-danger" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleRemove();
+                                    }}
+                                >
+                                    <FaTrash />
+                                </Button>
+                            </>
+                        )}
+                        {entryMode === 'edit' && (
+                            <>
+                                <Button 
+                                    variant="outline-secondary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onCancel();
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button 
+                                    variant="primary" 
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSave();
+                                    }}
+                                    disabled={!canSave}
+                                >
+                                    Save
+                                </Button>
+                            </>
+                        )}
+                    </div>
                 </div>
 
                 {/* Accordion Content */}
@@ -94,6 +149,11 @@ function ApiKeyEntryCard({
                         placeholder="e.g., AWS, Google Cloud, GitHub"
                         value={entry.service}
                         onChange={(e) => handleFieldChange('service', e.target.value)}
+                        disabled={entryMode === 'view'}
+                        spellCheck={false}
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        autoComplete="off"
                     />
                 </Form.Group>
 
@@ -105,6 +165,11 @@ function ApiKeyEntryCard({
                             placeholder="••••••••••"
                             value={entry.key}
                             onChange={(e) => handleFieldChange('key', e.target.value)}
+                            disabled={entryMode === 'view'}
+                            spellCheck={false}
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            autoComplete="off"
                         />
                         <Button 
                             variant="outline-secondary"
@@ -123,6 +188,11 @@ function ApiKeyEntryCard({
                             placeholder="••••••••••"
                             value={entry.secret}
                             onChange={(e) => handleFieldChange('secret', e.target.value)}
+                            disabled={entryMode === 'view'}
+                            spellCheck={false}
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            autoComplete="off"
                         />
                         <Button 
                             variant="outline-secondary"
@@ -141,6 +211,11 @@ function ApiKeyEntryCard({
                                 placeholder="Permissions, usage, expiration info, etc..."
                                 value={entry.notes}
                                 onChange={(e) => handleFieldChange('notes', e.target.value)}
+                                disabled={entryMode === 'view'}
+                                spellCheck={false}
+                                autoCorrect="off"
+                                autoCapitalize="off"
+                                autoComplete="off"
                             />
                         </Form.Group>
                     </div>

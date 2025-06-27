@@ -8,78 +8,53 @@ import { FaExclamationTriangle, FaKey, FaLock, FaCalendarAlt, FaQrcode, FaUnlock
 
 const PDFVaultBackup = (props) => {
      //   console.log(props);
-        //lets break up the encrypted text into managable qrcode blocks
+        //lets create a single QR code combining metadata and data for optimal UX
         if (!props.cipherText) return;
         let maxLengthPerQRCode = props.maxLengthPerQRCode; //characters
         let tmpQRArray = [];
         let canvas;
         let QRText;
         let c = 1;
-        let qrPerRow = 2;
+        let qrPerRow = 1; // Single QR code per row
 
-        let totalQRCodes = 1;
-        for (let i = 0; i < props.cipherText.length; i += maxLengthPerQRCode) {
-            totalQRCodes++;
-        }
-        let metadata = JSON.stringify({
-            id:1,
-            about:'Vault [Kosign.xyz]',
-            qrcodes: totalQRCodes,
-            version: CURRENT_VAULT_VERSION,
+        // Create combined vault data in single QR code
+        let combinedVaultData = JSON.stringify({
+            id: 1,
+            about: 'Vault [Kosign dot xyz]',
+            //version: CURRENT_VAULT_VERSION,
             name: props.vaultName,
-            // description: props.description,
             shares: props.shares.length,
             threshold: props.threshold,
             cipherIV: props.cipherIV,
-            keys:props.keyAliasArray,
-            format: VAULT_VERSIONS[CURRENT_VAULT_VERSION]
+            keys: props.keyAliasArray,
+           // format: VAULT_VERSIONS[CURRENT_VAULT_VERSION],
+            data: props.cipherText // Include the encrypted data directly
         });
 
-        // console.log('Metadata QR length:', metadata.length);
-        // console.log('Metadata QR is ', metadata);
+        console.log('Combined vault data length:', combinedVaultData.length);
+        console.log('Combined vault data preview:', combinedVaultData.substring(0, 200) + '...');
 
         canvas = document.createElement('canvas');
-        QRCode2.toCanvas(canvas, metadata);
-        tmpQRArray.push({qrCode:canvas.toDataURL(), id:c, raw:metadata});
+        QRCode2.toCanvas(canvas, combinedVaultData, {
+            errorCorrectionLevel: 'M',
+            width: 250,  // Reduced from 320 to 250
+            margin: 2
+        });
+        tmpQRArray.push({qrCode:canvas.toDataURL(), id: 1, raw: combinedVaultData});
 
-        for (let i = 0; i < props.cipherText.length; i += maxLengthPerQRCode) {
-            //result.push(props.cipherText.substr(i, maxLengthPerQRCode));
-            canvas = document.createElement('canvas');
-            c++;
-            QRText = JSON.stringify({
-                id: c,
-                data: props.cipherText.substr(i, maxLengthPerQRCode)
-            });
-            QRCode2.toCanvas(canvas, QRText);
-            tmpQRArray.push({qrCode:canvas.toDataURL(), id:c, raw:(JSON.stringify({id:c, data:props.cipherText.substr(i, maxLengthPerQRCode) } ))});
-        }
+        // No longer need to chunk data since everything is in one QR code
+        const chunkedArray = [tmpQRArray]; // Single QR code in array format
 
-        //console.log('prechunked array is ',tmpQRArray);
-        const chunkedArray = [];
-
-        for (let i = 0; i < tmpQRArray.length; i += qrPerRow) {
-            chunkedArray.push(tmpQRArray.slice(i, i + qrPerRow));
-        }
-       //console.log('chunked array is ', chunkedArray);
-
-        //setCipherArray(result);
-       // setQRArray(chunkedArray);
-
-    const qrArray = chunkedArray;
-
-
+        const qrArray = chunkedArray;
 
     let pageNumber = 0;
 
     const qrPerPage     = 1;
     const firstPageQR   = 1;
 
-    const totalQRs = qrArray.length*qrPerRow;
-    const remainingQRs = totalQRs - firstPageQR;
-
-    const totalPages = totalQRCodes; // Each QR code gets its own page
-
-
+    const totalQRs = 1; // Always 1 QR code now
+    const totalQRCodes = 1; // Always 1 QR code now
+    const totalPages = 1; // Always single page
 
     //const [qrArray, setQRArray] = useState(chunkedArray);
     //const [cipherArray, setCipherArray] = useState();
@@ -343,14 +318,14 @@ const PDFVaultBackup = (props) => {
             justifyContent: 'center',
             alignItems: 'center',
             position: 'relative',
-            padding: props.qrtype === 'downloadable' ? '0 70px' : '0',
-            height: props.qrtype === 'downloadable' ? 380 : 400,
-            width: props.qrtype === 'downloadable' ? 380 : 400,
+            padding: props.qrtype === 'downloadable' ? '0 40px' : '0',
+            height: props.qrtype === 'downloadable' ? 280 : 300,  // Reduced for smaller QR
+            width: props.qrtype === 'downloadable' ? 280 : 300,   // Reduced for smaller QR
             margin: '0 auto',
         },
         QRImage: {
-            width: 400,
-            height: 400,
+            width: 250,  // Reduced from 320 to 250
+            height: 250, // Reduced from 320 to 250
             padding: 10,
             backgroundColor: '#fff',
             objectFit: 'contain',
@@ -500,8 +475,8 @@ const PDFVaultBackup = (props) => {
                         <QRCode 
                             id='qrcodekey' 
                             value={qrData.raw} 
-                            size={400} 
-                            level="H"
+                            size={250}  // Reduced from 320 to 250
+                            level="M"   // Good balance of error correction and capacity
                             includeMargin={true}
                         />
                         :null
@@ -590,11 +565,6 @@ const PDFVaultBackup = (props) => {
         // Get formatted creation date
         const creationDate = formatTime(props.createdTimestamp);
 
-        // Determine how to display the page range for shards
-        const shardPagesText = totalQRCodes === 2 
-            ? "(page 2)" 
-            : `(pages 2-${totalPages})`;
-
         return (
             <div style={styles.asciiBoxStyle}>
                 <div style={{
@@ -642,21 +612,19 @@ const PDFVaultBackup = (props) => {
                         }}>
                             {`     !!! IMPORTANT !!!       `}
                         </div>
-                        <div style={{marginTop: 8, fontWeight: 'bold'}}>{`Page 1 of ${totalPages}`}</div>
+                        <div style={{marginTop: 8, fontWeight: 'bold'}}>{`Single Page Vault`}</div>
                         <div style={{marginTop: 4, display: 'flex', alignItems: 'center', gap: '8px'}}>
-                            <span>v{CURRENT_VAULT_VERSION}</span>
-                            {qrType && (
-                                <span style={{
-                                    backgroundColor: '#0d6efd',
-                                    color: 'white',
-                                    padding: '2px 8px',
-                                    borderRadius: '4px',
-                                    fontSize: '14px',
-                                    fontWeight: 'bold'
-                                }}>
-                                    {qrType}
-                                </span>
-                            )}
+                            {/* <span>v{CURRENT_VAULT_VERSION}</span> */}
+                            <span style={{
+                                backgroundColor: '#28a745',
+                                color: 'white',
+                                padding: '2px 8px',
+                                borderRadius: '4px',
+                                fontSize: '14px',
+                                fontWeight: 'bold'
+                            }}>
+                                VAULT DATA
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -664,9 +632,6 @@ const PDFVaultBackup = (props) => {
                 <div style={styles.asciiDetailsSection}>
                     {`-----------------------------------------------------------------------------
 Vault Name:         ${props.vaultName}
-Contents:           ◆ 1 Metadata QR Code (page 1)
-                    ◆ ${totalQRCodes - 1} Data Shard QR Code${totalQRCodes - 1 !== 1 ? 's' : ''} ${shardPagesText}
-                    ◆ ${totalPages} page${totalPages !== 1 ? 's' : ''} total
 Keys Required:      ${props.threshold} of ${props.shares.length}
 Unlock URL:         `}
                     <span style={styles.highlightStyle}>https://kosign.xyz/unlock</span>
@@ -793,65 +758,45 @@ Vault Name:         `}
 
     return (
         <div style={props.qrtype==='printable'?styles.printPage:styles.downloadPage}>
-            {/* First page: Metadata QR + full header/details */}
+            {/* Single QR code containing complete vault data */}
             <div style={styles.page}>
-                {renderVaultHeaderAscii(0, true, 'METADATA')}
+                {renderVaultHeaderAscii(0, true, 'COMPLETE VAULT')}
                 
                 <div style={{
                     ...styles.QRWrapperMiddle,
                     position: 'relative',
                 }}>
-                    <div style={styles.QRRow}>
-                        {renderQR(qrArray[0][0], 0, 0)}
-                    </div>
-                    
-                    {/* <div style={{
-                        position: props.qrtype === 'downloadable' ? 'absolute' : 'absolute',
-                        bottom: props.qrtype === 'downloadable' ? '10px' : '40px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        fontSize: props.qrtype === 'downloadable' ? 14 : 16,
-                        color: '#000',
-                        fontFamily: 'Helvetica',
-                        zIndex: 1000
+                    {/* Single QR code with all vault data */}
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        marginTop: '30px'
                     }}>
-                        Page 1 of {totalPages}
-                    </div> */}
-                </div>
-            </div>
-            
-            {/* Shard pages: One per page, compact header */}
-            {qrArray.flat().slice(1).map((qrData, idx) => (
-                <div key={'shardpage_' + idx} 
-                    style={props.qrtype==='printable' ? styles.printPageBreak : {}}>
-                    <div style={styles.page}>
-                        {/* Compact header for non-first pages with shard number */}
-                        {renderCompactHeader(idx + 2, `SHARD #${qrData.id - 1}`)}
-                        
-                        <div style={{
-                            ...styles.QRWrapperMiddleSecondPage,
-                            position: 'relative',
+                        {/* <div style={{
+                            ...styles.QRText,
+                            marginBottom: '20px',
+                            backgroundColor: '#e8f5e8',
+                            borderColor: '#28a745',
+                            color: '#28a745',
+                            fontSize: 20,
+                            padding: '8px 20px'
                         }}>
-                            <div style={styles.QRRow}>
-                                {renderQR(qrData, 0, idx + 1)}
-                            </div>
-                            
-                            {/* <div style={{
-                                position: props.qrtype === 'downloadable' ? 'absolute' : 'absolute',
-                                bottom: props.qrtype === 'downloadable' ? '10px' : '40px',
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                fontSize: props.qrtype === 'downloadable' ? 14 : 16,
-                                color: '#000',
-                                fontFamily: 'Helvetica',
-                                zIndex: 1000
-                            }}>
-                                Page {idx + 2} of {totalPages}
-                            </div> */}
+                            COMPLETE VAULT - SCAN ONCE
+                        </div> */}
+                        {renderQR(qrArray[0][0], 0, 0)}
+                        <div style={{
+                            marginTop: '15px',
+                            fontSize: 14,
+                            color: '#666',
+                            textAlign: 'center',
+                            fontStyle: 'italic'
+                        }}>
+                            All vault data and metadata in one QR code
                         </div>
                     </div>
                 </div>
-            ))}
+            </div>
         </div>
     );
 

@@ -926,7 +926,7 @@
 /* Preparation Step Styles */
 .preparation-content {
     width: 50%;
-    margin: 8% auto 0px auto;
+    margin: 2% auto 0px auto;
 }
 
 /* Mobile responsive for preparation step */
@@ -2348,4 +2348,43 @@
 .github-link:hover {
     color: #1260B3 !important;
     text-decoration: underline;
-} 
+}
+
+/* Format Selection - Footer Text Link */
+.format-selection-footer {
+    text-align: center;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-top: 1px solid #2a2a2a;
+    background: #111111;
+}
+
+.format-text {
+    color: #777777;
+    font-size: 12px;
+}
+
+.format-link {
+    background: none;
+    border: none;
+    color: #999999;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.format-link:hover {
+    color: #bbbbbb;
+}
+
+@media (max-width: 480px) {
+    .format-buttons {
+        flex-direction: column;
+    }
+    
+    .format-btn {
+        width: 100%;
+    }
+}

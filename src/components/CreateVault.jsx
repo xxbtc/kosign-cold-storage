@@ -66,10 +66,11 @@ function CreateVault(props) {
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
     const [totalPages, setTotalPages] = useState();
 
-    const maxLengthPerQRCode = 400;
-    const qrPerPage     = 4;
-    const firstPageQR   = 2;
-    const qrPerRow      = 4;
+    // Reduced for single-page vaults with easier scanning
+    const maxLengthPerQRCode = 150;  // Reduced from 400 to 150
+    const qrPerPage     = 1;     // Single QR per page for better UX
+    const firstPageQR   = 1;     // Start with 1 QR on first page
+    const qrPerRow      = 1;     // One QR per row for better layout
 
     const [vaultColors, setVaultColors] = useState([]);
 
@@ -89,18 +90,24 @@ function CreateVault(props) {
     }, [showProUpgrade]);
 
     const calculateHowManyPages = (value) => {
-        // This should match the exact logic in PDFVaultBackup.jsx
-        // The PDF encrypts the value first, which adds overhead
-        // Let's estimate the encrypted size (typically 1.3-1.5x larger due to base64 encoding + metadata)
+        // Single QR code vault - all data combined
+        // The combined vault data (metadata + encrypted content) will be in one QR code
+        // This should typically result in Version 6-8 QR codes which are very scannable
+        
+        // Estimate total size: metadata (~100-150 chars) + encrypted data (~value.length * 1.4)
+        const estimatedMetadataSize = 150; // Conservative estimate for metadata
         const estimatedCipherTextLength = Math.ceil(value.length * 1.4);
+        const estimatedTotalSize = estimatedMetadataSize + estimatedCipherTextLength;
         
-        // Match the exact PDF logic: totalQRCodes = 1; for each chunk: totalQRCodes++
-        let totalQRCodes = 1; // Start with metadata QR
-        for (let i = 0; i < estimatedCipherTextLength; i += maxLengthPerQRCode) {
-            totalQRCodes++;
-        }
+        // Log for debugging
+        console.log('Single QR Vault size estimation:');
+        console.log('  - Input data length:', value.length);
+        console.log('  - Estimated encrypted size:', estimatedCipherTextLength);
+        console.log('  - Estimated metadata size:', estimatedMetadataSize);
+        console.log('  - Total estimated size:', estimatedTotalSize);
         
-        return totalQRCodes; // Each QR code gets its own page
+        // Always return 1 page since everything is in a single QR code
+        return 1;
     };
 
     const setSecret = (newSecretValue) => {

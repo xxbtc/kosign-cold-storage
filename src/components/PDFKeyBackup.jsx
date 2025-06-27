@@ -125,13 +125,13 @@ const PDFKeyBackup = (props) => {
             justifyContent: 'center',
             alignItems: 'center',
             position: 'relative',
-            padding: props.qrtype === 'downloadable' ? '0 70px' : '0',
-            height: 400,
-            width: 400
+            padding: props.qrtype === 'downloadable' ? '0 40px' : '0',
+            height: 280,
+            width: 280
         },
         QRImage: {
-            width: 400,
-            height: 400,
+            width: 250,
+            height: 250,
             padding: 10,
             backgroundColor: '#fff',
             objectFit: 'contain',
@@ -247,7 +247,11 @@ const PDFKeyBackup = (props) => {
     });
 
     canvas = document.createElement('canvas');
-    QRCode2.toCanvas(canvas, qrdata);
+    QRCode2.toCanvas(canvas, qrdata, {
+        errorCorrectionLevel: 'M',  // Changed from H to M for better balance
+        width: 250,  // Reduced from default to 250
+        margin: 2
+    });
     const qr = canvas.toDataURL();
 
     // New ASCII-style header for key backup
@@ -348,8 +352,8 @@ Key Alias:          `}
                                 <QRCode 
                                     id='qrcodekey' 
                                     value={qrdata} 
-                                    size={400}
-                                    level="H"
+                                    size={250}
+                                    level="M"
                                     includeMargin={true}
                                 />
                                 : null
