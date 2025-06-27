@@ -125,9 +125,12 @@ const PDFKeyBackup = (props) => {
             justifyContent: 'center',
             alignItems: 'center',
             position: 'relative',
-            padding: props.qrtype === 'downloadable' ? '0 40px' : '0',
-            height: 280,
-            width: 280
+            padding: props.qrtype === 'downloadable' ? '15px' : '10px',
+            height: props.qrtype === 'downloadable' ? 280 : 300,
+            width: props.qrtype === 'downloadable' ? 280 : 300,
+            margin: '0',
+            border: '1px dotted #ccc',
+            borderRadius: '8px',
         },
         QRImage: {
             width: 250,
@@ -209,7 +212,7 @@ const PDFKeyBackup = (props) => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '4px',
-                marginTop: '8px',
+                marginTop: '0px',
                 alignItems: 'flex-end'
             }}>
                 {/* Also keep the visual representation for browser/print */}
@@ -340,14 +343,22 @@ Key Alias:          `}
                  ...(props.qrtype === 'printable' ? styles.printPageBreak : {})
              }}>
             <div style={styles.page}>
-                {renderKeyHeaderAscii()}
-                
-                <div style={styles.QRWrapperMiddle}>
-                    <div style={styles.QRWrapperInner}>
+                {/* Main content area with QR code in top-left */}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    padding: '20px',
+                    gap: '40px',
+                    flex: 1
+                }}>
+                    {/* Left side - QR Code */}
+                    <div style={{
+                        flex: '0 0 320px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center'
+                    }}>
                         <div style={styles.QRCodeContainer}>
-                            <div style={styles.QRLeftText}>
-                                KEEP SECURE
-                            </div>
                             {props.qrtype === 'printable' ?
                                 <QRCode 
                                     id='qrcodekey' 
@@ -366,8 +377,171 @@ Key Alias:          `}
                                 />
                                 : null
                             }
-                            <div style={styles.QRWarning}>
-                                DO NOT FOLD
+                        </div>
+                        <div style={{
+                            fontSize: 14,
+                            fontWeight: 'bold',
+                            color: '#dc3545',
+                            marginTop: '15px',
+                            textAlign: 'center',
+                            fontFamily: 'Helvetica-Bold',
+                            fontStyle: 'italic'
+                        }}>
+                            DO NOT FOLD
+                        </div>
+                    </div>
+                    
+                    {/* Right side - ASCII art and information */}
+                    <div style={{
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '20px'
+                    }}>
+                        {/* Header section */}
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '20px'
+                        }}>
+                            <h1 style={{
+                                fontSize: 20,
+                                fontWeight: 'bold',
+                                color: '#2c3e50',
+                                margin: 0,
+                                fontFamily: 'Helvetica-Bold'
+                            }}>
+                                KOSIGN KEY
+                            </h1>
+                            {renderColorBoxes()}
+                        </div>
+                        
+                        {/* ASCII art */}
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            marginBottom: '20px'
+                        }}>
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                fontFamily: 'monospace',
+                                fontSize: 11,
+                                color: '#2c3e50',
+                                lineHeight: 1.1,
+                                whiteSpace: 'pre'
+                            }}>
+                                {` ██╗  ██╗███████╗██╗   ██╗
+ ██║ ██╔╝██╔════╝╚██╗ ██╔╝
+ █████╔╝ █████╗   ╚████╔╝ 
+ ██╔═██╗ ██╔══╝    ╚██╔╝  
+ ██║  ██╗███████╗   ██║   
+ ╚═╝  ╚═╝╚══════╝   ╚═╝   `}
+                            </div>
+                            <div style={{
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                color: '#0d6efd',
+                                marginTop: 10,
+                                fontFamily: 'Helvetica-Bold',
+                                textAlign: 'center'
+                            }}>
+                                {props.keyAlias}
+                            </div>
+                        </div>
+
+                        {/* Instructions */}
+                        <div style={{
+                            backgroundColor: '#f8f9fa',
+                            padding: '20px',
+                            borderRadius: '8px',
+                            border: '1px solid #e9ecef'
+                        }}>
+                            <h3 style={{
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                color: '#2c3e50',
+                                margin: '0 0 12px 0',
+                                fontFamily: 'Helvetica-Bold'
+                            }}>
+                                How to Use This Key
+                            </h3>
+                            <ol style={{
+                                fontSize: 14,
+                                color: '#495057',
+                                margin: 0,
+                                paddingLeft: '20px',
+                                fontFamily: 'Helvetica'
+                            }}>
+                                <li>Go to <strong>kosign.xyz/unlock</strong></li>
+                                <li>Go offline</li>
+                                <li>Scan your vault QR code</li>
+                                <li>Scan key(s) required to unlock vault</li>
+                            </ol>
+
+                            <div style={{
+                                fontSize: 14,
+                                color: '#495057',
+                                margin: '10px 0px 0px 0px',
+                                fontFamily: 'Helvetica'
+                            }}>
+                                Note: The unlock utility is open source and is available at https://github.com/xxbtc/kosign-unlock 
+                            </div>
+
+                        </div>
+
+                        {/* Key details */}
+                        <div style={{
+                            backgroundColor: '#fff',
+                            padding: '20px',
+                            borderRadius: '8px',
+                            border: '1px solid #e9ecef'
+                        }}>
+                            <h3 style={{
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                color: '#2c3e50',
+                                margin: '0 0 12px 0',
+                                fontFamily: 'Helvetica-Bold'
+                            }}>
+                                Key Details
+                            </h3>
+                            <div style={{
+                                fontSize: 14,
+                                color: '#495057',
+                                fontFamily: 'Helvetica',
+                                lineHeight: 1.5
+                            }}>
+                                <div><strong>Vault:</strong> {props.vaultName}</div>
+                                <div><strong>Key Name:</strong> {props.keyAlias}</div>
+                                <div><strong>Created:</strong> {formatTime(props.createdTimestamp)}</div>
+                            </div>
+                        </div>
+
+                        {/* Security notice */}
+                        <div style={{
+                            backgroundColor: '#fff3cd',
+                            padding: '15px',
+                            borderRadius: '8px',
+                            border: '1px solid #ffeaa7'
+                        }}>
+                            <div style={{
+                                fontSize: 16,
+                                color: '#856404',
+                                fontWeight: 'bold',
+                                fontFamily: 'Helvetica-Bold',
+                                marginBottom: '8px'
+                            }}>
+                                🔒 KEEP SECURE
+                            </div>
+                            <div style={{
+                                fontSize: 14,
+                                color: '#856404',
+                                fontFamily: 'Helvetica'
+                            }}>
+                                Store this key in a safe private location.
                             </div>
                         </div>
                     </div>

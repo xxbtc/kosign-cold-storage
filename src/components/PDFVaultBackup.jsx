@@ -278,6 +278,7 @@ const PDFVaultBackup = (props) => {
             width: '100%',
             padding: props.qrtype === 'downloadable' ? '30px 0 60px 0' : '0',
             gap: 0,
+            alignItems: 'flex-start', // Align to left instead of center
         },
         QRWrapperMiddleSecondPage: {
             display: 'flex',
@@ -313,15 +314,16 @@ const PDFVaultBackup = (props) => {
             marginBottom:15,
         },
         QRCodeContainer: {
-            flex: 1,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             position: 'relative',
-            padding: props.qrtype === 'downloadable' ? '0 40px' : '0',
+            padding: props.qrtype === 'downloadable' ? '15px' : '10px',
             height: props.qrtype === 'downloadable' ? 280 : 300,  // Reduced for smaller QR
             width: props.qrtype === 'downloadable' ? 280 : 300,   // Reduced for smaller QR
-            margin: '0 auto',
+            margin: '0', // Reset margin since we're positioning via flex layout
+            border: '1px dotted #ccc', // Light dotted border around QR code
+            borderRadius: '8px', // Slight rounding for a softer look
         },
         QRImage: {
             width: 250,  // Reduced from 320 to 250
@@ -376,14 +378,14 @@ const PDFVaultBackup = (props) => {
                     writingMode: 'vertical-rl',
                     textOrientation: 'mixed',
                     transform: 'rotate(180deg)',
-                    paddingRight: '30px',
+                    paddingRight: '20px',
                     position: 'relative'
                   }
                 : {
                     transform: 'rotate(-90deg)',
                     paddingRight: '0px',
                     position: 'absolute',
-                    right: '-80px',
+                    left: '0px', // Reduced from -80px to stay within margins
                     width: '100px',
                     textAlign: 'center'
                   }
@@ -408,7 +410,7 @@ const PDFVaultBackup = (props) => {
                     transform: 'rotate(90deg)',
                     paddingLeft: '0px',
                     position: 'absolute',
-                    left: '-80px',
+                    left: '-40px', // Reduced from -80px to stay within margins
                     width: '100px',
                     textAlign: 'center'
                   }
@@ -468,9 +470,6 @@ const PDFVaultBackup = (props) => {
         return (
             <div key={'qrkey'+ii+'_'+i} style={styles.QRWrapperInner}>
                 <div style={styles.QRCodeContainer}>
-                    <div style={styles.QRLeftText}>
-                        KEEP SECURE
-                    </div>
                     {props.qrtype==='printable'?
                         <QRCode 
                             id='qrcodekey' 
@@ -489,9 +488,7 @@ const PDFVaultBackup = (props) => {
                         />
                         :null
                     }
-                    <div style={styles.QRWarning}>
-                        DO NOT FOLD
-                    </div>
+
                 </div>
             </div>
         )
@@ -526,7 +523,7 @@ const PDFVaultBackup = (props) => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '4px',
-                marginTop: '8px',
+                marginTop: '0px',
                 alignItems: 'flex-end'
             }}>
                 {/* Add a text label for colors that will definitely show up in PDF
@@ -561,238 +558,195 @@ const PDFVaultBackup = (props) => {
         );
     };
 
-    const renderVaultHeaderAscii = (page, forceShowFullHeader, qrType = null) => {
-        // Get formatted creation date
-        const creationDate = formatTime(props.createdTimestamp);
-
-        return (
-            <div style={styles.asciiBoxStyle}>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                }}>
-                    <div style={{
-                        flexGrow: 1,
-                        flexShrink: 1,
-                        minWidth: 0,
-                        maxWidth: '65%',  
-                    }}>
-                        <div style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10, marginTop: 10, fontFamily: 'Helvetica-BoldOblique'}}>
-                            KOSIGN.XYZ SECURE COLD STORAGE
-                        </div>
-                        <div>
-                            {` ██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗
- ██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝
- ██║   ██║███████║██║   ██║██║     ██║   
- ╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║   
-  ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║   
-   ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝   `}
-                        </div>
-                    </div>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-end',
-                        justifyContent: 'flex-start',
-                        minWidth: '240px',
-                    }}>
-                        {/* Use the new function to render color blocks */}
-                        {renderColorBoxes()}
-                        
-                        <div style={{
-                            marginTop: 10,
-                            fontFamily: 'monospace',
-                            color: '#dc3545',
-                            fontWeight: 'bold',
-                            border: '1px solid #dc3545',
-                            borderRadius: '0px',
-                            padding: '4px 0px',
-                            backgroundColor: '#fff3f3',
-                        }}>
-                            {`     !!! IMPORTANT !!!       `}
-                        </div>
-                        <div style={{marginTop: 8, fontWeight: 'bold'}}>{`Single Page Vault`}</div>
-                        <div style={{marginTop: 4, display: 'flex', alignItems: 'center', gap: '8px'}}>
-                            {/* <span>v{CURRENT_VAULT_VERSION}</span> */}
-                            <span style={{
-                                backgroundColor: '#28a745',
-                                color: 'white',
-                                padding: '2px 8px',
-                                borderRadius: '4px',
-                                fontSize: '14px',
-                                fontWeight: 'bold'
-                            }}>
-                                VAULT DATA
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style={styles.asciiDetailsSection}>
-                    {`-----------------------------------------------------------------------------
-Vault Name:         ${props.vaultName}
-Keys Required:      ${props.threshold} of ${props.shares.length}
-Unlock URL:         `}
-                    <span style={styles.highlightStyle}>https://kosign.xyz/unlock</span>
-                    {`
-Source Code:        `}
-                    <span style={styles.highlightStyle}>https://github.com/xxbtc/kosign-unlock</span>
-                    {`
-Keys:               `}
-                    <div style={{
-                        display: 'inline-flex',
-                        flexWrap: 'wrap',
-                        fontFamily: 'monospace',
-                        maxWidth: 'calc(100% - 19ch)',
-                        gap: '8px',
-                        marginTop: '2px'
-                    }}>
-                        {props.keyAliasArray.map((key, index) => (
-                            <span key={index} style={{
-                                padding: '0 4px',
-                                border: '0.5px solid #888',
-                                borderRadius: '4px',
-                                backgroundColor: '#f8f9fa',
-                                fontWeight: 'normal',
-                                whiteSpace: 'nowrap',
-                                position: 'relative',
-                                display: 'inline-block'
-                            }}>
-                                {`${key}`}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        )
-    };
-    
-    // Modify the renderCompactHeader function to match the full header style
-    const renderCompactHeader = (pageNumber, qrType = null) => {
-        // Get formatted creation date
-        const creationDate = formatTime(props.createdTimestamp);
-        
-        return (
-            <div style={styles.asciiBoxStyle}>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                }}>
-                    <div style={{
-                        flexGrow: 1,
-                        flexShrink: 1,
-                        minWidth: 0,
-                        maxWidth: '65%',  
-                    }}>
-                        <div style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10, marginTop: 10, fontFamily: 'Helvetica-BoldOblique'}}>
-                            KOSIGN.XYZ SECURE COLD STORAGE
-                        </div>
-                        <div>
-                            {` ██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗
- ██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝
- ██║   ██║███████║██║   ██║██║     ██║   
- ╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║   
-  ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║   
-   ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝   `}
-                        </div>
-                    </div>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-end',
-                        justifyContent: 'flex-start',
-                        minWidth: '240px',
-                    }}>
-                        {/* Use the new function to render color blocks */}
-                        {renderColorBoxes()}
-                        
-                        <div style={{
-                            marginTop: 10,
-                            fontFamily: 'monospace',
-                            color: '#dc3545',
-                            fontWeight: 'bold',
-                            border: '1px solid #dc3545',
-                            borderRadius: '0px',
-                            padding: '4px 0px',
-                            backgroundColor: '#fff3f3',
-                        }}>
-                            {`     !!! IMPORTANT !!!       `}
-                        </div>
-                        
-                        <div style={{marginTop: 8, fontWeight: 'bold'}}>{`Page ${pageNumber} of ${totalPages}`}</div>
-                        {qrType && (
-                            <div style={{marginTop: 4, display: 'flex', alignItems: 'center', gap: '8px'}}>
-                                <span style={{
-                                    backgroundColor: '#0d6efd',
-                                    color: 'white',
-                                    padding: '2px 8px',
-                                    borderRadius: '4px',
-                                    fontSize: '14px',
-                                    fontWeight: 'bold'
-                                }}>
-                                    {qrType}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                </div>
-                
-                <div style={{...styles.asciiDetailsSection, paddingBottom: 0, marginBottom: 0}}>
-                    {`-----------------------------------------------------------------------------
-Vault Name:         `}
-                    <span style={{
-                        display: 'inline-block',
-                        wordBreak: 'break-word',
-                        maxWidth: 'calc(100% - 19ch)',
-                        whiteSpace: 'normal'
-                    }}>
-                        {props.vaultName}
-                    </span>
-                    
-                </div>
-            </div>
-        );
-    };
 
     return (
         <div style={props.qrtype==='printable'?styles.printPage:styles.downloadPage}>
-            {/* Single QR code containing complete vault data */}
             <div style={styles.page}>
-                {renderVaultHeaderAscii(0, true, 'COMPLETE VAULT')}
-                
+                {/* Main content area with elevated QR code */}
                 <div style={{
-                    ...styles.QRWrapperMiddle,
-                    position: 'relative',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    padding: '20px',
+                    gap: '40px',
+                    flex: 1
                 }}>
-                    {/* Single QR code with all vault data */}
+                    {/* Left side - QR Code elevated */}
                     <div style={{
+                        flex: '0 0 320px',
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center',
-                        marginTop: '30px'
+                        alignItems: 'center'
                     }}>
-                        {/* <div style={{
-                            ...styles.QRText,
-                            marginBottom: '20px',
-                            backgroundColor: '#e8f5e8',
-                            borderColor: '#28a745',
-                            color: '#28a745',
-                            fontSize: 20,
-                            padding: '8px 20px'
-                        }}>
-                            COMPLETE VAULT - SCAN ONCE
-                        </div> */}
                         {renderQR(qrArray[0][0], 0, 0)}
                         <div style={{
-                            marginTop: '15px',
                             fontSize: 14,
-                            color: '#666',
+                            fontWeight: 'bold',
+                            color: '#dc3545',
+                            marginTop: '15px',
                             textAlign: 'center',
+                            fontFamily: 'Helvetica-Bold',
                             fontStyle: 'italic'
                         }}>
-                            All vault data and metadata in one QR code
+                            DO NOT FOLD
+                        </div>
+                        
+                    </div>
+                    
+                    {/* Right side - ASCII art and information */}
+                    <div style={{
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '20px'
+                    }}>
+                        {/* Header section */}
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '20px'
+                        }}>
+                            <h1 style={{
+                                fontSize: 20,
+                                fontWeight: 'bold',
+                                color: '#2c3e50',
+                                margin: '4px 0px 0px 0px',
+                                fontFamily: 'Helvetica-Bold'
+                            }}>
+                                KOSIGN VAULT
+                            </h1>
+                            {renderColorBoxes()}
+                        </div>
+                        
+                        {/* ASCII art */}
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            fontFamily: 'monospace',
+                            fontSize: 11,
+                            color: '#2c3e50',
+                            lineHeight: 1.1,
+                            whiteSpace: 'pre',
+                            marginBottom: '20px'
+                        }}>
+                            {` ██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗
+ ██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝
+ ██║   ██║███████║██║   ██║██║     ██║   
+ ╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║   
+  ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║   
+   ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝   `}
+                        </div>
+
+                        {/* Instructions */}
+                        <div style={{
+                            backgroundColor: '#f8f9fa',
+                            padding: '20px',
+                            borderRadius: '8px',
+                            border: '1px solid #e9ecef'
+                        }}>
+                            <h3 style={{
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                color: '#2c3e50',
+                                margin: '0 0 12px 0',
+                                fontFamily: 'Helvetica-Bold'
+                            }}>
+                                How to Unlock
+                            </h3>
+                            <ol style={{
+                                fontSize: 14,
+                                color: '#495057',
+                                margin: 0,
+                                paddingLeft: '20px',
+                                fontFamily: 'Helvetica'
+                            }}>
+                                <li>Go to <strong>kosign.xyz/unlock</strong></li>
+                                <li>Go offline</li>
+                                <li>Scan your vault QR code (this page)</li>
+                                <li>Scan {props.threshold} key{props.threshold > 1 ? 's' : ''}</li>
+                            </ol>
+
+                            <div style={{
+                                fontSize: 14,
+                                color: '#495057',
+                                margin: '10px 0px 0px 0px',
+                                fontFamily: 'Helvetica'
+                            }}>
+                                Note: The unlock utility is open source and is available at https://github.com/xxbtc/kosign-unlock 
+                            </div>
+                            
+                        </div>
+
+                     
+                        {/* Vault details */}
+                        <div style={{
+                            backgroundColor: '#fff',
+                            padding: '20px',
+                            borderRadius: '8px',
+                            border: '1px solid #e9ecef'
+                        }}>
+                            <h3 style={{
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                color: '#2c3e50',
+                                margin: '0 0 12px 0',
+                                fontFamily: 'Helvetica-Bold'
+                            }}>
+                                Vault Details
+                            </h3>
+                            <div style={{
+                                fontSize: 14,
+                                color: '#495057',
+                                fontFamily: 'Helvetica',
+                                lineHeight: 1.5
+                            }}>
+                                <div><strong>Name:</strong> {props.vaultName}</div>
+                                <div><strong>Keys Required:</strong> {props.threshold} of {props.shares.length}</div>
+                                <div><strong>Created:</strong> {formatTime(props.createdTimestamp)}</div>
+                                <div style={{marginTop: '8px'}}>
+                                    <strong>Key Names:</strong>
+                                    <div style={{marginTop: '4px'}}>
+                                        {props.keyAliasArray.map((key, index) => (
+                                            <span key={index} style={{
+                                                display: 'inline-block',
+                                                padding: '2px 8px',
+                                                margin: '2px 4px 2px 0',
+                                                backgroundColor: '#e9ecef',
+                                                borderRadius: '12px',
+                                                fontSize: '12px',
+                                                border: '1px solid #ced4da'
+                                            }}>
+                                                {key}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Security notice */}
+                        <div style={{
+                            backgroundColor: '#fff3cd',
+                            padding: '15px',
+                            borderRadius: '8px',
+                            border: '1px solid #ffeaa7'
+                        }}>
+                            <div style={{
+                                fontSize: 16,
+                                color: '#856404',
+                                fontWeight: 'bold',
+                                fontFamily: 'Helvetica-Bold',
+                                marginBottom: '8px'
+                            }}>
+                                🔒 KEEP SECURE
+                            </div>
+                            <div style={{
+                                fontSize: 14,
+                                color: '#856404',
+                                fontFamily: 'Helvetica'
+                            }}>
+                                Store this vault in a safe private location.
+                            </div>
                         </div>
                     </div>
                 </div>
