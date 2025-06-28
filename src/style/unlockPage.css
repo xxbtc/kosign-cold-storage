@@ -465,8 +465,7 @@
 /* Scanner Section - Dark Mode */
 .unlock-layout .scanner-overlay {
     border-radius: 16px;
-   
-    
+    position: relative;
 }
 
 .unlock-layout .scanning-guide {
