@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { QrReader } from 'react-qr-reader';
 import { Oval } from 'react-loading-icons';
-import { FaExclamationTriangle } from 'react-icons/fa';
+import { FaExclamationTriangle, FaSyncAlt } from 'react-icons/fa';
 import VaultMetadata from './VaultMetadata';
 
 const LegacyMultiQRUnlock = ({ 
@@ -17,13 +17,42 @@ const LegacyMultiQRUnlock = ({
     onScanResult,
     getClassType,
     getKeyClass,
-    VAULT_VERSIONS
+    VAULT_VERSIONS,
+    cameraFacing,
+    onSwitchCamera,
+    getCameraConstraints,
+    isMobileDevice
 }) => {
+    // Get camera constraints based on facing mode
+    const getCameraConfig = () => {
+        const constraints = getCameraConstraints(cameraFacing === 'back');
+        
+        // Override facing mode based on user selection
+        if (cameraFacing === 'front') {
+            constraints.video.facingMode = { ideal: 'user' };
+        } else {
+            constraints.video.facingMode = { ideal: 'environment' };
+        }
+        
+        return constraints;
+    };
+
     return (
         <div className="scanning-content">
             <Row className="scanner-row">
                 <Col md={4} className="scanner-column">
                     <div className="scanner-overlay">
+                        {/* Camera Controls */}
+                        <div className="camera-controls">
+                            <button 
+                                className="camera-switch-btn"
+                                onClick={onSwitchCamera}
+                                title={`Switch to ${cameraFacing === 'back' ? 'front' : 'back'} camera`}
+                            >
+                                <FaSyncAlt />
+                            </button>
+                        </div>
+                        
                         {isProcessing ? (
                             <div className="scanner-processing">
                                 <Oval stroke={'#1786ff'} strokeWidth={15} />
@@ -31,16 +60,9 @@ const LegacyMultiQRUnlock = ({
                             </div>
                         ) : (
                             <QrReader
-                                key={'qr-scanner-legacy'}
+                                key={`qr-scanner-legacy-${cameraFacing}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
-                                constraints={{
-                                    audio: false,
-                                    video: {
-                                        facingMode: 'environment',
-                                        width: { ideal: 1280 },
-                                        height: { ideal: 720 }
-                                    }
-                                }}
+                                constraints={getCameraConfig()}
                                 containerStyle={{
                                     margin: 0,
                                     padding: 0,

@@ -36,6 +36,40 @@ import { useSensitiveMode } from '../contexts/SensitiveModeContext';
 import SingleQRUnlock from '../components/SingleQRUnlock';
 import LegacyMultiQRUnlock from '../components/LegacyMultiQRUnlock';
 
+// Camera utility functions for better mobile support
+const isMobileDevice = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
+};
+
+const getCameraConstraints = (preferBack = true) => {
+    const isMobile = isMobileDevice();
+    
+    // Base constraints
+    const constraints = {
+        audio: false,
+        video: {
+            width: { ideal: isMobile ? 1920 : 1280 },
+            height: { ideal: isMobile ? 1080 : 720 },
+            frameRate: { ideal: 30, max: 30 }
+        }
+    };
+    
+    // Camera selection - prefer back camera on mobile, front camera on desktop
+    if (isMobile && preferBack) {
+        // Mobile: prefer back camera for QR scanning
+        constraints.video.facingMode = { ideal: 'environment' };
+    } else if (!isMobile) {
+        // Desktop: typically has better front-facing webcams
+        constraints.video.facingMode = { ideal: 'user' };
+    } else {
+        // Fallback: let browser choose
+        constraints.video.facingMode = 'environment';
+    }
+    
+    return constraints;
+};
+
 function UnlockPage() {
 
     const navigate              = useNavigate();
@@ -61,6 +95,7 @@ function UnlockPage() {
     const [scannedKeys, setScannedKeys] = useState([]);
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
     const [cameraError, setCameraError] = useState(null);
+    const [cameraFacing, setCameraFacing] = useState('back'); // 'back' or 'front'
     const { enterSensitiveMode, exitSensitiveMode } = useSensitiveMode();
 
     useEffect(() => {
@@ -225,6 +260,10 @@ function UnlockPage() {
         }
     };
 
+    const switchCamera = () => {
+        setCameraFacing(cameraFacing === 'back' ? 'front' : 'back');
+        setCameraError(null); // Clear any existing errors when switching
+    };
 
     const unlockVault = ()=> {
         if (metadata.threshold===1) {
@@ -504,6 +543,10 @@ function UnlockPage() {
                                             cameraError={cameraError}
                                             scannedKeys={scannedKeys}
                                             onScanResult={scannedSomething}
+                                            cameraFacing={cameraFacing}
+                                            onSwitchCamera={switchCamera}
+                                            getCameraConstraints={getCameraConstraints}
+                                            isMobileDevice={isMobileDevice()}
                                         />
                                     ) : (
                                         <LegacyMultiQRUnlock
@@ -518,6 +561,10 @@ function UnlockPage() {
                                             getClassType={getClassType}
                                             getKeyClass={getKeyClass}
                                             VAULT_VERSIONS={VAULT_VERSIONS}
+                                            cameraFacing={cameraFacing}
+                                            onSwitchCamera={switchCamera}
+                                            getCameraConstraints={getCameraConstraints}
+                                            isMobileDevice={isMobileDevice()}
                                         />
                                     )}
                                 </div>

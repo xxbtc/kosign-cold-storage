@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { QrReader } from 'react-qr-reader';
 import { Oval } from 'react-loading-icons';
-import { FaExclamationTriangle, FaCheck, FaQrcode, FaKey } from 'react-icons/fa';
+import { FaExclamationTriangle, FaCheck, FaQrcode, FaKey, FaSyncAlt } from 'react-icons/fa';
 import '../style/singleQRUnlock.css';
 
 const SingleQRUnlock = ({ 
@@ -14,7 +14,11 @@ const SingleQRUnlock = ({
     isProcessing,
     cameraError,
     scannedKeys,
-    onScanResult
+    onScanResult,
+    cameraFacing,
+    onSwitchCamera,
+    getCameraConstraints,
+    isMobileDevice
 }) => {
     // Calculate total progress for unified flow (only after metadata is available)
     const totalSteps = metadata ? 1 + metadata.threshold : null;
@@ -70,12 +74,37 @@ const SingleQRUnlock = ({
         }
     };
 
+    // Get camera constraints based on facing mode
+    const getCameraConfig = () => {
+        const constraints = getCameraConstraints(cameraFacing === 'back');
+        
+        // Override facing mode based on user selection
+        if (cameraFacing === 'front') {
+            constraints.video.facingMode = { ideal: 'user' };
+        } else {
+            constraints.video.facingMode = { ideal: 'environment' };
+        }
+        
+        return constraints;
+    };
+
     return (
         <div className="scanning-content single-qr-mode">
             {/* Scanner Section - Similar to Original Layout */}
             <Row className="scanner-row">
                 <Col md={4} className="scanner-column">
                     <div className="scanner-overlay">
+                        {/* Camera Controls */}
+                        <div className="camera-controls">
+                            <button 
+                                className="camera-switch-btn"
+                                onClick={onSwitchCamera}
+                                title={`Switch to ${cameraFacing === 'back' ? 'front' : 'back'} camera`}
+                            >
+                                <FaSyncAlt />
+                            </button>
+                        </div>
+                        
                         {isProcessing ? (
                             <div className="scanner-processing">
                                 <Oval stroke={'#1786ff'} strokeWidth={15} />
@@ -83,16 +112,9 @@ const SingleQRUnlock = ({
                             </div>
                         ) : (
                             <QrReader
-                                key={'qr-scanner-single'}
+                                key={`qr-scanner-single-${cameraFacing}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
-                                constraints={{
-                                    audio: false,
-                                    video: {
-                                        facingMode: 'environment',
-                                        width: { ideal: 1280 },
-                                        height: { ideal: 720 }
-                                    }
-                                }}
+                                constraints={getCameraConfig()}
                                 containerStyle={{
                                     margin: 0,
                                     padding: 0,
