@@ -12,14 +12,9 @@ const SingleQRUnlock = ({
     numOfQRKEYSsScanned,
     scanType,
     isProcessing,
-    cameraError,
     scannedKeys,
     onScanResult,
-    cameraFacing,
-    onSwitchCamera,
-    getCameraConstraints,
-    isMobileDevice,
-    isIOSDevice
+    cameraManager
 }) => {
     // Calculate total progress for unified flow (only after metadata is available)
     const totalSteps = metadata ? 1 + metadata.threshold : null;
@@ -77,7 +72,7 @@ const SingleQRUnlock = ({
 
     // Get camera constraints based on facing mode
     const getCameraConfig = () => {
-        return getCameraConstraints(cameraFacing === 'back');
+        return cameraManager.getCameraConfig();
     };
 
     return (
@@ -90,8 +85,8 @@ const SingleQRUnlock = ({
                         <div className="camera-controls">
                             <button 
                                 className="camera-switch-btn"
-                                onClick={onSwitchCamera}
-                                title={`Switch to ${cameraFacing === 'back' ? 'front' : 'back'} camera`}
+                                onClick={cameraManager.switchCamera}
+                                title={`Switch to ${cameraManager.cameraFacing === 'back' ? 'front' : 'back'} camera`}
                             >
                                 <FaSyncAlt />
                             </button>
@@ -104,6 +99,7 @@ const SingleQRUnlock = ({
                             </div>
                         ) : (
                             <QrReader
+                                key={`qr-scanner-single-${cameraManager.cameraFacing}-${cameraManager.cameraKey || 0}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
                                 constraints={getCameraConfig()}
                                 containerStyle={{
@@ -189,10 +185,10 @@ const SingleQRUnlock = ({
                 </Col>
             </Row>
 
-            {cameraError && (
+            {cameraManager.cameraError && (
                 <div className="alert alert-danger mt-3">
                     <FaExclamationTriangle className="me-2" />
-                    {cameraError}
+                    {cameraManager.cameraError}
                 </div>
             )}
         </div>

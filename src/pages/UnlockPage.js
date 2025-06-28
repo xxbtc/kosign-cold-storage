@@ -31,39 +31,13 @@ import ProgressStepper from '../components/ProgressStepper';
 import VaultMetadata from '../components/VaultMetadata';
 import UnlockedVault from '../components/UnlockedVault';
 import { useSensitiveMode } from '../contexts/SensitiveModeContext';
+import { useCameraManager } from '../hooks/useCameraManager';
 
 // NEW: Import format-specific components
 import SingleQRUnlock from '../components/SingleQRUnlock';
 import LegacyMultiQRUnlock from '../components/LegacyMultiQRUnlock';
 
-// Camera utility functions for better mobile support
-const isMobileDevice = () => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-           (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
-};
-
-const isIOSDevice = () => {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-};
-
-const getCameraConstraints = (preferBack = true) => {
-    const isMobile = isMobileDevice();
-    
-    // Simplified constraints using direct string values for facingMode
-    const constraints = {
-        audio: false,
-        video: {
-            width: { ideal: isMobile ? 1920 : 1280 },
-            height: { ideal: isMobile ? 1080 : 720 },
-            frameRate: { ideal: 30, max: 30 },
-            // Use simple string format as shown in react-qr-reader docs
-            facingMode: preferBack ? 'environment' : 'user'
-        }
-    };
-    
-    return constraints;
-};
+// Moved camera logic to useCameraManager hook
 
 function UnlockPage() {
 
@@ -89,8 +63,10 @@ function UnlockPage() {
     const [keyAliasArray, setKeyAliasArray] = useState([]);
     const [scannedKeys, setScannedKeys] = useState([]);
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
-    const [cameraError, setCameraError] = useState(null);
-    const [cameraFacing, setCameraFacing] = useState('back'); // 'back' or 'front'
+    
+    // Camera management via custom hook
+    const cameraManager = useCameraManager();
+    
     const { enterSensitiveMode, exitSensitiveMode } = useSensitiveMode();
 
     useEffect(() => {
@@ -142,10 +118,26 @@ function UnlockPage() {
     }, [wizardStep]);
 
     const scannedVault = (data) => {
-        let jsonObject = JSON.parse(data);
+        let jsonObject;
+        
+        try {
+            jsonObject = JSON.parse(data);
+        } catch (error) {
+            console.error('Invalid vault QR data:', error);
+            alert('Invalid vault QR code format. Please scan a valid vault QR code.');
+            setTimeout(() => setIsProcessing(false), 300);
+            return;
+        }
 
         if ((numOfQRsScanned===0) && (jsonObject.id !==1)) {
             alert ('please scan the vault QR from your backup');
+            setTimeout(() => setIsProcessing(false), 300);
+            return;
+        }
+
+        // NEW: Prevent duplicate vault scanning
+        if (metadata && jsonObject.id === 1) {
+            alert('Vault already scanned. Please scan key QR codes instead.');
             setTimeout(() => setIsProcessing(false), 300);
             return;
         }
@@ -193,11 +185,23 @@ function UnlockPage() {
     };
 
     const scannedKey= (data) => {
-       // console.log('scanned key ', data);
-        //console.log('scanned a key', data);
-        //let jsonObject  = JSON.parse(data);
-        //setCipherData(cipherData+data);
+        // NEW: Validate key data structure
+        if (!data || !data.key || !data.ident) {
+            alert('Invalid key QR code. Please scan a valid key.');
+            setTimeout(() => setIsProcessing(false), 300);
+            return;
+        }
+
+        // Check for duplicate key shares
         if (unlockShares.includes(data.key)) {
+            alert('This key has already been scanned.');
+            setTimeout(() => setIsProcessing(false), 300);
+            return;
+        }
+
+        // Check for duplicate key identifiers
+        if (scannedKeys.includes(data.ident)) {
+            alert('This key has already been scanned.');
             setTimeout(() => setIsProcessing(false), 300);
             return;
         }
@@ -229,13 +233,13 @@ function UnlockPage() {
                 console.log('Camera Error:', error);
                 
                 if (error.name === 'NotAllowedError') {
-                    setCameraError('Camera permission denied. Please allow camera access and refresh the page.');
+                    cameraManager.setCameraError('Camera permission denied. Please allow camera access and refresh the page.');
                 } else if (error.name === 'NotFoundError') {
-                    setCameraError('No camera found. Please check your device camera.');
+                    cameraManager.setCameraError('No camera found. Please check your device camera.');
                 } else if (error.name === 'NotReadableError') {
-                    setCameraError('Camera is already in use by another application.');
+                    cameraManager.setCameraError('Camera is already in use by another application.');
                 } else if (error.name === 'OverconstrainedError') {
-                    setCameraError('Camera constraints cannot be satisfied.');
+                    cameraManager.setCameraError('Camera constraints cannot be satisfied.');
                 }
             }
             // Ignore other errors (like "No QR code found" - these are normal)
@@ -243,30 +247,62 @@ function UnlockPage() {
         }
         
         // Clear any previous camera errors when we get successful data
-        setCameraError(null);
+        cameraManager.setCameraError(null);
         
         if (isProcessing) return;
         setIsProcessing(true);
 
-        if (scanType==='vault') {
-            scannedVault(data);
-        } else if (scanType==='key'){
-            scannedKey(JSON.parse(data));
+        try {
+            if (scanType==='vault') {
+                scannedVault(data);
+            } else if (scanType==='key'){
+                const keyData = JSON.parse(data);
+                scannedKey(keyData);
+            }
+        } catch (error) {
+            console.error('QR scanning error:', error);
+            alert('Invalid QR code format. Please scan a valid ' + (scanType === 'vault' ? 'vault' : 'key') + ' QR code.');
+            setTimeout(() => setIsProcessing(false), 300);
         }
     };
 
-    const switchCamera = () => {
-        console.log('Switching camera from', cameraFacing);
-        setCameraError(null); // Clear any existing errors when switching
-        
-        // Switch camera facing - let the library handle the constraint change
-        setCameraFacing(cameraFacing === 'back' ? 'front' : 'back');
-        
-        console.log('Camera switched to:', cameraFacing === 'back' ? 'front' : 'back');
-    };
+    // switchCamera function moved to useCameraManager hook
 
     const unlockVault = ()=> {
+        // NEW: Comprehensive validation before attempting decryption
+        if (!metadata) {
+            alert('Missing vault metadata. Please scan vault QR first.');
+            return;
+        }
+
+        if (!cipherData || cipherData.length === 0) {
+            alert('Missing vault data. Please scan vault QR first.');
+            return;
+        }
+
+        if (!metadata.cipherIV) {
+            alert('Missing encryption parameters. Please scan vault QR again.');
+            return;
+        }
+
+        if (!unlockShares || unlockShares.length === 0) {
+            alert('No unlock keys found. Please scan key QR codes.');
+            return;
+        }
+
+        if (unlockShares.length < metadata.threshold) {
+            const needed = metadata.threshold - unlockShares.length;
+            alert(`Need ${needed} more key${needed > 1 ? 's' : ''}. You have ${unlockShares.length} of ${metadata.threshold} required keys.`);
+            return;
+        }
+
+        // All validations passed - proceed with decryption
         if (metadata.threshold===1) {
+            if (!unlockShares[0]) {
+                alert('Invalid unlock key data. Please scan key QR again.');
+                return;
+            }
+
             EncryptionService.decrypt(
                 cipherData,
                 unlockShares[0],
@@ -276,11 +312,17 @@ function UnlockPage() {
                 setUnlocked(true);
                 setDecryptionResult(decryptionResult);
             }).catch(error => {
-                alert('Decryption failed: ' + error.message);
+                console.error('Decryption error:', error);
+                alert('Decryption failed: ' + error.message + '\n\nPlease verify you scanned the correct vault and key QR codes.');
                 setUnlocked(false);
             });
         } else {
             EncryptionService.combineShares(unlockShares).then((cipherKey) => {
+                if (!cipherKey) {
+                    alert('Failed to combine unlock keys. Please scan key QR codes again.');
+                    return;
+                }
+
                 EncryptionService.decrypt(
                     cipherData,
                     cipherKey,
@@ -290,9 +332,14 @@ function UnlockPage() {
                     setUnlocked(true);
                     setDecryptionResult(decryptionResult);
                 }).catch(error => {
-                    alert('Decryption failed: ' + error.message);
+                    console.error('Decryption error:', error);
+                    alert('Decryption failed: ' + error.message + '\n\nPlease verify you scanned the correct vault and key QR codes.');
                     setUnlocked(false);
                 });
+            }).catch(error => {
+                console.error('Share combination error:', error);
+                alert('Failed to combine unlock keys: ' + error.message);
+                setUnlocked(false);
             });
         }
     };
@@ -528,6 +575,8 @@ function UnlockPage() {
                                     onContinue={() => {
                                         setShowScanner(true);
                                         setWizardStep(wizardStep + 1);
+                                        // Initialize cameras when scanning starts
+                                        cameraManager.initializeCameras();
                                     }}
                                 />
                             ) : wizardStep === 2 ? (
@@ -540,14 +589,9 @@ function UnlockPage() {
                                             numOfQRKEYSsScanned={numOfQRKEYSsScanned}
                                             scanType={scanType}
                                             isProcessing={isProcessing}
-                                            cameraError={cameraError}
                                             scannedKeys={scannedKeys}
                                             onScanResult={scannedSomething}
-                                            cameraFacing={cameraFacing}
-                                            onSwitchCamera={switchCamera}
-                                            getCameraConstraints={getCameraConstraints}
-                                            isMobileDevice={isMobileDevice()}
-                                            isIOSDevice={isIOSDevice()}
+                                            cameraManager={cameraManager}
                                         />
                                     ) : (
                                         <LegacyMultiQRUnlock
@@ -556,17 +600,12 @@ function UnlockPage() {
                                             numOfQRKEYSsScanned={numOfQRKEYSsScanned}
                                             scanType={scanType}
                                             isProcessing={isProcessing}
-                                            cameraError={cameraError}
                                             scannedKeys={scannedKeys}
                                             onScanResult={scannedSomething}
                                             getClassType={getClassType}
                                             getKeyClass={getKeyClass}
                                             VAULT_VERSIONS={VAULT_VERSIONS}
-                                            cameraFacing={cameraFacing}
-                                            onSwitchCamera={switchCamera}
-                                            getCameraConstraints={getCameraConstraints}
-                                            isMobileDevice={isMobileDevice()}
-                                            isIOSDevice={isIOSDevice()}
+                                            cameraManager={cameraManager}
                                         />
                                     )}
                                 </div>

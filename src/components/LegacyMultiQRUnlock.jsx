@@ -12,21 +12,16 @@ const LegacyMultiQRUnlock = ({
     numOfQRKEYSsScanned,
     scanType,
     isProcessing,
-    cameraError,
     scannedKeys,
     onScanResult,
     getClassType,
     getKeyClass,
     VAULT_VERSIONS,
-    cameraFacing,
-    onSwitchCamera,
-    getCameraConstraints,
-    isMobileDevice,
-    isIOSDevice
+    cameraManager
 }) => {
     // Get camera constraints based on facing mode
     const getCameraConfig = () => {
-        return getCameraConstraints(cameraFacing === 'back');
+        return cameraManager.getCameraConfig();
     };
 
     return (
@@ -38,8 +33,8 @@ const LegacyMultiQRUnlock = ({
                         <div className="camera-controls">
                             <button 
                                 className="camera-switch-btn"
-                                onClick={onSwitchCamera}
-                                title={`Switch to ${cameraFacing === 'back' ? 'front' : 'back'} camera`}
+                                onClick={cameraManager.switchCamera}
+                                title={`Switch to ${cameraManager.cameraFacing === 'back' ? 'front' : 'back'} camera`}
                             >
                                 <FaSyncAlt />
                             </button>
@@ -52,6 +47,7 @@ const LegacyMultiQRUnlock = ({
                             </div>
                         ) : (
                             <QrReader
+                                key={`qr-scanner-legacy-${cameraManager.cameraFacing}-${cameraManager.cameraKey || 0}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
                                 constraints={getCameraConfig()}
                                 containerStyle={{
@@ -104,10 +100,10 @@ const LegacyMultiQRUnlock = ({
                 </Col>
             </Row>
 
-            {cameraError && (
+            {cameraManager.cameraError && (
                 <div className="alert alert-danger mt-3">
                     <FaExclamationTriangle className="me-2" />
-                    {cameraError}
+                    {cameraManager.cameraError}
                 </div>
             )}
         </div>
