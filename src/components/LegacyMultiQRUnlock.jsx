@@ -106,6 +106,13 @@ const LegacyMultiQRUnlock = ({
                     {cameraManager.cameraError}
                 </div>
             )}
+            
+            {/* Temporary debug info for mobile testing */}
+            {cameraManager.debugInfo && (
+                <div className="alert alert-info mt-3" style={{ fontSize: '12px', maxHeight: '60px', overflow: 'auto' }}>
+                    <strong>Debug:</strong> {cameraManager.debugInfo}
+                </div>
+            )}
         </div>
     );
 };

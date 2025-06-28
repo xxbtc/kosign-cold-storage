@@ -90,6 +90,24 @@ const SingleQRUnlock = ({
                             >
                                 <FaSyncAlt />
                             </button>
+                            
+                            {/* Temporary test buttons for mobile debugging */}
+                            {cameraManager.debugInfo && (
+                                <div style={{ position: 'absolute', top: '40px', right: '5px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                    <button 
+                                        onClick={() => cameraManager.forceExactFacingMode('back')}
+                                        style={{ fontSize: '10px', padding: '2px 4px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '2px' }}
+                                    >
+                                        Force Back
+                                    </button>
+                                    <button 
+                                        onClick={() => cameraManager.forceExactFacingMode('front')}
+                                        style={{ fontSize: '10px', padding: '2px 4px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '2px' }}
+                                    >
+                                        Force Front
+                                    </button>
+                                </div>
+                            )}
                         </div>
                         
                         {isProcessing ? (
@@ -189,6 +207,13 @@ const SingleQRUnlock = ({
                 <div className="alert alert-danger mt-3">
                     <FaExclamationTriangle className="me-2" />
                     {cameraManager.cameraError}
+                </div>
+            )}
+            
+            {/* Temporary debug info for mobile testing */}
+            {cameraManager.debugInfo && (
+                <div className="alert alert-info mt-3" style={{ fontSize: '12px', maxHeight: '60px', overflow: 'auto' }}>
+                    <strong>Debug:</strong> {cameraManager.debugInfo}
                 </div>
             )}
         </div>
