@@ -19,7 +19,6 @@ const SingleQRUnlock = ({
     onSwitchCamera,
     getCameraConstraints,
     isMobileDevice,
-    cameraKey,
     isIOSDevice
 }) => {
     // Calculate total progress for unified flow (only after metadata is available)
@@ -105,7 +104,6 @@ const SingleQRUnlock = ({
                             </div>
                         ) : (
                             <QrReader
-                                key={`qr-scanner-single-${cameraFacing}-${cameraKey || 0}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
                                 constraints={getCameraConfig()}
                                 containerStyle={{

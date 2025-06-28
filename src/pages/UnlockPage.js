@@ -91,7 +91,6 @@ function UnlockPage() {
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
     const [cameraError, setCameraError] = useState(null);
     const [cameraFacing, setCameraFacing] = useState('back'); // 'back' or 'front'
-    const [cameraKey, setCameraKey] = useState(0); // Force QR Reader remount on iOS
     const { enterSensitiveMode, exitSensitiveMode } = useSensitiveMode();
 
     useEffect(() => {
@@ -260,11 +259,8 @@ function UnlockPage() {
         console.log('Switching camera from', cameraFacing);
         setCameraError(null); // Clear any existing errors when switching
         
-        // Switch camera facing
+        // Switch camera facing - let the library handle the constraint change
         setCameraFacing(cameraFacing === 'back' ? 'front' : 'back');
-        
-        // Force QR Reader remount by updating key
-        setCameraKey(prev => prev + 1);
         
         console.log('Camera switched to:', cameraFacing === 'back' ? 'front' : 'back');
     };
@@ -551,7 +547,6 @@ function UnlockPage() {
                                             onSwitchCamera={switchCamera}
                                             getCameraConstraints={getCameraConstraints}
                                             isMobileDevice={isMobileDevice()}
-                                            cameraKey={cameraKey}
                                             isIOSDevice={isIOSDevice()}
                                         />
                                     ) : (
@@ -571,7 +566,6 @@ function UnlockPage() {
                                             onSwitchCamera={switchCamera}
                                             getCameraConstraints={getCameraConstraints}
                                             isMobileDevice={isMobileDevice()}
-                                            cameraKey={cameraKey}
                                             isIOSDevice={isIOSDevice()}
                                         />
                                     )}

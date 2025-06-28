@@ -22,7 +22,6 @@ const LegacyMultiQRUnlock = ({
     onSwitchCamera,
     getCameraConstraints,
     isMobileDevice,
-    cameraKey,
     isIOSDevice
 }) => {
     // Get camera constraints based on facing mode
@@ -53,7 +52,6 @@ const LegacyMultiQRUnlock = ({
                             </div>
                         ) : (
                             <QrReader
-                                key={`qr-scanner-legacy-${cameraFacing}-${cameraKey || 0}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
                                 constraints={getCameraConfig()}
                                 containerStyle={{
