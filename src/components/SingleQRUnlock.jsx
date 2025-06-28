@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { QrReader } from 'react-qr-reader';
 import { Oval } from 'react-loading-icons';
 import { FaExclamationTriangle, FaCheck, FaQrcode, FaKey, FaSyncAlt } from 'react-icons/fa';
-import Lottie from 'lottie-react';
-import scanQRAnimation from '../animations/5427-scan-qr-code.json';
 import '../style/singleQRUnlock.css';
 
 const SingleQRUnlock = ({ 
