@@ -53,7 +53,7 @@ const SingleQRUnlock = ({
 
     const progressItems = getProgressItems();
 
-    // Get current scan instruction
+    // Get current scan instruction with detailed progress
     const getScanInstruction = () => {
         if (scanType === 'vault') {
             return (
@@ -62,38 +62,35 @@ const SingleQRUnlock = ({
                 </span>
             );
         } else {
-            const keysNeeded = metadata.threshold - numOfQRKEYSsScanned;
-            return (
-                <span>
-                    <strong>Scan any key</strong> ({keysNeeded} more needed)
-                </span>
-            );
+            const keysScanned = numOfQRKEYSsScanned;
+            const totalKeysNeeded = metadata.threshold;
+            const keysRemaining = totalKeysNeeded - keysScanned;
+            
+            if (keysScanned === 0) {
+                return (
+                    <span>
+                        <strong>Scan key 1 of {totalKeysNeeded}</strong>
+                    </span>
+                );
+            } else if (keysRemaining > 0) {
+                return (
+                    <span>
+                        <strong>Scan key {keysScanned + 1} of {totalKeysNeeded}</strong> ({keysRemaining} more needed)
+                    </span>
+                );
+            } else {
+                return (
+                    <span>
+                        <strong>All keys scanned!</strong> Unlocking vault...
+                    </span>
+                );
+            }
         }
-    };
-
-    // Enhanced camera constraints
-    const getCameraConfig = () => {
-        return cameraManager.getCameraConfig();
     };
 
     return (
         <div className="scanning-content single-qr-mode">
             {/* Scanner Section - Similar to Original Layout */}
-            {/* Debug information */}
-            {cameraManager.debugInfo && (
-                <div style={{
-                    background: '#e3f2fd',
-                    color: '#1565c0',
-                    padding: '8px 12px',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    fontFamily: 'monospace',
-                    marginBottom: '10px',
-                    border: '1px solid #bbdefb'
-                }}>
-                    {cameraManager.debugInfo}
-                </div>
-            )}
 
             <Row className="scanner-row">
                 <Col md={4} className="scanner-column">
@@ -107,30 +104,6 @@ const SingleQRUnlock = ({
                             >
                                 <FaSyncAlt />
                             </button>
-                            
-                            {/* Temporary test buttons for mobile debugging */}
-                            {cameraManager.debugInfo && (
-                                <div style={{ position: 'absolute', top: '40px', right: '5px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                    <button 
-                                        onClick={cameraManager.forceBackCamera}
-                                        style={{ fontSize: '10px', padding: '2px 4px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '2px' }}
-                                    >
-                                        Force Back
-                                    </button>
-                                    <button 
-                                        onClick={cameraManager.forceFrontCamera}
-                                        style={{ fontSize: '10px', padding: '2px 4px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '2px' }}
-                                    >
-                                        Force Front
-                                    </button>
-                                    <button 
-                                        onClick={cameraManager.forceIOSCameraReset}
-                                        style={{ fontSize: '10px', padding: '2px 4px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '2px' }}
-                                    >
-                                        💥 Nuclear
-                                    </button>
-                                </div>
-                            )}
                         </div>
                         
                         {isProcessing ? (
@@ -142,7 +115,7 @@ const SingleQRUnlock = ({
                             <QrReader
                                 key={`qr-scanner-single-${cameraManager.cameraFacing}-${cameraManager.cameraKey || 0}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
-                                constraints={getCameraConfig()}
+                                constraints={cameraManager.getCameraConfig()}
                                 containerStyle={{
                                     margin: 0,
                                     padding: 0,
@@ -158,34 +131,16 @@ const SingleQRUnlock = ({
                                     objectFit: 'cover',
                                     borderRadius: 12,
                                 }}
-                                ref={(qrReader) => {
-                                    // Hook into the video element to verify stream
-                                    if (qrReader) {
-                                        const checkVideo = (attempt = 1) => {
-                                            const video = qrReader.querySelector('video');
-                                            if (video && video.srcObject) {
-                                                console.log('🎬 QR Reader video stream detected (attempt ' + attempt + ')');
-                                                cameraManager.verifyStream(video.srcObject);
-                                            } else if (attempt < 3) {
-                                                // Try again up to 3 times
-                                                setTimeout(() => checkVideo(attempt + 1), 300 * attempt);
-                                            }
-                                        };
-                                        
-                                        // Start checking
-                                        checkVideo();
-                                    }
-                                }}
                             />
                         )}
                     </div>
                 </Col>
                 
-                <Col md={8}>
-                    <div className="current-action">
-                        <Oval stroke={'#1786ff'} strokeWidth={15} className={'loading'} />
-                        {getScanInstruction()}
-                    </div>
+                                 <Col md={8}>
+                     <div className="current-action">
+                         <Oval stroke={'#1786ff'} strokeWidth={15} className={'loading'} />
+                         {getScanInstruction()}
+                     </div>
                     
                     {/* Simplified Progress Display - Remove excess containers */}
                     {metadata && (
@@ -240,23 +195,9 @@ const SingleQRUnlock = ({
                                 </div>
                             </div>
                         </div>
-                    )}
-                </Col>
-            </Row>
-
-            {cameraManager.cameraError && (
-                <div className="alert alert-danger mt-3">
-                    <FaExclamationTriangle className="me-2" />
-                    {cameraManager.cameraError}
-                </div>
-            )}
-            
-            {/* Temporary debug info for mobile testing */}
-            {cameraManager.debugInfo && (
-                <div className="alert alert-info mt-3" style={{ fontSize: '12px', maxHeight: '60px', overflow: 'auto' }}>
-                    <strong>Debug:</strong> {cameraManager.debugInfo}
-                                 </div>
-             )}
+                                         )}
+                 </Col>
+             </Row>
         </div>
     );
 };
