@@ -19,7 +19,7 @@ function SecretDataEntry({
     isOnline,
     onContinue
 }) {
-    const [showPreview, setShowPreview] = useState(false);
+
     
     // Structured data state (now includes freeText)
     const [structuredData, setStructuredData] = useState({
@@ -111,24 +111,29 @@ function SecretDataEntry({
                 custom: []
             };
 
-            // Check if this is a flattened format
+
+
+            // Check if this is a flattened array format
             if (Array.isArray(parsed)) {
-                // Check if this is a single entry (array of strings/values) vs multiple entries (array of arrays)
-                const isSingleEntry = parsed.length > 0 && !Array.isArray(parsed[0]);
+                // Check if this is a single entry vs multiple entries
+                // Single entry: array of primitive values ["service", "username", "password"]
+                // Multiple entries: array of arrays [["entry1"], ["entry2"]]
+                const isSingleEntry = parsed.length > 0 && 
+                    !Array.isArray(parsed[0]);
                 
                 if (isSingleEntry) {
                     // Single entry format: ["service", "username", "password", ...]
                     const detectedType = detectEntryType(parsed);
-                    validStructure[detectedType] = [convertArrayToEntry(parsed, detectedType)];
+                    validStructure[detectedType] = [convertToEntry(parsed, detectedType)];
                 } else {
                     // Multiple entries format: [["entry1"], ["entry2"], ...]
-                    if (parsed.length > 0 && Array.isArray(parsed[0])) {
+                    if (parsed.length > 0) {
                         const firstEntry = parsed[0];
                         const detectedType = detectEntryType(firstEntry);
                         
-                        // Convert the flat array to the detected section
-                        validStructure[detectedType] = parsed.map(entryArray => {
-                            return convertArrayToEntry(entryArray, detectedType);
+                        // Convert the entries to the detected section
+                        validStructure[detectedType] = parsed.map(entryData => {
+                            return convertToEntry(entryData, detectedType);
                         });
                     }
                 }
@@ -144,11 +149,8 @@ function SecretDataEntry({
                         validStructure[section] = parsed[section];
                     }
                 } else if (parsed[section] && Array.isArray(parsed[section])) {
-                    validStructure[section] = parsed[section].map(entryArray => {
-                        if (Array.isArray(entryArray)) {
-                            return convertArrayToEntry(entryArray, section);
-                        }
-                        return {};
+                    validStructure[section] = parsed[section].map(entryData => {
+                        return convertToEntry(entryData, section);
                     });
                 }
             });
@@ -160,86 +162,98 @@ function SecretDataEntry({
         }
     };
 
-    // Helper function to detect entry type from array structure and content
-    const detectEntryType = (entryArray) => {
-        let detectedType = 'custom'; // default fallback
-        
-        // Detect type based on array length and content patterns
-        if (entryArray.length === 2) {
-            detectedType = 'notes'; // [title, content]
-        } else if (entryArray.length >= 3 && entryArray.length <= 5) {
-            // Look for common patterns to distinguish types
-            const hasEmailPattern = entryArray.some(field => 
-                typeof field === 'string' && field.includes('@')
-            );
-            const hasSeedPattern = entryArray.some(field => 
-                typeof field === 'string' && 
-                (field.includes('seed') || field.split(' ').length >= 12)
-            );
-            const hasKeyPattern = entryArray.some(field => 
-                typeof field === 'string' && 
-                (field.toLowerCase().includes('key') || field.toLowerCase().includes('token'))
-            );
-            
-            if (hasSeedPattern) {
-                detectedType = 'wallets';
-            } else if (hasKeyPattern) {
-                detectedType = 'apiKeys';
-            } else if (hasEmailPattern) {
-                detectedType = 'passwords';
-            } else {
-                detectedType = entryArray.length === 3 ? 'custom' : 'passwords';
+    // Helper function to detect entry type from array content
+    const detectEntryType = (entryData) => {
+        // Only handle array format now
+        if (Array.isArray(entryData)) {
+            if (entryData.length === 1) {
+                return 'custom'; // Single value, treat as custom
+            } else if (entryData.length === 2) {
+                return 'notes'; // Two values: [title, content]
+            } else if (entryData.length >= 3) {
+                return detectTypeFromValues(entryData);
             }
         }
         
-        return detectedType;
+        return 'custom'; // default fallback
     };
 
-    // Helper function to convert array back to entry object
-    const convertArrayToEntry = (entryArray, section) => {
-        switch (section) {
-            case 'passwords':
-                // [service, username, password, url, notes]
-                return {
-                    service: entryArray[0] || '',
-                    username: entryArray[1] || '',
-                    password: entryArray[2] || '',
-                    url: entryArray[3] || '',
-                    notes: entryArray[4] || ''
-                };
-            case 'wallets':
-                // [name, seed, privateKey, address, notes]
-                return {
-                    name: entryArray[0] || '',
-                    seed: entryArray[1] || '',
-                    privateKey: entryArray[2] || '',
-                    address: entryArray[3] || '',
-                    notes: entryArray[4] || ''
-                };
-            case 'notes':
-                // [title, content]
-                return {
-                    title: entryArray[0] || '',
-                    content: entryArray[1] || ''
-                };
-            case 'apiKeys':
-                // [service, key, secret, notes]
-                return {
-                    service: entryArray[0] || '',
-                    key: entryArray[1] || '',
-                    secret: entryArray[2] || '',
-                    notes: entryArray[3] || ''
-                };
-            case 'custom':
-                // [label, value, notes]
-                return {
-                    label: entryArray[0] || '',
-                    value: entryArray[1] || '',
-                    notes: entryArray[2] || ''
-                };
-            default:
-                return {};
+    // Helper function to detect type from field values
+    const detectTypeFromValues = (values) => {
+        // Look for common patterns to distinguish types
+        const hasEmailPattern = values.some(field => 
+            typeof field === 'string' && field.includes('@')
+        );
+        const hasSeedPattern = values.some(field => 
+            typeof field === 'string' && 
+            (field.includes('seed') || field.split(' ').length >= 12)
+        );
+        const hasKeyPattern = values.some(field => 
+            typeof field === 'string' && 
+            (field.toLowerCase().includes('key') || field.toLowerCase().includes('token'))
+        );
+        
+        if (hasSeedPattern) {
+            return 'wallets';
+        } else if (hasKeyPattern) {
+            return 'apiKeys';
+        } else if (hasEmailPattern) {
+            return 'passwords';
+        } else {
+            return values.length === 3 ? 'custom' : 'passwords';
         }
+    };
+
+    // Helper function to convert positional array back to entry object  
+    const convertToEntry = (entryData, section) => {
+        // Handle positional array format - fill in order, preserving field positions
+        if (Array.isArray(entryData)) {
+            switch (section) {
+                case 'passwords':
+                    // Fill in order: [service, username, password, url, notes]
+                    return {
+                        service: entryData[0] || '',
+                        username: entryData[1] || '',
+                        password: entryData[2] || '',
+                        url: entryData[3] || '',
+                        notes: entryData[4] || ''
+                    };
+                case 'wallets':
+                    // Fill in order: [name, seed, privateKey, address, notes]
+                    return {
+                        name: entryData[0] || '',
+                        seed: entryData[1] || '',
+                        privateKey: entryData[2] || '',
+                        address: entryData[3] || '',
+                        notes: entryData[4] || ''
+                    };
+                case 'notes':
+                    // Fill in order: [title, content]
+                    return {
+                        title: entryData[0] || '',
+                        content: entryData[1] || ''
+                    };
+                case 'apiKeys':
+                    // Fill in order: [service, key, secret, notes]
+                    return {
+                        service: entryData[0] || '',
+                        key: entryData[1] || '',
+                        secret: entryData[2] || '',
+                        notes: entryData[3] || ''
+                    };
+                case 'custom':
+                    // Fill in order: [label, value, notes]
+                    return {
+                        label: entryData[0] || '',
+                        value: entryData[1] || '',
+                        notes: entryData[2] || ''
+                    };
+                default:
+                    return {};
+            }
+        }
+        
+        return {};
     };
 
     // Convert structured data to compact array format (saves characters)
@@ -263,72 +277,72 @@ function SecretDataEntry({
             console.log(`Processing section ${section}, length: ${structuredData[section].length}`);
             if (structuredData[section].length > 0) {
                 const entries = structuredData[section].map(entry => {
-                    // Convert object to array based on section type
+                    // Helper function to create array that preserves field positioning
+                    // Only trims trailing empty fields to maintain UX while saving some space
+                    const createPositionalArray = (fields) => {
+                        // Find the last non-empty field index to preserve positioning
+                        let lastNonEmptyIndex = -1;
+                        for (let i = fields.length - 1; i >= 0; i--) {
+                            if (fields[i] && fields[i].trim() !== '') {
+                                lastNonEmptyIndex = i;
+                                break;
+                            }
+                        }
+                        
+                        // If no non-empty fields, return null
+                        if (lastNonEmptyIndex === -1) {
+                            return null;
+                        }
+                        
+                        // Return array up to last non-empty field (preserves middle empty fields)
+                        return fields.slice(0, lastNonEmptyIndex + 1);
+                    };
+
+                    // Convert object to positional array format - preserves field positioning
                     switch (section) {
                         case 'passwords':
-                            // [service, username, password, url, notes] - only include non-empty values
-                            const pwdArray = [
+                            // [service, username, password, url, notes] - preserve middle empty fields
+                            return createPositionalArray([
                                 entry.service || '',
                                 entry.username || '',
                                 entry.password || '',
                                 entry.url || '',
                                 entry.notes || ''
-                            ];
-                            // Trim trailing empty strings to save space
-                            while (pwdArray.length > 0 && pwdArray[pwdArray.length - 1] === '') {
-                                pwdArray.pop();
-                            }
-                            return pwdArray;
+                            ]);
                         case 'wallets':
-                            // [name, seed, privateKey, address, notes]
-                            const walletArray = [
+                            // [name, seed, privateKey, address, notes] - preserve middle empty fields
+                            return createPositionalArray([
                                 entry.name || '',
                                 entry.seed || '',
                                 entry.privateKey || '',
                                 entry.address || '',
                                 entry.notes || ''
-                            ];
-                            while (walletArray.length > 0 && walletArray[walletArray.length - 1] === '') {
-                                walletArray.pop();
-                            }
-                            return walletArray;
+                            ]);
                         case 'notes':
-                            // [title, content]
-                            const notesArray = [
+                            // [title, content] - preserve middle empty fields
+                            return createPositionalArray([
                                 entry.title || '',
                                 entry.content || ''
-                            ];
-                            while (notesArray.length > 0 && notesArray[notesArray.length - 1] === '') {
-                                notesArray.pop();
-                            }
-                            return notesArray;
+                            ]);
                         case 'apiKeys':
-                            // [service, key, secret, notes]
-                            const apiArray = [
+                            // [service, key, secret, notes] - preserve middle empty fields
+                            return createPositionalArray([
                                 entry.service || '',
                                 entry.key || '',
                                 entry.secret || '',
                                 entry.notes || ''
-                            ];
-                            while (apiArray.length > 0 && apiArray[apiArray.length - 1] === '') {
-                                apiArray.pop();
-                            }
-                            return apiArray;
+                            ]);
                         case 'custom':
-                            // [label, value, notes]
-                            const customArray = [
+                            // [label, value, notes] - preserve middle empty fields
+                            return createPositionalArray([
                                 entry.label || '',
                                 entry.value || '',
                                 entry.notes || ''
-                            ];
-                            while (customArray.length > 0 && customArray[customArray.length - 1] === '') {
-                                customArray.pop();
-                            }
-                            return customArray;
+                            ]);
                         default:
-                            return [];
+                            return null;
                     }
-                }).filter(array => array.length > 0); // Only include non-empty arrays
+                }).filter(arr => arr !== null); // Only include non-empty arrays
                 
                 if (entries.length > 0) {
                     cleanData[section] = entries;
@@ -369,6 +383,119 @@ function SecretDataEntry({
     const getCurrentText = () => {
         return convertToText();
     };
+
+    // Get compressed version for final storage (removes empty values completely)
+    const getCompressedText = () => {
+        return convertToCompressedText();
+    };
+
+    // Convert structured data to ultra-compact format (removes all empty values)
+    const convertToCompressedText = useCallback(() => {
+        console.log('convertToCompressedText called with structuredData:', structuredData);
+        
+        // Convert to ultra-compact format by removing all empty values
+        const cleanData = {};
+        const sectionsWithData = [];
+        
+        Object.keys(structuredData).forEach(section => {
+            if (section === 'freeText') {
+                // Handle freeText as string
+                if (structuredData.freeText && structuredData.freeText.trim()) {
+                    cleanData.freeText = structuredData.freeText;
+                    sectionsWithData.push('freeText');
+                }
+                return;
+            }
+            
+            console.log(`Processing section ${section}, length: ${structuredData[section].length}`);
+            if (structuredData[section].length > 0) {
+                const entries = structuredData[section].map(entry => {
+                    // Helper function to create ultra-compact array - removes ALL empty values
+                    const createUltraCompactArray = (fields) => {
+                        const result = [];
+                        fields.forEach(value => {
+                            if (value && value.trim() !== '') {
+                                result.push(value);
+                            }
+                        });
+                        return result.length > 0 ? result : null;
+                    };
+
+                    // Convert object to ultra-compact format - no empty values at all
+                    switch (section) {
+                        case 'passwords':
+                            return createUltraCompactArray([
+                                entry.service || '',
+                                entry.username || '',
+                                entry.password || '',
+                                entry.url || '',
+                                entry.notes || ''
+                            ]);
+                        case 'wallets':
+                            return createUltraCompactArray([
+                                entry.name || '',
+                                entry.seed || '',
+                                entry.privateKey || '',
+                                entry.address || '',
+                                entry.notes || ''
+                            ]);
+                        case 'notes':
+                            return createUltraCompactArray([
+                                entry.title || '',
+                                entry.content || ''
+                            ]);
+                        case 'apiKeys':
+                            return createUltraCompactArray([
+                                entry.service || '',
+                                entry.key || '',
+                                entry.secret || '',
+                                entry.notes || ''
+                            ]);
+                        case 'custom':
+                            return createUltraCompactArray([
+                                entry.label || '',
+                                entry.value || '',
+                                entry.notes || ''
+                            ]);
+                        default:
+                            return null;
+                    }
+                }).filter(arr => arr !== null); // Only include non-empty arrays
+                
+                if (entries.length > 0) {
+                    cleanData[section] = entries;
+                    sectionsWithData.push(section);
+                }
+                console.log(`Added ${entries.length} entries to cleanData[${section}]:`, entries);
+            }
+        });
+        
+        console.log('Final cleanData (compressed):', cleanData);
+        console.log('Sections with data:', sectionsWithData);
+        
+        // OPTIMIZATION: If only one section has data (and no freeText), return just the array
+        const nonFreeTextSections = sectionsWithData.filter(s => s !== 'freeText');
+        if (nonFreeTextSections.length === 1 && !cleanData.freeText) {
+            const singleSection = nonFreeTextSections[0];
+            const sectionData = cleanData[singleSection];
+            
+            // FURTHER OPTIMIZATION: If only one entry in the single section, return just that entry
+            if (sectionData.length === 1) {
+                const result = JSON.stringify(sectionData[0]);
+                console.log('convertToCompressedText result (single entry optimization):', result);
+                return result;
+            } else {
+                const result = JSON.stringify(sectionData);
+                console.log('convertToCompressedText result (single section optimization):', result);
+                return result;
+            }
+        }
+        
+        // Return compact JSON (no spaces) to save characters
+        const result = Object.keys(cleanData).length > 0 ? JSON.stringify(cleanData) : '';
+        console.log('convertToCompressedText result:', result);
+        return result;
+    }, [structuredData]);
 
     // Count only user content, not JSON structure overhead
     const getUserContentLength = () => {
@@ -754,54 +881,7 @@ function SecretDataEntry({
         }
     };
 
-    if (showPreview) {
-        return (
-            <div className={'createWrapper'}>
-                <div className="secret-entry-header">
-                    <div className="header-icon">
-                        <FaEye />
-                    </div>
-                    <h3>Preview Your Vault Contents</h3>
-                    <p className="header-subtitle">
-                        Review how your data will be formatted in the encrypted vault
-                    </p>
-                </div>
 
-
-
-                <Card className="preview-card">
-                    <Card.Header>
-                        <h5>Vault Contents</h5>
-                    </Card.Header>
-                    <Card.Body>
-                        <pre className="preview-content">{currentText}</pre>
-                    </Card.Body>
-                </Card>
-
-
-
-                <div className="continue-section mt-4">
-                    <div className="d-flex gap-2">
-                        <Button 
-                            variant={'outline-secondary'} 
-                            size={'lg'}
-                            onClick={() => setShowPreview(false)}
-                        >
-                            ← Back to Edit
-                        </Button>
-                        <Button 
-                            variant={'primary'} 
-                            size={'lg'}
-                            onClick={onContinue}
-                            className="flex-fill"
-                        >
-                            Encrypt & Continue
-                        </Button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
 
 
@@ -941,23 +1021,17 @@ function SecretDataEntry({
 
             <div className="continue-section">
                 {currentText.trim() && !isOverLimit ? (
-                    <div className="d-flex gap-2">
-                        <Button 
-                            variant={'outline-primary'} 
-                            size={'lg'}
-                            onClick={() => setShowPreview(true)}
-                        >
-                            Preview
-                        </Button>
-                        <Button 
-                            variant={'primary'} 
-                            size={'lg'}
-                            onClick={onContinue}
-                            className="flex-fill"
-                        >
-                            Encrypt & Continue
-                        </Button>
-                    </div>
+                    <Button 
+                        variant={'primary'} 
+                        size={'lg'}
+                        onClick={() => {
+                            const compressedText = getCompressedText();
+                            onContinue(compressedText);
+                        }}
+                        className="continue-btn"
+                    >
+                        Continue
+                    </Button>
                 ) : (
                     <>
                         <Button 
@@ -966,7 +1040,7 @@ function SecretDataEntry({
                             className="continue-btn"
                             disabled
                         >
-                            Encrypt & Continue
+                            Continue
                         </Button>
                         <p className="continue-note">
                             {!currentText.trim() 

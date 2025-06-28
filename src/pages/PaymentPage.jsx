@@ -261,7 +261,7 @@ function PaymentPage() {
                                         
                                         <h1 className="success-title">Payment Successful!</h1>
                                         <p className="success-subtitle">
-                                            Welcome to Kosign Pro! Your payment has been processed successfully.
+                                            Your additional keys have been purchased! Your payment has been processed successfully.
                                         </p>
 
                                         {/* License Key Display */}
@@ -293,11 +293,11 @@ function PaymentPage() {
                                         )}
 
                                         <div className="success-features mb-4">
-                                            <h4>You now have access to:</h4>
+                                            <h4>You can now create:</h4>
                                             <ul className="feature-list">
-                                                <li>✓ Up to 20 key shares</li>
-                                                <li>✓ Extended storage (5,000 chars)</li>
+                                                <li>✓ Multi-key vaults with your purchased keys</li>
                                                 <li>✓ Flexible thresholds (2-of-3, 3-of-5, etc.)</li>
+                                                <li>✓ Secure distributed backup system</li>
                                             </ul>
                                         </div>
 
@@ -309,7 +309,7 @@ function PaymentPage() {
                                                     navigate('/create');
                                                 }}
                                             >
-                                                Create Your Pro Vault
+                                                Create Your Vault
                                             </button>
                                             <button 
                                                 className="btn btn-outline-secondary"
@@ -348,9 +348,9 @@ function PaymentPage() {
                         <Row className="justify-content-center">
                             <Col lg={8} md={10}>
                                 <div className="payment-header text-center mb-5">
-                                    <h1 className="payment-title">Upgrade to Kosign Pro</h1>
+                                    <h1 className="payment-title">Purchase Additional Keys</h1>
                                     <p className="payment-subtitle">
-                                        One-time payment • No subscriptions • Own it forever
+                                        $5 per additional key • No subscriptions • One-time payment
                                     </p>
                                 </div>
 
@@ -360,18 +360,19 @@ function PaymentPage() {
                                             <h3>Order Summary</h3>
                                             <div className="order-item">
                                                 <div className="item-details">
-                                                    <h4>Kosign Pro Vault</h4>
-                                                    <p>Yours forever</p>
+                                                    <h4>Additional Vault Keys</h4>
+                                                    <p>$5 per key beyond your first free key</p>
                                                 </div>
-                                                <div className="item-price">$49</div>
+                                                <div className="item-price">Contact for pricing</div>
                                             </div>
                                             
                                             <div className="features-included">
-                                                <h5>What's included:</h5>
+                                                <h5>What you get:</h5>
                                                 <ul>
-                                                    <li>✓ Up to 20 key shares</li>
-                                                    <li>✓ Extended storage (5,000 chars)</li>
-                                                    <li>✓ Flexible thresholds <br/>(2-of-3, 3-of-5, etc.)</li>
+                                                    <li>✓ First key always free</li>
+                                                    <li>✓ $5 per additional key</li>
+                                                    <li>✓ All threshold combinations <br/>(2-of-3, 3-of-5, etc.)</li>
+                                                    <li>✓ Same security for all keys</li>
                                                 </ul>
                                             </div>
 

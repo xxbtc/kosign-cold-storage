@@ -1,19 +1,33 @@
 class ProFeatureService {
-    static get FREE_LIMITS() {
-        return global.FREE_PLAN;
+    static get PRICING() {
+        return global.PRICING;
     }
 
-    static get PRO_LIMITS() {
-        return global.PRO_PLAN;
+    // Calculate cost for a given number of keys
+    static calculateCost(numberOfKeys) {
+        if (numberOfKeys <= this.PRICING.freeKeys) {
+            return 0;
+        }
+        return (numberOfKeys - this.PRICING.freeKeys) * this.PRICING.pricePerKey;
     }
 
-    static async isProUser() {
+    // Check if user can create a certain number of keys without payment
+    static canCreateKeysWithoutPayment(numberOfKeys) {
+        return numberOfKeys <= this.PRICING.maxKeysWithoutPayment;
+    }
+
+    // Check if user has paid for a certain number of keys
+    static async hasPaymentForKeys(numberOfKeys) {
+        if (this.canCreateKeysWithoutPayment(numberOfKeys)) {
+            return true;
+        }
+
         // Check for active pro session first (after payment)
         if (this.hasActiveProSession()) {
             return true;
         }
 
-        // Check if there's a pending license
+        // Check if there's a pending license for the required number of keys
         const isPending = localStorage.getItem('kosign_pro_pending') === 'true';
         const licenseKey = localStorage.getItem('kosign_pro_pending_key');
         
@@ -39,6 +53,11 @@ class ProFeatureService {
             this.clearProStatus();
             return false;
         }
+    }
+
+    // Legacy method for backward compatibility
+    static async isProUser() {
+        return this.hasActiveProSession() || localStorage.getItem('kosign_pro_pending') === 'true';
     }
 
     // Add a synchronous version for immediate checks (but should be used sparingly)
@@ -95,15 +114,19 @@ class ProFeatureService {
         }
     }
 
-    static async consumeLicense() {
+    static async consumeLicense(requestedKeys = null) {
         try {
             const pendingKey = localStorage.getItem('kosign_pro_pending_key');
             if (!pendingKey) {
                 return { success: false, error: 'No pending license to consume' };
             }
 
+            if (!requestedKeys) {
+                return { success: false, error: 'Number of requested keys must be specified' };
+            }
+
             const { PaymentService } = await import('./PaymentService');
-            const data = await PaymentService.consumeLicense(pendingKey);
+            const data = await PaymentService.consumeLicense(pendingKey, requestedKeys);
 
             if (data.result) {
                 // Clear the consumable license data
@@ -137,6 +160,21 @@ class ProFeatureService {
         localStorage.removeItem('kosign_pro_session_active');
     }
 
+    // Legacy methods for backward compatibility
+    static get FREE_LIMITS() {
+        return {
+            maxShares: this.PRICING.maxKeysWithoutPayment,
+            maxStorage: this.PRICING.maxStorage
+        };
+    }
+
+    static get PRO_LIMITS() {
+        return {
+            maxShares: 20, // High limit for paid users
+            maxStorage: this.PRICING.maxStorage
+        };
+    }
+
     static getCurrentLimits() {
         if (this.isProUserCached()) {
             return this.PRO_LIMITS;
@@ -145,21 +183,20 @@ class ProFeatureService {
     }
 
     static canCreateShare(currentShares) {
-        const limits = this.getCurrentLimits();
-        return currentShares < limits.maxShares;
+        // For the new model, we need to check if payment is required
+        return this.canCreateKeysWithoutPayment(currentShares + 1) || this.isProUserCached();
     }
 
     static canStoreData(dataLength) {
-        const limits = this.getCurrentLimits();
-        return dataLength <= limits.maxStorage;
+        return dataLength <= this.PRICING.maxStorage;
     }
 
-    static getUpgradeMessage(type) {
-        const messages = {
-            shares: `You've reached the free limit of ${this.FREE_LIMITS.maxShares} shares. Upgrade to Pro for up to ${this.PRO_LIMITS.maxShares} shares!`,
-            storage: `You've reached the free limit of ${this.FREE_LIMITS.maxStorage} characters. Upgrade to Pro for up to ${this.PRO_LIMITS.maxStorage} characters!`
-        };
-        return messages[type] || 'Upgrade to Pro for more features!';
+    static getUpgradeMessage(numberOfKeys) {
+        const cost = this.calculateCost(numberOfKeys);
+        if (cost === 0) {
+            return 'Your first key is free!';
+        }
+        return `${numberOfKeys} keys will cost $${cost} total ($5 per additional key beyond the first)`;
     }
 }
 

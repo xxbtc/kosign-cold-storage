@@ -69,7 +69,7 @@ const ProStatusIndicator = ({ onUpgradeClick, onLicenseActivated }) => {
                         onClick={onUpgradeClick}
                         className="me-2 pro-upgrade-btn"
                     >
-                        Upgrade to Pro ($49)
+                        Need more keys? ($5 each)
                     </Button>
                     <Button 
                         variant="link" 

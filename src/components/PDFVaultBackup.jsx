@@ -20,19 +20,18 @@ const PDFVaultBackup = (props) => {
         // Create combined vault data in single QR code
         let combinedVaultData = JSON.stringify({
             id: 1,
-            about: 'Vault [Kosign dot xyz]',
-            //version: CURRENT_VAULT_VERSION,
+            vault: 'kosign.xyz',
+            version: CURRENT_VAULT_VERSION,
             name: props.vaultName,
             shares: props.shares.length,
             threshold: props.threshold,
             cipherIV: props.cipherIV,
             keys: props.keyAliasArray,
-           // format: VAULT_VERSIONS[CURRENT_VAULT_VERSION],
             data: props.cipherText // Include the encrypted data directly
         });
 
-        console.log('Combined vault data length:', combinedVaultData.length);
-        console.log('Combined vault data preview:', combinedVaultData.substring(0, 200) + '...');
+        // console.log('Combined vault data length:', combinedVaultData.length);
+        // console.log('Combined vault data preview:', combinedVaultData.substring(0, 200) + '...');
 
         canvas = document.createElement('canvas');
         QRCode2.toCanvas(canvas, combinedVaultData, {
@@ -85,7 +84,8 @@ const PDFVaultBackup = (props) => {
             flex: 1,
             flexGrow: 1,
             width: '100%',
-            minHeight: '297mm', // A4 height
+            minHeight: 'auto', // Let content determine height for downloads
+            maxHeight: '297mm', // Don't exceed A4 height
             boxSizing: 'border-box',
             margin: 0,
             padding: 0,
@@ -111,7 +111,7 @@ const PDFVaultBackup = (props) => {
             backgroundColor: '#fff',
             flex: 1,
             width: '100%',
-            height: '100%',
+            height: props.qrtype === 'downloadable' ? 'auto' : '100%',
             padding: 0,
             flexGrow: 1,
             display: 'flex',
@@ -560,14 +560,20 @@ const PDFVaultBackup = (props) => {
 
 
     return (
-        <div style={props.qrtype==='printable'?styles.printPage:styles.downloadPage}>
+        <div style={{
+            ...(props.qrtype==='printable'?styles.printPage:styles.downloadPage),
+            ...(props.qrtype === 'downloadable' && {
+                pageBreakAfter: 'avoid',
+                pageBreakInside: 'avoid'
+            })
+        }}>
             <div style={styles.page}>
                 {/* Main content area with elevated QR code */}
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    padding: '20px',
-                    gap: '40px',
+                    padding: props.qrtype === 'downloadable' ? '15px' : '20px',
+                    gap: props.qrtype === 'downloadable' ? '20px' : '40px',
                     flex: 1
                 }}>
                     {/* Left side - QR Code elevated */}
@@ -592,13 +598,13 @@ const PDFVaultBackup = (props) => {
                         
                     </div>
                     
-                    {/* Right side - ASCII art and information */}
-                    <div style={{
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '20px'
-                    }}>
+                                            {/* Right side - ASCII art and information */}
+                        <div style={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: props.qrtype === 'downloadable' ? '12px' : '20px'
+                        }}>
                         {/* Header section */}
                         <div style={{
                             display: 'flex',

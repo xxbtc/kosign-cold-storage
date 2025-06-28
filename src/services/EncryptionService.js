@@ -84,17 +84,31 @@ export class EncryptionService {
     };
 
     static splitKey = async (secretKey, numberOfShares, threshold) => {
+        console.log('splitKey called with:', { numberOfShares, threshold });
+        
+        // Validate threshold constraints (secrets.js library requirement)
+        if (numberOfShares > 1 && threshold === 1) {
+            throw new Error('Cryptographic library requires threshold >= 2 for multiple keys. Use single key instead.');
+        }
+        
         // convert the text into a hex string
         const pwHex = secrets.str2hex(secretKey); // => hex string
-        // e.g. split into 10 shares, with a threshold of 4
+        // split into numberOfShares shares, with given threshold
         const shares = secrets.share(pwHex, numberOfShares, threshold);
-        //console.log('shares: ', shares);
+        console.log('Generated', shares.length, 'shares with threshold', threshold);
         return shares;
     };
 
     static combineShares = async (shares) => {
-        let comb = secrets.combine(shares);
-        return secrets.hex2str(comb);
+        console.log('combineShares called with', shares.length, 'shares');
+        
+        try {
+            let comb = secrets.combine(shares);
+            return secrets.hex2str(comb);
+        } catch (error) {
+            console.error('Error in combineShares:', error);
+            throw new Error(`Failed to combine shares: ${error.message}`);
+        }
     };
 
 

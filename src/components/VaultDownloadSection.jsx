@@ -179,16 +179,12 @@ const VaultDownloadSection = ({
             {preferredMethod === 'print' ? (
                 <div className="single-action-container">
                     <div className="security-tips-section">
-                        <h4>🖨️ Printing & Distribution Security Tips</h4>
+                        <h4>🖨️ Printing Security Tips</h4>
                         <ul>
-                            <li><strong>Use a private printer</strong> (not shared/office printers)</li>
+                            <li><strong>Use a private offline printer</strong> (not shared/network printers)</li>
                             <li><strong>Clear printer memory/cache</strong> after printing</li>
                             <li><strong>Use archive-grade paper</strong> for long-term durability (acid-free, lignin-free)</li>
                             <li><strong>Don't fold the documents</strong> - use flat, tamper-proof envelopes to protect QR codes</li>
-                            <li><strong>For social recovery:</strong> Give each person only their key, hand deliver when possible, or use tamper-proof envelopes with secure mail and tracking</li>
-                            <li><strong>For private storage:</strong> You can keep multiple keys yourself in different locations</li>
-                            <li><strong>Store vault document</strong> in a fireproof safe or safety deposit box</li>
-                            <li><strong>Optional:</strong> Keep a master list noting who has which key and delivery method (adds convenience but also risk)</li>
                         </ul>
                     </div>
                     
@@ -204,15 +200,11 @@ const VaultDownloadSection = ({
             ) : (
                 <div className="single-action-container">
                     <div className="download-files-section">
-                        <div className="security-tips-section download-tips">
-                            <h4>💾 Download & Distribution Security Tips</h4>
+                        <div className="security-tips-section">
+                            <h4>💾 Security Tips for Downloads</h4>
                             <ul>
-                                <li><strong>Don't store vault and keys together</strong> - Use separate devices/locations for vault vs keys</li>
-                                <li><strong>Delete from Downloads folder</strong> and empty trash/recycle bin</li>
-                                <li><strong>For social recovery:</strong> Give each person only their key, hand deliver when possible. If sending digitally (not recommended), use different apps/channels and never send enough keys via the same medium to meet your unlock threshold</li>
-                                <li><strong>For private storage:</strong> You can keep multiple keys yourself in different locations</li>
-                                <li><strong>No cloud storage</strong> - Don't upload to Google Drive, Dropbox, iCloud, etc.</li>
-                                <li><strong>Optional:</strong> Keep a master list noting who has which key and delivery method (adds convenience but also risk)</li>
+                                <li>Vaults and keys should be stored seperatly.</li>
+                                <li><strong>Delete from Downloads folder</strong> and empty trash/recycle bin when done</li>
                             </ul>
                         </div>
                         
@@ -232,7 +224,7 @@ const VaultDownloadSection = ({
                             
                             <div className="keys-download-section">
                                 <h4>🔑 Unlock Keys ({shares.length} total)</h4>
-                                <p>Download each key individually for secure distribution</p>
+                                <p>Download each key individually</p>
                                 
                                 {keysDownloaded.size > 0 && (
                                     <div className="download-progress">
@@ -257,7 +249,7 @@ const VaultDownloadSection = ({
                                 </div>
                                 
                                 <div className="keys-help-text">
-                                    <small>Click numbered buttons to download each key individually. You can download again if needed.</small>
+                                    <small>Click numbered buttons to download each key individually.</small>
                                 </div>
                             </div>
                         </div>
@@ -265,7 +257,7 @@ const VaultDownloadSection = ({
                         {(vaultDownloaded || keysDownloaded.size > 0) && (
                             <div className="post-download-reminder">
                                 <FaExclamationTriangle />
-                                <span><strong>Don't forget:</strong> Move files to secure storage, use different channels, and clear downloads!</span>
+                                <span><strong>Don't forget:</strong> Move files to secure storage, use different channels, and clear downloads folder and trash/recycle bin!</span>
                             </div>
                         )}
                     </div>

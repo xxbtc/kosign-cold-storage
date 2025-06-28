@@ -7,59 +7,51 @@ import { AnalyticsService } from '../services/AnalyticsService';
 function HomepagePricing({ pricingRef }) {
     const navigate = useNavigate();
     
-    // Get limits from single source of truth
-    const freeLimits = ProFeatureService.FREE_LIMITS;
-    const proLimits = ProFeatureService.PRO_LIMITS;
+    const pricing = ProFeatureService.PRICING;
 
     return (
         <section className="pricing-section" ref={pricingRef}>
             <Container>
                 <Row>
                     <Col className="text-center">
-                        <h2 className="pricing-title">Get Started Free</h2>
-                        <p className="pricing-subtitle">Upgrade as your needs grow</p>
+                        <h2 className="pricing-title">Simple Per-Key Pricing</h2>
+                        <p className="pricing-subtitle">One-time payment • No subscriptions • Pay only for what you need</p>
                     </Col>
                 </Row>
                 
                 <Row className="pricing-grid justify-content-center">
-                    <Col xl={5} lg={6} md={10} sm={12} className="mb-4">
-                        <div className="pricing-card ">
-                            <div className="pricing-header">
-                                <h3>Free</h3>
-                                <div className="price">$0<span> forever</span></div>
+                    <Col xl={8} lg={10} md={12} className="mb-4">
+                        <div className="pricing-card large-card">
+                            <div className="pricing-header text-center mb-4">
+                                <h3>Pay Per Key</h3>
+                                <div className="price-structure">
+                                    <div className="price-item">
+                                        <span className="key-count">First key:</span>
+                                        <span className="price">Free</span>
+                                    </div>
+                                    <div className="price-item">
+                                        <span className="key-count">Each additional key:</span>
+                                        <span className="price">${pricing.pricePerKey}</span>
+                                    </div>
+                                </div>
                             </div>
+
                             <ul className="pricing-features">
-                                <li>✓ Single vault</li>
-                                <li>✓ Up to {freeLimits.maxShares} key shares</li>
-                                <li>✓ Limited storage ({freeLimits.maxStorage} chars)</li>
-                                <li>✓ Basic thresholds (1-of-1, 2-of-2)</li>
+                                <li>✓ Up to {pricing.maxStorage} characters storage per vault</li>
+                                <li>✓ All threshold combinations supported</li>
+                                <li>✓ Open source unlock app</li>
+                                <li>✓ One-time payment, own forever</li>
+                                <li>✓ No monthly fees or subscriptions</li>
+                                <li>✓ No vendor lock-in</li>
                             </ul>
+                            
                             <button className="pricing-cta primary" onClick={() => {
                                 AnalyticsService.trackCTAClick('pricing');
                                 navigate('/create');
                             }}>
-                                Start Free
+                                Create Your Vault
                             </button>
-                            <p className="pricing-note">Perfect for most users • No credit card required</p>
-                        </div>
-                    </Col>
-                    
-                    <Col xl={5} lg={6} md={10} sm={12} className="mb-4">
-                        <div className="pricing-card one-time-purchase ">
-                            <div className="pricing-header">
-                                <h3>Pro</h3>
-                                <div className="price">$49<span> one-time</span></div>
-                            </div>
-                            <ul className="pricing-features">
-                                <li>✓ Everything in Free</li>
-                                <li>✓ Up to {proLimits.maxShares} key shares</li>
-                                <li>✓ Extended storage ({proLimits.maxStorage.toLocaleString()} chars)</li>
-                                <li>✓ Flexible thresholds (2-of-3, 3-of-5, etc.)</li>
-                            </ul>
-                            <button className="pricing-cta primary" onClick={() => navigate('/payment')}>
-                                Buy Once, Own Forever
-                            </button>
-                            <p className="pricing-note">Pay once • Keep forever • No monthly fees </p>
+                            <p className="pricing-note">Choose your keys upfront • Pay once, own forever</p>
                         </div>
                     </Col>
                 </Row>
@@ -67,7 +59,8 @@ function HomepagePricing({ pricingRef }) {
                 <Row className="mt-4">
                     <Col className="text-center">
                         <p className="pricing-guarantee">
-                            <strong>No subscriptions. No monthly fees. No recurring charges.</strong><br/>                        
+                            <strong>Simple and transparent.</strong> No hidden fees. No recurring charges.<br/>
+                            Pay once for the keys you need, then own your vault forever.
                         </p>
                     </Col>
                 </Row>

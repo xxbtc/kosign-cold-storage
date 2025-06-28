@@ -129,11 +129,12 @@ export class PaymentService  {
         });
     };
 
-    static consumeLicense = async (licenseKey) => {
+    static consumeLicense = async (licenseKey, requestedKeys) => {
         const cookies = new Cookies();
 
         let params = new FormData();
         params.append('license_key', licenseKey);
+        params.append('requested_keys', requestedKeys);
 
         return axios.post(global.apiURL + 'pay/consumeLicense', params, {
             headers: {

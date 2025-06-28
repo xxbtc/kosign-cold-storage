@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState} from 'react'
 import { Link , useNavigate} from 'react-router-dom'
-import {Form, FormGroup, FormText, Button} from 'react-bootstrap';
+import {Form, FormGroup, FormText, Button, Card} from 'react-bootstrap';
 import {EncryptionService} from "../services/EncryptionService";
 import Navbar from "../components/NavbarTop";
 import ReactDOMServer from 'react-dom/server';
+import { FaEye } from 'react-icons/fa';
 
 import '../style/index.css';
 import '../style/createPage.css';
@@ -32,6 +33,7 @@ function CreateVault(props) {
     const { enterSensitiveMode, exitSensitiveMode } = useSensitiveMode();
 
     const [secretValue, setSecretValue] = useState('');
+    const [compressedSecretValue, setCompressedSecretValue] = useState('');
     const [cipherText, setCiphertext] = useState(null);
     const [cipherKey, setCipherKey] = useState(null);
     const [cipherIV, setCipherIV] = useState(null);
@@ -119,7 +121,7 @@ function CreateVault(props) {
         // Always allow the update - let the UI handle the character limit warnings
         // Users should see their full data and make informed decisions about what to remove
         console.log('  - ALLOWED: Always updating secret value (UI will handle limit warnings)');
-        setTotalPages(calculateHowManyPages(newSecretValue));
+        // Note: We'll calculate pages based on compressed version at encryption time
         setSecretValue(newSecretValue);
     };
 
@@ -183,12 +185,15 @@ function CreateVault(props) {
     };
 
     useEffect(()=>{
-        if (wizardStep===4) {
+        if (wizardStep===5 && compressedSecretValue) {
             setTimeout(() => {
-                // Generate colors once when entering step 4
+                // Generate colors once when entering step 5 (encryption)
                 setVaultColors(generateColors());
+                
+                // Calculate pages based on compressed version
+                setTotalPages(calculateHowManyPages(compressedSecretValue));
                              
-                EncryptionService.encrypt(secretValue, false).then((encryptionResult) => {
+                EncryptionService.encrypt(compressedSecretValue, false).then((encryptionResult) => {
                     setCiphertext(encryptionResult.cipherText);
                     setCipherKey(encryptionResult.cipherKey);
                     setCipherIV(encryptionResult.cipherIV);
@@ -206,7 +211,7 @@ function CreateVault(props) {
                 });
             }, 1000);
         }
-    }, [wizardStep]);
+    }, [wizardStep, compressedSecretValue]);
 
     // Enter sensitive mode after vault configuration and NEVER exit until component unmounts
     useEffect(() => {
@@ -220,6 +225,8 @@ function CreateVault(props) {
             if (wizardStep >= 2) {
                 exitSensitiveMode();
             }
+            // Clear pro session when component unmounts (vault creation complete or cancelled)
+            ProFeatureService.clearProSession();
         };
     }, []); // Empty dependency array - only run on mount/unmount
 
@@ -250,6 +257,15 @@ function CreateVault(props) {
             });
         }
     }, [showProUpgrade]);
+
+    // Clear pro session when vault creation is complete (step 6)
+    useEffect(() => {
+        if (wizardStep === 6) {
+            // Vault creation is complete, clear the consumed pro session
+            console.log('Vault creation complete - clearing pro session');
+            ProFeatureService.clearProSession();
+        }
+    }, [wizardStep]);
 
     useEffect(()=>{
         let tmpTotalCost = (totalShareholders * global.costPerKey) + (global.setupCost) - (global.freeKeys*global.costPerKey);
@@ -289,15 +305,18 @@ function CreateVault(props) {
 
     }, []);
 
-    // Check if user is creating a pro vault (regardless of their current status)
-    const isCreatingProVault = () => {
-        return totalShareholders > ProFeatureService.FREE_LIMITS.maxShares;
+    // Check if user is creating a vault that requires payment
+    const requiresPayment = () => {
+        return ProFeatureService.calculateCost(totalShareholders) > 0;
     };
 
     // Check if user exceeds free limits AND needs to upgrade
     const exceedsFreeLimit = () => {
         return totalShareholders > ProFeatureService.FREE_LIMITS.maxShares && !ProFeatureService.isProUserCached();
     };
+
+    // Calculate the cost for display
+    const vaultCost = ProFeatureService.calculateCost(totalShareholders);
 
     // Add validation when component mounts or when checking pro status
     useEffect(() => {
@@ -327,20 +346,76 @@ function CreateVault(props) {
             return;
         }
 
-        // Validate pro status if user appears to be pro
-        if (ProFeatureService.isProUserCached() && totalShareholders > ProFeatureService.FREE_LIMITS.maxShares) {
+        // Check if user needs pro features for this vault
+        if (totalShareholders > ProFeatureService.FREE_LIMITS.maxShares) {
             setIsValidatingProStatus(true);
-            const isValidPro = await ProFeatureService.isProUser();
-            setIsValidatingProStatus(false);
             
-            if (!isValidPro) {
-                // License is invalid, show upgrade prompt
+            // Check what type of pro status we have
+            const hasActiveSession = ProFeatureService.hasActiveProSession();
+            const hasPendingLicense = localStorage.getItem('kosign_pro_pending') === 'true';
+            const pendingKey = localStorage.getItem('kosign_pro_pending_key');
+            
+            console.log('Pro status check:', { hasActiveSession, hasPendingLicense, pendingKey: !!pendingKey });
+            
+            if (hasPendingLicense && pendingKey) {
+                // User has a NEW license to consume (from recent purchase/activation)
+                console.log('Found pending license to consume');
+                
+                // Validate the pending license first
+                try {
+                    const { PaymentService } = await import('../services/PaymentService');
+                    const validationData = await PaymentService.validateLicense(pendingKey);
+                    
+                    if (!validationData.result) {
+                        setIsValidatingProStatus(false);
+                        alert('License is no longer valid. Please purchase a new license.');
+                        setShowProUpgrade(true);
+                        return;
+                    }
+                    
+                    const maxAllowedKeys = validationData.features?.max_shares || 1;
+                    if (totalShareholders > maxAllowedKeys) {
+                        setIsValidatingProStatus(false);
+                        alert(`Your license allows ${maxAllowedKeys} keys but you've configured ${totalShareholders} keys. Please reduce the number of keys or upgrade your license.`);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error validating pending license:', error);
+                    setIsValidatingProStatus(false);
+                    alert('Failed to validate license. Please try again.');
+                    return;
+                }
+                
+                // Consume the pending license
+                console.log('Consuming pending license for', totalShareholders, 'keys...');
+                const consumeResult = await ProFeatureService.consumeLicense(totalShareholders);
+                setIsValidatingProStatus(false);
+                
+                if (!consumeResult.success) {
+                    console.error('Failed to consume license:', consumeResult.error);
+                    alert('Failed to activate license: ' + consumeResult.error);
+                    if (consumeResult.error.includes('allows') && consumeResult.error.includes('keys')) {
+                        return; // User needs to adjust their configuration
+                    }
+                    setShowProUpgrade(true);
+                    return;
+                }
+                
+                console.log('License consumed successfully - you can now create this vault offline');
+                
+            } else if (hasActiveSession) {
+                // User has an ACTIVE session from previous license consumption
+                console.log('Using existing active pro session');
+                setIsValidatingProStatus(false);
+                // No need to consume again - already paid and activated
+                
+            } else {
+                // User doesn't have any pro status - needs to purchase
+                console.log('No pro status found - showing upgrade prompt');
+                setIsValidatingProStatus(false);
                 setShowProUpgrade(true);
                 return;
             }
-        } else if (exceedsFreeLimit()) {
-            setShowProUpgrade(true);
-            return;
         }
 
         //forcepage is just for testing purposes
@@ -359,9 +434,15 @@ function CreateVault(props) {
         setWizardStep(3); // Go to secret data entry
     };
 
-    // Add new function for continuing from secret data entry
-    const continueFromSecretData = () => {
-        setWizardStep(4); // Go directly to encryption step
+    // Add new function for continuing from secret data entry to preview
+    const continueFromSecretData = (compressedText) => {
+        setCompressedSecretValue(compressedText || secretValue); // Use compressed version for storage
+        setWizardStep(4); // Go to preview step (new)
+    };
+
+    // Add new function for continuing from preview to encryption
+    const continueFromPreview = () => {
+        setWizardStep(5); // Go to encryption step (shifted from 4 to 5)
     };
 
     const onPaymentComplete = () => {
@@ -414,7 +495,10 @@ function CreateVault(props) {
             </div>
         );
         const exporter = new Html2PDF(printElement, {filename:"Kosign - Vault - "+vaultName+".pdf"}).set({
-            pagebreak: { before:'.pagebreak', mode: ['avoid-all', 'css', 'legacy'] }
+            pagebreak: { before:'.pagebreak', mode: ['avoid-all', 'css', 'legacy'] },
+            margin: [10, 10, 10, 10], // Reduce margins for better fit
+            format: 'A4',
+            orientation: 'portrait'
         });
         await exporter.getPdf(true);
     };
@@ -561,25 +645,23 @@ function CreateVault(props) {
                                                 variant={'primary'} 
                                                 size={'lg'}
                                                 onClick={() => continueWizard()}
+                                                disabled={isValidatingProStatus}
                                                 style={{
-                                                    background: isCreatingProVault() 
+                                                    background: requiresPayment() 
                                                         ? 'linear-gradient(90deg, #1786ff 0%, #1260B3 100%)' // Bright blue
                                                         : 'linear-gradient(90deg, #6c757d 0%, #495057 100%)', // Muted gray
-                                                    borderColor: isCreatingProVault() ? '#1786ff' : '#6c757d',
+                                                    borderColor: requiresPayment() ? '#1786ff' : '#6c757d',
                                                     borderWidth: '1px',
                                                     borderStyle: 'solid'
                                                 }}
                                             >
-                                                Continue ({isCreatingProVault() ? 'Pro' : 'Free'})
+                                                {isValidatingProStatus 
+                                                    ? 'Activating License...' 
+                                                    : `Continue ${vaultCost > 0 ? `($${vaultCost})` : '(Free)'}`
+                                                }
                                             </Button>
                                             
-                                            {totalCost > 0 && (
-                                                <div className={'costSummary'}>
-                                                    <div className={'formTotalCost'}>
-                                                        ${totalCost} Total
-                                                    </div>
-                                                </div>
-                                            )}
+                                            
                                         </div>
                                     </FormGroup>
                                 </div>
@@ -638,16 +720,60 @@ function CreateVault(props) {
                     : null}
                 </div>
 
-
-
                 {wizardStep === 4 ?
+                    <div className="wizard-step-container">
+                        <div className="secret-entry-header">
+                            <div className="header-icon">
+                                <FaEye />
+                            </div>
+                            <h3>Preview Your Vault Contents</h3>
+                            <p className="header-subtitle">
+                                Review how your data will be formatted in the encrypted vault
+                            </p>
+                        </div>
+
+                        <Card className="preview-card">
+                            <Card.Header>
+                                <h5>Vault Contents</h5>
+                            </Card.Header>
+                            <Card.Body>
+                                <pre className="preview-content">{compressedSecretValue}</pre>
+                                {/* <div className="mt-2 text-muted small">
+                                    <strong>Space saved:</strong> {secretValue.length - compressedSecretValue.length} characters removed from empty fields
+                                </div> */}
+                            </Card.Body>
+                        </Card>
+
+                        <div className="continue-section mt-4">
+                            <div className="d-flex gap-2">
+                                <Button 
+                                    variant={'outline-secondary'} 
+                                    size={'lg'}
+                                    onClick={() => setWizardStep(3)}
+                                >
+                                    ← Back to Edit
+                                </Button>
+                                <Button 
+                                    variant={'primary'} 
+                                    size={'lg'}
+                                    onClick={continueFromPreview}
+                                    className="flex-fill"
+                                >
+                                    Encrypt & Continue
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                    : null}
+
+                {wizardStep === 5 ?
                     <div className={'loadingStepWrapper'}>
-                        <CreateLoading loadingComplete={()=>setWizardStep(5)} />
+                        <CreateLoading loadingComplete={()=>setWizardStep(6)} />
                     </div>
                     : null
                 }
 
-                {wizardStep === 5 ?
+                {wizardStep === 6 ?
                     <VaultDownloadSection
                         hasPressedVaultPrint={hasPressedVaultPrint}
                         hasPressedKeyPrint={hasPressedKeyPrint}

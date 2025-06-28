@@ -8,13 +8,15 @@ import '../style/payment.css';
 
 const stripePromise = loadStripe(global.stripePubKey);
 
-const PaymentForm = ({ onSuccess, onError }) => {
+const PaymentForm = ({ onSuccess, onError, totalShareholders }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [isProcessing, setIsProcessing] = useState(false);
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [error, setError] = useState('');
+
+    const paymentAmount = ProFeatureService.calculateCost(totalShareholders);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -27,8 +29,8 @@ const PaymentForm = ({ onSuccess, onError }) => {
         setError('');
 
         try {
-            // Create payment intent on backend
-            const response = await PaymentService.setupPayment(1, '');
+            // Create payment intent on backend with calculated amount
+            const response = await PaymentService.setupPayment(paymentAmount, totalShareholders);
             
             if (!response.client_secret) {
                 throw new Error('Failed to create payment intent');
@@ -168,7 +170,7 @@ const PaymentForm = ({ onSuccess, onError }) => {
                         Processing Payment...
                     </>
                 ) : (
-                    'Complete Purchase ($49)'
+                    `Complete Purchase ($${paymentAmount})`
                 )}
             </button>
 
@@ -188,6 +190,7 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
     const [licenseError, setLicenseError] = useState('');
     const [validatingLicense, setValidatingLicense] = useState(false);
     const [customerEmail, setCustomerEmail] = useState('');
+    const [licenseInfo, setLicenseInfo] = useState(null);
     const [isConsumingLicense, setIsConsumingLicense] = useState(false);
 
     // Auto-scroll to top when payment completes
@@ -239,10 +242,10 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
         setIsConsumingLicense(true);
         
         try {
-            // Now consume the license
-            const result = await ProFeatureService.consumeLicense();
+            // Now consume the license for the requested number of keys
+            const result = await ProFeatureService.consumeLicense(totalShareholders);
             if (result.success) {
-                console.log('License consumed successfully');
+                console.log('License consumed successfully for', totalShareholders, 'keys');
                 onPaymentSuccess();
             } else {
                 console.error('Failed to consume license:', result.error);
@@ -266,14 +269,30 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
 
         setValidatingLicense(true);
         setLicenseError('');
+        setLicenseInfo(null);
 
         try {
             // First validate/activate the license
             const result = await ProFeatureService.activateLicense(licenseKey.trim());
             
             if (result.success) {
-                // For manual license entry, consume immediately and continue
-                const consumeResult = await ProFeatureService.consumeLicense();
+                const licenseMaxKeys = result.features?.max_shares || 1;
+                
+                if (totalShareholders > licenseMaxKeys) {
+                    // Only show license info for incompatible licenses
+                    setLicenseInfo({
+                        maxKeys: licenseMaxKeys,
+                        isCompatible: false
+                    });
+                    setLicenseError(
+                        `This license allows ${licenseMaxKeys} key${licenseMaxKeys === 1 ? '' : 's'} but you've configured ${totalShareholders} keys. ` +
+                        `Please reduce your vault to ${licenseMaxKeys} key${licenseMaxKeys === 1 ? '' : 's'} or upgrade your license.`
+                    );
+                    return;
+                }
+                
+                // License is compatible - consume immediately and continue (no flash of success message)
+                const consumeResult = await ProFeatureService.consumeLicense(totalShareholders);
                 
                 if (consumeResult.success) {
                     // License consumed successfully, go directly to security step
@@ -391,13 +410,32 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
                                 type="text"
                                 className="form-control"
                                 value={licenseKey}
-                                onChange={(e) => setLicenseKey(e.target.value)}
+                                onChange={(e) => {
+                                    setLicenseKey(e.target.value);
+                                    setLicenseError('');
+                                    setLicenseInfo(null);
+                                }}
                                 placeholder="KSGN-XXXX-XXXX-XXXX"
                                 style={{ fontFamily: 'Monaco, Menlo, monospace' }}
                             />
                             {licenseError && (
                                 <Alert variant="danger" className="mt-2">
                                     {licenseError}
+                                </Alert>
+                            )}
+
+                            {licenseInfo && (
+                                <Alert variant={licenseInfo.isCompatible ? "success" : "warning"} className="mt-2">
+                                    {licenseInfo.isCompatible ? (
+                                        <>
+                                            ✅ License validated! Allows {licenseInfo.maxKeys} key{licenseInfo.maxKeys === 1 ? '' : 's'} 
+                                            (you need {totalShareholders})
+                                        </>
+                                    ) : (
+                                        <>
+                                            ⚠️ License allows {licenseInfo.maxKeys} key{licenseInfo.maxKeys === 1 ? '' : 's'} but you need {totalShareholders}
+                                        </>
+                                    )}
                                 </Alert>
                             )}
                         </div>
@@ -407,15 +445,19 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
                             size="lg" 
                             className="w-100 mb-3"
                             onClick={handleLicenseSubmit}
-                            disabled={validatingLicense}
+                            disabled={validatingLicense || (licenseInfo && !licenseInfo.isCompatible)}
                         >
                             {validatingLicense ? (
                                 <>
                                     <Spinner animation="border" size="sm" className="me-2" />
                                     Validating...
                                 </>
+                            ) : licenseInfo && licenseInfo.isCompatible ? (
+                                'Continue with License'
+                            ) : licenseInfo && !licenseInfo.isCompatible ? (
+                                'License Insufficient'
                             ) : (
-                                'Activate License'
+                                'Validate License'
                             )}
                         </Button>
 
@@ -433,11 +475,14 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
         );
     }
 
+    const paymentAmount = ProFeatureService.calculateCost(totalShareholders);
+    const additionalKeys = totalShareholders - 1;
+
     return (
         <div className="wizard-step-container">
             <div className="create-vault-header">
                 <h3 style={{ color: '#ffffff' }}>Complete Your Purchase</h3>
-                <p style={{ color: '#b0b0b0' }}>Upgrade to Kosign Pro to create your {totalShareholders}-key vault</p>
+                <p style={{ color: '#b0b0b0' }}>Pay for {additionalKeys} additional key{additionalKeys !== 1 ? 's' : ''} to create your {totalShareholders}-key vault</p>
             </div>
 
             <div className="createSectionWrapper">
@@ -452,11 +497,20 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
                     margin: '0 auto 1.5rem auto'
                 }}>
                     <div className="d-flex justify-content-between mb-2">
-                        <span style={{ color: '#b0b0b0' }}>Kosign Pro License</span>
-                        <span style={{ color: '#ffffff', fontWeight: 'bold' }}>$49</span>
+                        <span style={{ color: '#b0b0b0' }}>First key</span>
+                        <span style={{ color: '#4caf50' }}>Free</span>
                     </div>
-                    <div style={{ color: '#888888', fontSize: '0.85rem' }}>
-                        Up to {ProFeatureService.PRO_LIMITS.maxShares} keys • Extended storage •  Flexible thresholds
+                    <div className="d-flex justify-content-between mb-2">
+                        <span style={{ color: '#b0b0b0' }}>{additionalKeys} additional key{additionalKeys !== 1 ? 's' : ''}</span>
+                        <span style={{ color: '#ffffff', fontWeight: 'bold' }}>${paymentAmount}</span>
+                    </div>
+                    <hr style={{ border: '1px solid #444', margin: '0.5rem 0' }} />
+                    <div className="d-flex justify-content-between">
+                        <span style={{ color: '#ffffff', fontWeight: 'bold' }}>Total</span>
+                        <span style={{ color: '#ffffff', fontWeight: 'bold' }}>${paymentAmount}</span>
+                    </div>
+                    <div style={{ color: '#888888', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                        ${ProFeatureService.PRICING.pricePerKey} per additional key • No monthly fees
                     </div>
                 </div>
 
@@ -466,6 +520,7 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
                         <PaymentForm
                             onSuccess={handlePaymentSuccess}
                             onError={handlePaymentError}
+                            totalShareholders={totalShareholders}
                         />
                     </Elements>
                 </div>

@@ -573,6 +573,17 @@
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
+.number-btn.disabled,
+.number-btn:disabled {
+    background: #1a1a1a !important;
+    border-color: #333333 !important;
+    color: #666666 !important;
+    cursor: not-allowed !important;
+    opacity: 0.4 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
 .config-help {
     color: #b0b0b0;
     font-size: 0.9rem;

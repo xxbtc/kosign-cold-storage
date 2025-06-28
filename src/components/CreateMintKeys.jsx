@@ -32,9 +32,17 @@ function CreateMintKeys(props) {
     const setShareholders = (val) => {
         setTotalShareholders(val);
         props.setShareholders(val);
-        // Don't automatically set consensus to match shareholders
-        // Keep existing consensus if it's still valid, otherwise set to 2
-        const newConsensus = consensus > val ? 2 : consensus;
+        
+        // Handle consensus adjustment based on library constraints
+        let newConsensus;
+        if (val === 1) {
+            // Single key - consensus must be 1
+            newConsensus = 1;
+        } else {
+            // Multiple keys - secrets.js library requires minimum threshold of 2
+            newConsensus = Math.max(2, Math.min(consensus, val));
+        }
+        
         setConsensus(newConsensus);
         props.setConsensus(newConsensus);
     };
@@ -54,23 +62,20 @@ function CreateMintKeys(props) {
         cookies.set(cookieName, cookieValue, cookieOptions);
     };
 
-    // Get the actual free plan limit (always 3), not user's current limit
-    const freeLimit = ProFeatureService.FREE_LIMITS.maxShares;
-
     // Helper function to get button styling
     const getKeyButtonStyle = (num) => {
-        const isFree = num <= freeLimit; // This will always be num <= 3
+        const cost = ProFeatureService.calculateCost(num);
         const isActive = totalShareholders === num;
         
         if (isActive) {
-            return isFree 
-                ? { borderColor: '#6c757d', backgroundColor: 'rgba(108, 117, 125, 0.2)' } // Gray (less appealing)
-                : { borderColor: '#4caf50', backgroundColor: 'rgba(76, 175, 80, 0.2)' }; // Green (appealing)
+            return cost === 0 
+                ? { borderColor: '#4caf50', backgroundColor: 'rgba(76, 175, 80, 0.2)' } // Green for free
+                : { borderColor: '#1786ff', backgroundColor: 'rgba(23, 134, 255, 0.2)' }; // Blue for paid
         }
         
-        return isFree
-            ? { borderColor: 'rgba(108, 117, 125, 0.5)', backgroundColor: 'transparent' } // Gray
-            : { borderColor: 'rgba(76, 175, 80, 0.5)', backgroundColor: 'transparent' }; // Green
+        return cost === 0
+            ? { borderColor: 'rgba(76, 175, 80, 0.5)', backgroundColor: 'transparent' } // Green for free
+            : { borderColor: 'rgba(23, 134, 255, 0.5)', backgroundColor: 'transparent' }; // Blue for paid
     };
 
     return (
@@ -81,11 +86,35 @@ function CreateMintKeys(props) {
                 <div className="key-config-section">
                     <h6 className="config-question" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <FaKey style={{ color: '#4caf50', fontSize: '1.1rem' }} />
-                        How many keys do you want to create?
+                        How many keys do you need?
                     </h6>
+                    
+                    {/* Benefit explanation */}
+                    <div style={{
+                        background: 'transparent',
+                        padding: '0rem',
+                        marginBottom: '1rem',
+                        fontSize: '0.85rem',
+                        textAlign: 'left',
+                        color: '#b0b0b0'
+                    }}>
+                      We recommend creating 3 or more keys to ensure you can still access your vault if you lose a key.
+                    </div>
+
+                     {/* Pricing information */}
+                     <div style={{
+                        textAlign: 'left',
+                        marginBottom: '1rem',
+                        fontSize: '0.8rem',
+                        color: '#b0b0b0'
+                    }}>
+                        $5 per key • First key free
+                    </div>
+
+
                     <div className="number-selector">
                         {Array.from({length: 20}, (_, i) => i + 1).map(num => {
-                            const isFree = num <= freeLimit;
+                            const cost = ProFeatureService.calculateCost(num);
                             return (
                                 <button
                                     key={num}
@@ -93,7 +122,7 @@ function CreateMintKeys(props) {
                                     className={`number-btn ${totalShareholders === num ? 'active' : ''}`}
                                     onClick={() => setShareholders(num)}
                                     style={getKeyButtonStyle(num)}
-                                    title={isFree ? `${num} keys (Free plan)` : `${num} keys (Pro plan required)`}
+                                    title={cost === 0 ? `${num} key${num !== 1 ? 's' : ''} (Free)` : `${num} key${num !== 1 ? 's' : ''} ($${cost})`}
                                 >
                                     {num}
                                 </button>
@@ -101,43 +130,44 @@ function CreateMintKeys(props) {
                         })}
                     </div>
                     
-                    {/* Simpler legend without sparkle */}
-                    <div style={{
-                        display: 'flex',
-                        gap: '1rem',
-                        justifyContent: 'center',
-                        marginTop: '0.75rem',
-                        fontSize: '0.75rem'
-                    }}>
-                        <div style={{ color: '#6c757d', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                            <div style={{
-                                width: '8px',
-                                height: '8px',
-                                backgroundColor: '#6c757d', // Gray
-                                borderRadius: '50%'
-                            }}></div>
-                            Free (1-{freeLimit} keys)
-                        </div>
-                        <div style={{ color: '#4caf50', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                            <div style={{
-                                width: '8px',
-                                height: '8px',
-                                backgroundColor: '#4caf50', // Green
-                                borderRadius: '50%'
-                            }}></div>
-                            Pro ({freeLimit + 1}-20 keys)
-                        </div>
-                    </div>
+                   
                     
                 </div>
 
-                {/* Threshold Section - Only show if more than 1 key */}
-                {totalShareholders > 1 && (
+                {/* Explanation for 2 keys */}
+                {totalShareholders === 2 && (
+                    <div className="key-config-section">
+                        <div style={{
+                            background: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            borderRadius: '6px',
+                            padding: '0.75rem',
+                            fontSize: '0.85rem',
+                            color: '#b0b0b0',
+                            textAlign: 'center'
+                        }}>
+                            Both keys will be required to unlock your vault
+                        </div>
+                    </div>
+                )}
+
+                                        {/* Threshold Section - Only show if more than 2 keys (need actual choice) */}
+                {totalShareholders > 2 && (
                     <div className="key-config-section">
                         <h6 className="config-question" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <FaUnlock style={{ color: '#4caf50', fontSize: '1.1rem' }} />
                             How many keys are needed to unlock?
                         </h6>
+                        <div style={{
+                            background: 'transparent',
+                            padding: '0rem',
+                            marginBottom: '1rem',
+                            fontSize: '0.85rem',
+                            textAlign: 'left',
+                            color: '#b0b0b0'
+                        }}>
+                            Lower threshold = more redundancy. Higher threshold = more security
+                        </div>
                         <div className="number-selector">
                             {Array.from({length: totalShareholders - 1}, (_, i) => i + 2).map(num => (
                                 <button

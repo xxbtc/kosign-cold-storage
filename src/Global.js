@@ -6,25 +6,22 @@ global.paymentCompleteURL = 'https://kosign.xyz/thankyou';
 //global.paymentCompleteURL = 'http://localhost:3000/thankyou';
 
 //global.stripePubKey = 'pk_test_I4rOTLfBxkIH2dqZ1c8iTr2400Pjy6dJbv';
-global.stripePubKey = 'pk_test_I4rOTLfBxkIH2dqZ1c8iTr2400Pjy6dJbv';
+global.stripePubKey = 'pk_live_ebxGJc3XYVRfcCmNUBxoDbuY00ECghv95k';
 
-// Plan Limits - Centralized Configuration
-global.FREE_PLAN = {
-    maxShares: 2,        // Free plan allows up to 2 keys
-    maxStorage: 120      // Optimized for seed phrases (12-24 words = ~120 chars)
-};
-
-global.PRO_PLAN = {
-    maxShares: 20,       // Pro plan allows up to 20 keys  
-    maxStorage: 300      // Multiple items or longer seeds (still single-page focused)
+// New Pricing Model: $5 per key with first key free
+global.PRICING = {
+    freeKeys: 1,         // First key is always free
+    pricePerKey: 5,      // $5 for each additional key
+    maxKeysWithoutPayment: 1,  // Can create 1 key without payment
+    maxStorage: 300      // Storage limit remains the same
 };
 
 // Legacy settings (can be removed once ProFeatureService is updated)
-global.costPerKey = 0;
+global.costPerKey = global.PRICING.pricePerKey;
 global.setupCost  = 0;
-global.freeKeys   = global.FREE_PLAN.maxShares;  // Use the centralized value
-global.maxCharsPerVaultFree = global.FREE_PLAN.maxStorage;
-global.maxCharsPerVault = global.PRO_PLAN.maxStorage;
+global.freeKeys   = global.PRICING.freeKeys;
+global.maxCharsPerVaultFree = global.PRICING.maxStorage;
+global.maxCharsPerVault = global.PRICING.maxStorage;
 //global.regularURL = 'http://xxxxxx.localhost/api/index.php/';
 
 //global.wsURL = 'wss://echo.websocket.org';
