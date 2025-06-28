@@ -73,7 +73,7 @@ const SingleQRUnlock = ({
 
     // Enhanced camera constraints
     const getCameraConfig = () => {
-        return cameraManager.getCameraConstraints();
+        return cameraManager.getCameraConfig();
     };
 
     return (
@@ -123,6 +123,12 @@ const SingleQRUnlock = ({
                                     >
                                         Force Front
                                     </button>
+                                    <button 
+                                        onClick={cameraManager.forceIOSCameraReset}
+                                        style={{ fontSize: '10px', padding: '2px 4px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '2px' }}
+                                    >
+                                        💥 Nuclear
+                                    </button>
                                 </div>
                             )}
                         </div>
@@ -151,6 +157,24 @@ const SingleQRUnlock = ({
                                     padding: 0,
                                     objectFit: 'cover',
                                     borderRadius: 12,
+                                }}
+                                ref={(qrReader) => {
+                                    // Hook into the video element to verify stream
+                                    if (qrReader) {
+                                        const checkVideo = (attempt = 1) => {
+                                            const video = qrReader.querySelector('video');
+                                            if (video && video.srcObject) {
+                                                console.log('🎬 QR Reader video stream detected (attempt ' + attempt + ')');
+                                                cameraManager.verifyStream(video.srcObject);
+                                            } else if (attempt < 3) {
+                                                // Try again up to 3 times
+                                                setTimeout(() => checkVideo(attempt + 1), 300 * attempt);
+                                            }
+                                        };
+                                        
+                                        // Start checking
+                                        checkVideo();
+                                    }
                                 }}
                             />
                         )}

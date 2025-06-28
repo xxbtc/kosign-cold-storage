@@ -220,11 +220,50 @@ export const useCameraManager = () => {
         }
     };
 
-
-
+    // Enhanced camera constraints with verification
     const getCameraConfig = () => {
-        // Will work with or without camera enumeration (falls back to facingMode)
-        return getCameraConstraints(cameraFacing === 'back', availableCameras);
+        const constraints = getCameraConstraints(cameraFacing === 'back', availableCameras);
+        
+        // Add verification logging for iOS
+        if (isIOSDevice() && availableCameras) {
+            const targetCamera = availableCameras[cameraFacing];
+            if (targetCamera) {
+                console.log(`🔍 iOS Verification - Requested camera:`, {
+                    facing: cameraFacing,
+                    label: targetCamera.label,
+                    deviceId: targetCamera.deviceId,
+                    constraintUsed: constraints.video.deviceId ? 'deviceId' : 'facingMode'
+                });
+            }
+        }
+        
+        return constraints;
+    };
+
+    // Add stream verification function
+    const verifyStream = (stream) => {
+        if (!stream || !isIOSDevice()) return;
+        
+        const videoTrack = stream.getVideoTracks()[0];
+        if (videoTrack) {
+            console.log(`🎥 Actual stream info:`, {
+                label: videoTrack.label,
+                facingMode: videoTrack.getSettings()?.facingMode,
+                deviceId: videoTrack.getSettings()?.deviceId,
+                width: videoTrack.getSettings()?.width,
+                height: videoTrack.getSettings()?.height
+            });
+            
+            // Update debug with actual vs expected
+            const expectedCamera = availableCameras?.[cameraFacing];
+            const isCorrectCamera = expectedCamera && videoTrack.getSettings()?.deviceId === expectedCamera.deviceId;
+            
+            if (isCorrectCamera) {
+                setDebugInfo(`✅ Correct camera active: ${videoTrack.label.substring(0, 25)}...`);
+            } else {
+                setDebugInfo(`❌ Wrong camera! Expected: ${expectedCamera?.label.substring(0, 15)}... Got: ${videoTrack.label.substring(0, 15)}...`);
+            }
+        }
     };
 
     // Test functions for mobile debugging
@@ -252,17 +291,49 @@ export const useCameraManager = () => {
         }
     };
 
+    // Nuclear option for iOS camera switching
+    const forceIOSCameraReset = async () => {
+        if (!isIOSDevice()) {
+            console.log('⚠️ Nuclear reset only for iOS');
+            return;
+        }
+        
+        console.log('💥 Nuclear iOS camera reset initiated');
+        setDebugInfo('💥 Nuclear reset: forcing iOS camera switch...');
+        
+        const originalFacing = cameraFacing;
+        const oppositeFacing = cameraFacing === 'back' ? 'front' : 'back';
+        
+        // Step 1: Switch to opposite camera
+        console.log(`💥 Step 1: Switch to ${oppositeFacing}`);
+        setCameraFacing(oppositeFacing);
+        setCameraKey(prev => prev + 1);
+        
+        // Wait for switch to complete
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Step 2: Switch back to original camera
+        console.log(`💥 Step 2: Switch back to ${originalFacing}`);
+        setCameraFacing(originalFacing);
+        setCameraKey(prev => prev + 1);
+        
+        setDebugInfo(`💥 Nuclear reset complete - targeting ${originalFacing} camera`);
+        console.log('💥 Nuclear reset complete');
+    };
+
     return {
         cameraFacing,
         cameraKey,
         switchCamera,
-        getCameraConstraints,
+        getCameraConfig,
         cameraError,
         setCameraError,
         initializeCameras,
         isInitialized,
         debugInfo,
         forceBackCamera,
-        forceFrontCamera
+        forceFrontCamera,
+        verifyStream,  // New stream verification function
+        forceIOSCameraReset  // New nuclear option function
     };
 }; 
