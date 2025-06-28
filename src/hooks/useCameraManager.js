@@ -88,46 +88,59 @@ const getCameraConstraints = (preferBack = true, availableCameras = null) => {
     const isMobile = isMobileDevice();
     const isIOS = isIOSDevice();
     
-    // Base constraints
+    console.log(`🎯 Building constraints for ${preferBack ? 'back' : 'front'} camera (iOS: ${isIOS})`);
+    
+    // Base constraints - reduced resolution for better iOS compatibility
     const constraints = {
         audio: false,
         video: {
-            width: { ideal: isMobile ? 1920 : 1280 },
-            height: { ideal: isMobile ? 1080 : 720 },
+            width: { ideal: isIOS ? 1280 : (isMobile ? 1920 : 1280) },
+            height: { ideal: isIOS ? 720 : (isMobile ? 1080 : 720) },
             frameRate: { ideal: 30, max: 30 }
         }
     };
     
-    // Use deviceId if we have specific camera devices, otherwise fall back to facingMode
-    if (availableCameras) {
+    // Aggressive iOS deviceId approach
+    if (isIOS && availableCameras) {
         const targetCamera = preferBack ? availableCameras.back : availableCameras.front;
         
         if (targetCamera?.deviceId) {
-            console.log(`Using deviceId for ${preferBack ? 'back' : 'front'} camera:`, targetCamera.label);
+            console.log(`📱 iOS: Using exact deviceId for ${preferBack ? 'back' : 'front'} camera:`, targetCamera.label);
             
-            // For iOS, try both exact and ideal constraints
-            if (isIOS) {
-                constraints.video.deviceId = { exact: targetCamera.deviceId };
-            } else {
-                constraints.video.deviceId = { ideal: targetCamera.deviceId };
-            }
+            // iOS specific: Use exact deviceId with no facingMode fallback
+            constraints.video.deviceId = { exact: targetCamera.deviceId };
             
-            console.log('Final constraints with deviceId:', constraints);
+            // Remove any conflicting constraints
+            delete constraints.video.facingMode;
+            
+            console.log('📱 iOS exact deviceId constraints:', JSON.stringify(constraints, null, 2));
             return constraints;
         }
     }
     
-    // Fallback to facingMode approach with iOS-specific handling
-    console.log(`Using facingMode fallback for ${preferBack ? 'back' : 'front'} camera`);
+    // Non-iOS deviceId approach
+    if (!isIOS && availableCameras) {
+        const targetCamera = preferBack ? availableCameras.back : availableCameras.front;
+        
+        if (targetCamera?.deviceId) {
+            console.log(`🤖 Android: Using ideal deviceId for ${preferBack ? 'back' : 'front'} camera:`, targetCamera.label);
+            constraints.video.deviceId = { ideal: targetCamera.deviceId };
+            console.log('🤖 Android deviceId constraints:', constraints);
+            return constraints;
+        }
+    }
+    
+    // Fallback to facingMode approach
+    console.log(`📹 Using facingMode fallback for ${preferBack ? 'back' : 'front'} camera`);
     
     if (isIOS) {
-        // iOS: Try exact facingMode for more reliable switching
+        // iOS: Use exact facingMode as last resort
         constraints.video.facingMode = { exact: preferBack ? 'environment' : 'user' };
-        console.log('iOS exact facingMode constraints:', constraints);
+        console.log('📱 iOS exact facingMode fallback:', constraints);
     } else {
-        // Other devices: Use ideal facingMode
+        // Other devices: Use simple facingMode
         constraints.video.facingMode = preferBack ? 'environment' : 'user';
-        console.log('Standard facingMode constraints:', constraints);
+        console.log('🤖 Standard facingMode fallback:', constraints);
     }
     
     return constraints;
@@ -158,80 +171,98 @@ export const useCameraManager = () => {
         console.log('Cameras enumerated:', cameras);
     };
 
-    const switchCamera = () => {
+    const switchCamera = async () => {
+        const oldFacing = cameraFacing;
         const newFacing = cameraFacing === 'back' ? 'front' : 'back';
         
-        // Initialize cameras if not done yet (user is actively trying to use camera)
-        if (!isInitialized) {
-            setDebugInfo('🔧 Initializing cameras for switch...');
-            initializeCameras();
+        console.log(`🔄 Switching camera from ${oldFacing} to ${newFacing}`);
+        
+        // Stop all existing camera streams aggressively
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            stream.getTracks().forEach(track => {
+                console.log(`🛑 Stopping active track: ${track.label}`);
+                track.stop();
+            });
+        } catch (e) {
+            console.log('📝 No active streams to stop');
         }
         
-        // Update debug info about what's happening
+        // Update state
+        setCameraFacing(newFacing);
+        setCameraKey(prev => prev + 1);
+        
+        // Enhanced debug info
         if (availableCameras) {
-            const targetCamera = newFacing === 'back' ? availableCameras.back : availableCameras.front;
-            
+            const targetCamera = availableCameras[newFacing];
             if (targetCamera) {
-                setDebugInfo(`🔄 Switching to ${newFacing} camera: ${targetCamera.label.substring(0, 30)}...`);
+                const label = targetCamera.label?.substring(0, 30) || 'Unknown Camera';
+                const deviceId = targetCamera.deviceId?.substring(0, 10) || 'No ID';
+                setDebugInfo(`🎯 Switching to ${newFacing}: ${label}... (${deviceId}...)`);
+                console.log(`📱 Target camera:`, {
+                    facing: newFacing,
+                    label: targetCamera.label,
+                    deviceId: targetCamera.deviceId
+                });
             } else {
-                setDebugInfo(`⚠️ No ${newFacing} camera found, using facingMode fallback`);
+                setDebugInfo(`⚠️ No ${newFacing} camera found, using facingMode`);
+                console.log(`⚠️ No ${newFacing} camera available in devices`);
             }
         } else {
-            setDebugInfo(`📝 Using facingMode: ${newFacing} (no enumeration)`);
+            setDebugInfo(`🔧 Switching to ${newFacing} (cameras not enumerated)`);
         }
         
-        setCameraError(null); // Clear any existing errors when switching
-        
-        // Switch camera facing
-        setCameraFacing(newFacing);
-        
-        // Force QR Reader remount by updating key
-        const newKey = cameraKey + 1;
-        setCameraKey(newKey);
-        
-        // Update final debug info
-        setTimeout(() => {
-            const constraints = getCameraConstraints(newFacing === 'back', availableCameras);
-            const method = constraints.video.deviceId ? 'deviceId' : 'facingMode';
-            const value = constraints.video.deviceId ? 
-                `${constraints.video.deviceId.exact || constraints.video.deviceId.ideal}` : 
-                constraints.video.facingMode;
-            setDebugInfo(`✅ ${newFacing} camera active (${method}: ${value.substring ? value.substring(0, 15) + '...' : value})`);
-        }, 100);
+        // Additional delay to ensure stream cleanup on iOS
+        if (isIOSDevice()) {
+            setTimeout(() => {
+                console.log('📱 iOS: Additional delay for stream cleanup complete');
+            }, 200);
+        }
     };
+
+
 
     const getCameraConfig = () => {
         // Will work with or without camera enumeration (falls back to facingMode)
         return getCameraConstraints(cameraFacing === 'back', availableCameras);
     };
 
+    // Test functions for mobile debugging
+    const forceBackCamera = () => {
+        console.log('🧪 Force testing back camera');
+        setCameraFacing('back');
+        setCameraKey(prev => prev + 1);
+        
+        if (availableCameras?.back) {
+            setDebugInfo(`🧪 FORCE BACK: ${availableCameras.back.label.substring(0, 25)}... (deviceId: ${availableCameras.back.deviceId.substring(0, 8)}...)`);
+        } else {
+            setDebugInfo('🧪 FORCE BACK: No back camera found');
+        }
+    };
+    
+    const forceFrontCamera = () => {
+        console.log('🧪 Force testing front camera');
+        setCameraFacing('front');
+        setCameraKey(prev => prev + 1);
+        
+        if (availableCameras?.front) {
+            setDebugInfo(`🧪 FORCE FRONT: ${availableCameras.front.label.substring(0, 25)}... (deviceId: ${availableCameras.front.deviceId.substring(0, 8)}...)`);
+        } else {
+            setDebugInfo('🧪 FORCE FRONT: No front camera found');
+        }
+    };
+
     return {
-        // State
         cameraFacing,
         cameraKey,
-        availableCameras,
+        switchCamera,
+        getCameraConstraints,
         cameraError,
+        setCameraError,
+        initializeCameras,
         isInitialized,
         debugInfo,
-        
-        // Functions
-        switchCamera,
-        getCameraConfig,
-        setCameraError,
-        initializeCameras, // Manual initialization when needed
-        
-        // Utility functions (in case components need them)
-        isMobileDevice: isMobileDevice(),
-        isIOSDevice: isIOSDevice(),
-        
-        // For backward compatibility with existing prop structure
-        getCameraConstraints,
-        
-        // Emergency fallback for testing
-        forceExactFacingMode: (facing) => {
-            setDebugInfo(`🚨 Force mode: ${facing} (exact)`);
-            setCameraFacing(facing);
-            setCameraKey(prev => prev + 1);
-        },
+        forceBackCamera,
+        forceFrontCamera
     };
 }; 

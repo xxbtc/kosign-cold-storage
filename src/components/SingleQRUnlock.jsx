@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { QrReader } from 'react-qr-reader';
 import { Oval } from 'react-loading-icons';
 import { FaExclamationTriangle, FaCheck, FaQrcode, FaKey, FaSyncAlt } from 'react-icons/fa';
+import Lottie from 'lottie-react';
+import scanQRAnimation from '../animations/5427-scan-qr-code.json';
 import '../style/singleQRUnlock.css';
 
 const SingleQRUnlock = ({ 
@@ -14,7 +16,8 @@ const SingleQRUnlock = ({
     isProcessing,
     scannedKeys,
     onScanResult,
-    cameraManager
+    cameraManager,
+    onManualEntry
 }) => {
     // Calculate total progress for unified flow (only after metadata is available)
     const totalSteps = metadata ? 1 + metadata.threshold : null;
@@ -70,14 +73,30 @@ const SingleQRUnlock = ({
         }
     };
 
-    // Get camera constraints based on facing mode
+    // Enhanced camera constraints
     const getCameraConfig = () => {
-        return cameraManager.getCameraConfig();
+        return cameraManager.getCameraConstraints();
     };
 
     return (
         <div className="scanning-content single-qr-mode">
             {/* Scanner Section - Similar to Original Layout */}
+            {/* Debug information */}
+            {cameraManager.debugInfo && (
+                <div style={{
+                    background: '#e3f2fd',
+                    color: '#1565c0',
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontFamily: 'monospace',
+                    marginBottom: '10px',
+                    border: '1px solid #bbdefb'
+                }}>
+                    {cameraManager.debugInfo}
+                </div>
+            )}
+
             <Row className="scanner-row">
                 <Col md={4} className="scanner-column">
                     <div className="scanner-overlay">
@@ -95,13 +114,13 @@ const SingleQRUnlock = ({
                             {cameraManager.debugInfo && (
                                 <div style={{ position: 'absolute', top: '40px', right: '5px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
                                     <button 
-                                        onClick={() => cameraManager.forceExactFacingMode('back')}
+                                        onClick={cameraManager.forceBackCamera}
                                         style={{ fontSize: '10px', padding: '2px 4px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '2px' }}
                                     >
                                         Force Back
                                     </button>
                                     <button 
-                                        onClick={() => cameraManager.forceExactFacingMode('front')}
+                                        onClick={cameraManager.forceFrontCamera}
                                         style={{ fontSize: '10px', padding: '2px 4px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '2px' }}
                                     >
                                         Force Front
@@ -214,8 +233,8 @@ const SingleQRUnlock = ({
             {cameraManager.debugInfo && (
                 <div className="alert alert-info mt-3" style={{ fontSize: '12px', maxHeight: '60px', overflow: 'auto' }}>
                     <strong>Debug:</strong> {cameraManager.debugInfo}
-                </div>
-            )}
+                                 </div>
+             )}
         </div>
     );
 };
