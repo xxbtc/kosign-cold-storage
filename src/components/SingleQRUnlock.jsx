@@ -88,12 +88,19 @@ const SingleQRUnlock = ({
         }
     };
 
-    return (
+        return (
         <div className="scanning-content single-qr-mode">
-            {/* Scanner Section - Similar to Original Layout */}
+            {/* Mobile-first: Instruction bar above camera */}
+            <div className="scan-instruction-mobile d-block d-md-none">
+                <div className="current-action">
+                    <Oval stroke={'#1786ff'} strokeWidth={15} className={'loading'} />
+                    {getScanInstruction()}
+                </div>
+            </div>
 
+            {/* Scanner Section */}
             <Row className="scanner-row">
-                <Col md={4} className="scanner-column">
+                <Col lg={5} md={6} xs={12} className="scanner-column">
                     <div className="scanner-overlay">
                         {/* Camera Controls */}
                         <div className="camera-controls">
@@ -119,7 +126,7 @@ const SingleQRUnlock = ({
                                 containerStyle={{
                                     margin: 0,
                                     padding: 0,
-                                    height: '280px',
+                                    height: '250px', // Fixed mobile-friendly height
                                     width: '100%',
                                     borderRadius: 12,
                                 }}
@@ -135,69 +142,127 @@ const SingleQRUnlock = ({
                         )}
                     </div>
                 </Col>
-                
-                                 <Col md={8}>
+
+                                <Col lg={7} md={6} className="progress-column-desktop d-none d-md-block">
+                     {/* Desktop instruction bar - hidden on mobile */}
                      <div className="current-action">
                          <Oval stroke={'#1786ff'} strokeWidth={15} className={'loading'} />
                          {getScanInstruction()}
                      </div>
-                    
-                    {/* Simplified Progress Display - Remove excess containers */}
-                    {metadata && (
-                        <div className="vault-progress-simple">
-                            <div className="vault-name">
-                                <strong>{metadata.name}</strong>
-                            </div>
-                            
-                            {/* Vault Status */}
-                            <div className="progress-item-row">
-                                <div className={`progress-item ${numOfQRsScanned > 0 ? 'completed' : 'pending'}`}>
-                                    {numOfQRsScanned > 0 ? (
-                                        <FaCheck className="check-icon" />
-                                    ) : (
-                                        <FaQrcode className="pending-icon" />
-                                    )}
-                                    <span>Vault Data</span>
-                                </div>
-                            </div>
-                            
-                            {/* Keys Grid - Simplified */}
-                            <div className="keys-section">
-                                <div className="keys-header">
-                                    <FaKey className="section-icon" />
-                                    <span>Keys ({numOfQRKEYSsScanned}/{metadata.threshold})</span>
-                                </div>
-                                
-                                <div className="keys-grid-simple">
-                                    {metadata.keys && metadata.keys.map((keyAlias, index) => {
-                                        const isScanned = scannedKeys.includes(keyAlias);
-                                        return (
-                                            <div 
-                                                key={index} 
-                                                className={`key-item-simple ${isScanned ? 'completed' : ''}`}
-                                            >
-                                                {isScanned ? (
-                                                    <FaCheck className="check-icon" />
-                                                ) : (
-                                                    <FaKey className="key-icon" />
-                                                )}
-                                                <span className="key-alias">{keyAlias}</span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                                
-                                <div className="keys-note-simple">
-                                    Scan any {metadata.threshold} of {metadata.keys.length} keys
-                                    {numOfQRKEYSsScanned > 0 && (
-                                        <span> • {metadata.threshold - numOfQRKEYSsScanned} more needed</span>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                                         )}
+                     
+                     {/* Desktop Progress Display */}
+                     {metadata && (
+                         <div className="vault-progress-simple">
+                             <div className="vault-name">
+                                 <strong>{metadata.name}</strong>
+                             </div>
+                             
+                             {/* Vault Status */}
+                             <div className="progress-item-row">
+                                 <div className={`progress-item ${numOfQRsScanned > 0 ? 'completed' : 'pending'}`}>
+                                     {numOfQRsScanned > 0 ? (
+                                         <FaCheck className="check-icon" />
+                                     ) : (
+                                         <FaQrcode className="pending-icon" />
+                                     )}
+                                     <span>Vault Data</span>
+                                 </div>
+                             </div>
+                             
+                             {/* Keys Grid - Simplified */}
+                             <div className="keys-section">
+                                 <div className="keys-header">
+                                     <FaKey className="section-icon" />
+                                     <span>Keys ({numOfQRKEYSsScanned}/{metadata.threshold})</span>
+                                 </div>
+                                 
+                                 <div className="keys-grid-simple">
+                                     {metadata.keys && metadata.keys.map((keyAlias, index) => {
+                                         const isScanned = scannedKeys.includes(keyAlias);
+                                         return (
+                                             <div 
+                                                 key={index} 
+                                                 className={`key-item-simple ${isScanned ? 'completed' : ''}`}
+                                             >
+                                                 {isScanned ? (
+                                                     <FaCheck className="check-icon" />
+                                                 ) : (
+                                                     <FaKey className="key-icon" />
+                                                 )}
+                                                 <span className="key-alias">{keyAlias}</span>
+                                             </div>
+                                         );
+                                     })}
+                                 </div>
+                                 
+                                 <div className="keys-note-simple">
+                                     Scan any {metadata.threshold} of {metadata.keys.length} keys
+                                     {numOfQRKEYSsScanned > 0 && (
+                                         <span> • {metadata.threshold - numOfQRKEYSsScanned} more needed</span>
+                                     )}
+                                 </div>
+                             </div>
+                         </div>
+                     )}
                  </Col>
              </Row>
+
+             {/* Mobile Progress Display - Below camera */}
+             <div className="mobile-progress d-block d-md-none">
+                 {metadata && (
+                     <div className="vault-progress-simple">
+                         <div className="vault-name">
+                             <strong>{metadata.name}</strong>
+                         </div>
+                         
+                         {/* Vault Status */}
+                         <div className="progress-item-row">
+                             <div className={`progress-item ${numOfQRsScanned > 0 ? 'completed' : 'pending'}`}>
+                                 {numOfQRsScanned > 0 ? (
+                                     <FaCheck className="check-icon" />
+                                 ) : (
+                                     <FaQrcode className="pending-icon" />
+                                 )}
+                                 <span>Vault Data</span>
+                             </div>
+                         </div>
+                         
+                         {/* Keys Grid - Simplified */}
+                         <div className="keys-section">
+                             <div className="keys-header">
+                                 <FaKey className="section-icon" />
+                                 <span>Keys ({numOfQRKEYSsScanned}/{metadata.threshold})</span>
+                             </div>
+                             
+                             <div className="keys-grid-simple">
+                                 {metadata.keys && metadata.keys.map((keyAlias, index) => {
+                                     const isScanned = scannedKeys.includes(keyAlias);
+                                     return (
+                                         <div 
+                                             key={index} 
+                                             className={`key-item-simple ${isScanned ? 'completed' : ''}`}
+                                         >
+                                             {isScanned ? (
+                                                 <FaCheck className="check-icon" />
+                                             ) : (
+                                                 <FaKey className="key-icon" />
+                                             )}
+                                             <span className="key-alias">{keyAlias}</span>
+                                         </div>
+                                     );
+                                 })}
+                             </div>
+                             
+                             <div className="keys-note-simple">
+                                 Scan any {metadata.threshold} of {metadata.keys.length} keys
+                                 {numOfQRKEYSsScanned > 0 && (
+                                     <span> • {metadata.threshold - numOfQRKEYSsScanned} more needed</span>
+                                 )}
+                             </div>
+                         </div>
+                     </div>
+                 )}
+             </div>
         </div>
     );
 };
