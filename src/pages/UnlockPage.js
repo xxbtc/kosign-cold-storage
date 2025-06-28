@@ -42,7 +42,7 @@ const isMobileDevice = () => {
            (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
 };
 
-const getCameraConstraints = (preferBack = true) => {
+const getCameraConstraints = (facingMode = 'environment') => {
     const isMobile = isMobileDevice();
     
     // Base constraints
@@ -55,16 +55,14 @@ const getCameraConstraints = (preferBack = true) => {
         }
     };
     
-    // Camera selection - prefer back camera on mobile, front camera on desktop
-    if (isMobile && preferBack) {
-        // Mobile: prefer back camera for QR scanning
-        constraints.video.facingMode = { ideal: 'environment' };
-    } else if (!isMobile) {
-        // Desktop: typically has better front-facing webcams
-        constraints.video.facingMode = { ideal: 'user' };
+    // Camera facing mode - use exact for mobile for better switching, ideal as fallback
+    if (isMobile) {
+        // Try exact first for reliable camera switching on mobile
+        constraints.video.facingMode = { exact: facingMode };
+        // Add fallback constraint for devices that don't support exact
+        constraints.video.facingModeIdeal = facingMode;
     } else {
-        // Fallback: let browser choose
-        constraints.video.facingMode = 'environment';
+        constraints.video.facingMode = { ideal: facingMode };
     }
     
     return constraints;
@@ -95,7 +93,10 @@ function UnlockPage() {
     const [scannedKeys, setScannedKeys] = useState([]);
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
     const [cameraError, setCameraError] = useState(null);
-    const [cameraFacing, setCameraFacing] = useState('back'); // 'back' or 'front'
+    const [cameraFacing, setCameraFacing] = useState(() => {
+        // Initialize based on device type
+        return isMobileDevice() ? 'environment' : 'user';
+    });
     const { enterSensitiveMode, exitSensitiveMode } = useSensitiveMode();
 
     useEffect(() => {
@@ -260,9 +261,17 @@ function UnlockPage() {
         }
     };
 
-    const switchCamera = () => {
-        setCameraFacing(cameraFacing === 'back' ? 'front' : 'back');
+    const switchCamera = async () => {
+        const newFacing = cameraFacing === 'environment' ? 'user' : 'environment';
+        console.log(`Switching camera from ${cameraFacing} to ${newFacing}`);
+        
         setCameraError(null); // Clear any existing errors when switching
+        setCameraFacing(newFacing);
+        
+        // Force a small delay to ensure state updates
+        setTimeout(() => {
+            console.log(`Camera switched to: ${newFacing}`);
+        }, 100);
     };
 
     const unlockVault = ()=> {

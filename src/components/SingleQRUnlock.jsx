@@ -76,16 +76,7 @@ const SingleQRUnlock = ({
 
     // Get camera constraints based on facing mode
     const getCameraConfig = () => {
-        const constraints = getCameraConstraints(cameraFacing === 'back');
-        
-        // Override facing mode based on user selection
-        if (cameraFacing === 'front') {
-            constraints.video.facingMode = { ideal: 'user' };
-        } else {
-            constraints.video.facingMode = { ideal: 'environment' };
-        }
-        
-        return constraints;
+        return getCameraConstraints(cameraFacing);
     };
 
     return (
@@ -99,7 +90,7 @@ const SingleQRUnlock = ({
                             <button 
                                 className="camera-switch-btn"
                                 onClick={onSwitchCamera}
-                                title={`Switch to ${cameraFacing === 'back' ? 'front' : 'back'} camera`}
+                                title={`Switch to ${cameraFacing === 'environment' ? 'front' : 'back'} camera`}
                             >
                                 <FaSyncAlt />
                             </button>
@@ -112,7 +103,7 @@ const SingleQRUnlock = ({
                             </div>
                         ) : (
                             <QrReader
-                                key={`qr-scanner-single-${cameraFacing}`}
+                                key={`qr-scanner-single-${cameraFacing}-${Date.now()}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
                                 constraints={getCameraConfig()}
                                 containerStyle={{

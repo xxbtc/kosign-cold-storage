@@ -25,16 +25,7 @@ const LegacyMultiQRUnlock = ({
 }) => {
     // Get camera constraints based on facing mode
     const getCameraConfig = () => {
-        const constraints = getCameraConstraints(cameraFacing === 'back');
-        
-        // Override facing mode based on user selection
-        if (cameraFacing === 'front') {
-            constraints.video.facingMode = { ideal: 'user' };
-        } else {
-            constraints.video.facingMode = { ideal: 'environment' };
-        }
-        
-        return constraints;
+        return getCameraConstraints(cameraFacing);
     };
 
     return (
@@ -47,7 +38,7 @@ const LegacyMultiQRUnlock = ({
                             <button 
                                 className="camera-switch-btn"
                                 onClick={onSwitchCamera}
-                                title={`Switch to ${cameraFacing === 'back' ? 'front' : 'back'} camera`}
+                                title={`Switch to ${cameraFacing === 'environment' ? 'front' : 'back'} camera`}
                             >
                                 <FaSyncAlt />
                             </button>
@@ -60,7 +51,7 @@ const LegacyMultiQRUnlock = ({
                             </div>
                         ) : (
                             <QrReader
-                                key={`qr-scanner-legacy-${cameraFacing}`}
+                                key={`qr-scanner-legacy-${cameraFacing}-${Date.now()}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
                                 constraints={getCameraConfig()}
                                 containerStyle={{
