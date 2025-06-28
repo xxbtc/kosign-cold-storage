@@ -6,7 +6,7 @@ import { Oval } from 'react-loading-icons';
 import { FaExclamationTriangle, FaSyncAlt } from 'react-icons/fa';
 import VaultMetadata from './VaultMetadata';
 
-const LegacyMultiQRUnlock = ({ 
+const LegacyMultiQRUnlock = ({
     metadata,
     numOfQRsScanned,
     numOfQRKEYSsScanned,
@@ -21,11 +21,13 @@ const LegacyMultiQRUnlock = ({
     cameraFacing,
     onSwitchCamera,
     getCameraConstraints,
-    isMobileDevice
+    isMobileDevice,
+    cameraKey,
+    isIOSDevice
 }) => {
     // Get camera constraints based on facing mode
     const getCameraConfig = () => {
-        return getCameraConstraints(cameraFacing);
+        return getCameraConstraints(cameraFacing === 'back');
     };
 
     return (
@@ -38,7 +40,7 @@ const LegacyMultiQRUnlock = ({
                             <button 
                                 className="camera-switch-btn"
                                 onClick={onSwitchCamera}
-                                title={`Switch to ${cameraFacing === 'environment' ? 'front' : 'back'} camera`}
+                                title={`Switch to ${cameraFacing === 'back' ? 'front' : 'back'} camera`}
                             >
                                 <FaSyncAlt />
                             </button>
@@ -51,7 +53,7 @@ const LegacyMultiQRUnlock = ({
                             </div>
                         ) : (
                             <QrReader
-                                key={`qr-scanner-legacy-${cameraFacing}-${Date.now()}`}
+                                key={`qr-scanner-legacy-${cameraFacing}-${cameraKey || 0}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
                                 constraints={getCameraConfig()}
                                 containerStyle={{

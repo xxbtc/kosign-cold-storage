@@ -42,28 +42,25 @@ const isMobileDevice = () => {
            (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
 };
 
-const getCameraConstraints = (facingMode = 'environment') => {
+const isIOSDevice = () => {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+};
+
+const getCameraConstraints = (preferBack = true) => {
     const isMobile = isMobileDevice();
     
-    // Base constraints
+    // Simplified constraints using direct string values for facingMode
     const constraints = {
         audio: false,
         video: {
             width: { ideal: isMobile ? 1920 : 1280 },
             height: { ideal: isMobile ? 1080 : 720 },
-            frameRate: { ideal: 30, max: 30 }
+            frameRate: { ideal: 30, max: 30 },
+            // Use simple string format as shown in react-qr-reader docs
+            facingMode: preferBack ? 'environment' : 'user'
         }
     };
-    
-    // Camera facing mode - use exact for mobile for better switching, ideal as fallback
-    if (isMobile) {
-        // Try exact first for reliable camera switching on mobile
-        constraints.video.facingMode = { exact: facingMode };
-        // Add fallback constraint for devices that don't support exact
-        constraints.video.facingModeIdeal = facingMode;
-    } else {
-        constraints.video.facingMode = { ideal: facingMode };
-    }
     
     return constraints;
 };
@@ -93,10 +90,8 @@ function UnlockPage() {
     const [scannedKeys, setScannedKeys] = useState([]);
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
     const [cameraError, setCameraError] = useState(null);
-    const [cameraFacing, setCameraFacing] = useState(() => {
-        // Initialize based on device type
-        return isMobileDevice() ? 'environment' : 'user';
-    });
+    const [cameraFacing, setCameraFacing] = useState('back'); // 'back' or 'front'
+    const [cameraKey, setCameraKey] = useState(0); // Force QR Reader remount on iOS
     const { enterSensitiveMode, exitSensitiveMode } = useSensitiveMode();
 
     useEffect(() => {
@@ -261,17 +256,17 @@ function UnlockPage() {
         }
     };
 
-    const switchCamera = async () => {
-        const newFacing = cameraFacing === 'environment' ? 'user' : 'environment';
-        console.log(`Switching camera from ${cameraFacing} to ${newFacing}`);
-        
+    const switchCamera = () => {
+        console.log('Switching camera from', cameraFacing);
         setCameraError(null); // Clear any existing errors when switching
-        setCameraFacing(newFacing);
         
-        // Force a small delay to ensure state updates
-        setTimeout(() => {
-            console.log(`Camera switched to: ${newFacing}`);
-        }, 100);
+        // Switch camera facing
+        setCameraFacing(cameraFacing === 'back' ? 'front' : 'back');
+        
+        // Force QR Reader remount by updating key
+        setCameraKey(prev => prev + 1);
+        
+        console.log('Camera switched to:', cameraFacing === 'back' ? 'front' : 'back');
     };
 
     const unlockVault = ()=> {
@@ -556,6 +551,8 @@ function UnlockPage() {
                                             onSwitchCamera={switchCamera}
                                             getCameraConstraints={getCameraConstraints}
                                             isMobileDevice={isMobileDevice()}
+                                            cameraKey={cameraKey}
+                                            isIOSDevice={isIOSDevice()}
                                         />
                                     ) : (
                                         <LegacyMultiQRUnlock
@@ -574,6 +571,8 @@ function UnlockPage() {
                                             onSwitchCamera={switchCamera}
                                             getCameraConstraints={getCameraConstraints}
                                             isMobileDevice={isMobileDevice()}
+                                            cameraKey={cameraKey}
+                                            isIOSDevice={isIOSDevice()}
                                         />
                                     )}
                                 </div>

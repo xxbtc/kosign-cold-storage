@@ -18,7 +18,9 @@ const SingleQRUnlock = ({
     cameraFacing,
     onSwitchCamera,
     getCameraConstraints,
-    isMobileDevice
+    isMobileDevice,
+    cameraKey,
+    isIOSDevice
 }) => {
     // Calculate total progress for unified flow (only after metadata is available)
     const totalSteps = metadata ? 1 + metadata.threshold : null;
@@ -76,7 +78,7 @@ const SingleQRUnlock = ({
 
     // Get camera constraints based on facing mode
     const getCameraConfig = () => {
-        return getCameraConstraints(cameraFacing);
+        return getCameraConstraints(cameraFacing === 'back');
     };
 
     return (
@@ -90,7 +92,7 @@ const SingleQRUnlock = ({
                             <button 
                                 className="camera-switch-btn"
                                 onClick={onSwitchCamera}
-                                title={`Switch to ${cameraFacing === 'environment' ? 'front' : 'back'} camera`}
+                                title={`Switch to ${cameraFacing === 'back' ? 'front' : 'back'} camera`}
                             >
                                 <FaSyncAlt />
                             </button>
@@ -103,7 +105,7 @@ const SingleQRUnlock = ({
                             </div>
                         ) : (
                             <QrReader
-                                key={`qr-scanner-single-${cameraFacing}-${Date.now()}`}
+                                key={`qr-scanner-single-${cameraFacing}-${cameraKey || 0}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
                                 constraints={getCameraConfig()}
                                 containerStyle={{
