@@ -111,7 +111,7 @@ function Homepage(props) {
                                 Foundational Vault for Digital Assets
                             </h1>
                             <p className="hero-subtitle">
-                                Store passwords and digital assets offline in a cold storage paper vault. Designed to last generations.
+                                A paper wallet for your passwords, 2FA codes, and crypto — secured by threshold encryption and designed for inheritance.
                             </p>
                             
                             {/* Social Proof Bullets */}
