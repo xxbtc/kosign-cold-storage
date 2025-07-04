@@ -1,14 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Spinner, Button } from 'react-bootstrap';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { PaymentService } from '../services/PaymentService';
 import { ProFeatureService } from '../services/ProFeatureService';
 import '../style/payment.css';
 
 const stripePromise = loadStripe(global.stripePubKey);
 
-const PaymentForm = ({ onSuccess, onError, totalShareholders }) => {
+const PaymentFormWrapper = ({ onSuccess, onError, totalShareholders }) => {
+    const [clientSecret, setClientSecret] = useState('');
+    const [licenseKey, setLicenseKey] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const initializePayment = async () => {
+            try {
+                const response = await PaymentService.setupPayment(totalShareholders, '');
+                if (response.result && response.client_secret) {
+                    setClientSecret(response.client_secret);
+                    setLicenseKey(response.license_key);
+                } else {
+                    setError('Failed to initialize payment');
+                }
+            } catch (err) {
+                setError('Failed to initialize payment');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        initializePayment();
+    }, [totalShareholders]);
+
+    if (loading) {
+        return (
+            <div className="text-center" style={{ padding: '2rem' }}>
+                <Spinner animation="border" style={{ color: '#1786ff' }} />
+                <div style={{ color: '#ffffff', marginTop: '1rem' }}>Initializing payment...</div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <Alert variant="danger">
+                {error}
+            </Alert>
+        );
+    }
+
+    const elementsOptions = {
+        clientSecret,
+        appearance: {
+            theme: 'night',
+            variables: {
+                colorPrimary: '#1786ff',
+                colorBackground: '#222222',
+                colorText: '#ffffff',
+                colorDanger: '#f44336',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                borderRadius: '8px',
+            },
+        },
+    };
+
+    return (
+        <Elements stripe={stripePromise} options={elementsOptions}>
+            <PaymentForm
+                onSuccess={onSuccess}
+                onError={onError}
+                totalShareholders={totalShareholders}
+                clientSecret={clientSecret}
+                licenseKey={licenseKey}
+            />
+        </Elements>
+    );
+};
+
+const PaymentForm = ({ onSuccess, onError, totalShareholders, clientSecret, licenseKey }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [isProcessing, setIsProcessing] = useState(false);
@@ -29,36 +100,30 @@ const PaymentForm = ({ onSuccess, onError, totalShareholders }) => {
         setError('');
 
         try {
-            // Create payment intent on backend with calculated amount
-            const response = await PaymentService.setupPayment(totalShareholders, ''); // quantity=keys, coupon=empty
-            
-            if (!response.client_secret) {
-                throw new Error('Failed to create payment intent');
+            // License key is already available from initialization
+            if (!licenseKey) {
+                throw new Error('License key not found');
             }
 
-            const licenseKey = response.license_key;
             // Confirm payment with Stripe
-            const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
-                response.client_secret,
+            const { error: stripeError, paymentIntent } = await stripe.confirmPayment(
                 {
-                    payment_method: {
-                        card: elements.getElement(CardNumberElement),
-                        billing_details: {
-                            name: name,
-                            email: email,
-                        },
+                    elements,
+                    confirmParams: {
+                        return_url: `${window.location.origin}/payment-success`,
                     },
+                    redirect: 'if_required',
                 }
             );
 
             if (stripeError) {
                 setError(stripeError.message);
                 onError(stripeError.message);
-            } else {
+            } else if (paymentIntent && paymentIntent.status === 'succeeded') {
                 // Confirm payment in backend
                 try {
                     await PaymentService.confirmPayment(
-                        response.client_secret,
+                        clientSecret,
                         paymentIntent.id,
                         email,
                         name
@@ -68,6 +133,9 @@ const PaymentForm = ({ onSuccess, onError, totalShareholders }) => {
                 }
 
                 onSuccess(paymentIntent, email, name, licenseKey);
+            } else {
+                setError('Payment was not completed successfully');
+                onError('Payment was not completed successfully');
             }
         } catch (err) {
             setError(err.message || 'An error occurred during payment');
@@ -77,31 +145,17 @@ const PaymentForm = ({ onSuccess, onError, totalShareholders }) => {
         }
     };
 
-    const cardElementOptions = {
-        style: {
-            base: {
-                fontSize: '16px',
-                color: '#ffffff',
-                '::placeholder': {
-                    color: '#888888',
-                },
-                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                fontSmoothing: 'antialiased',
-            },
-            invalid: {
-                color: '#f44336',
-            },
-            complete: {
-                color: '#ffffff',
-            },
-            empty: {
-                color: '#ffffff',
-            },
-            autofill: {
-                color: '#ffffff',
-            },
+    const paymentElementOptions = {
+        layout: 'tabs',
+        business: {
+            name: 'Kosign',
         },
-        disableLink: true,
+        fields: {
+            billingDetails: {
+                name: 'auto',
+                email: 'auto',
+            }
+        },
     };
 
     return (
@@ -134,31 +188,8 @@ const PaymentForm = ({ onSuccess, onError, totalShareholders }) => {
             </div>
 
             <div className="form-group mb-4">
-                                
-                <div className="card-field-group mb-3">
-                    <label className="form-label-small">Card Number</label>
-                    <div className="stripe-element-container">
-                        <CardNumberElement options={cardElementOptions} />
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="col-md-6">
-                        <div className="card-field-group mb-3">
-                            <label className="form-label-small">Expiry Date</label>
-                            <div className="stripe-element-container">
-                                <CardExpiryElement options={cardElementOptions} />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-6">
-                        <div className="card-field-group mb-3">
-                            <label className="form-label-small">CVC</label>
-                            <div className="stripe-element-container">
-                                <CardCvcElement options={cardElementOptions} />
-                            </div>
-                        </div>
-                    </div>
+                <div className="payment-element-container">
+                    <PaymentElement options={paymentElementOptions} />
                 </div>
             </div>
 
@@ -525,13 +556,11 @@ const KosignPaymentStep = ({ totalShareholders, onPaymentSuccess, onLicenseActiv
 
                 {/* Payment Form */}
                 <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-                    <Elements stripe={stripePromise}>
-                        <PaymentForm
-                            onSuccess={handlePaymentSuccess}
-                            onError={handlePaymentError}
-                            totalShareholders={totalShareholders}
-                        />
-                    </Elements>
+                    <PaymentFormWrapper
+                        onSuccess={handlePaymentSuccess}
+                        onError={handlePaymentError}
+                        totalShareholders={totalShareholders}
+                    />
                 </div>
 
                 {/* License Key Option */}

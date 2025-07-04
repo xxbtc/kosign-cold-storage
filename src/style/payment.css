@@ -358,7 +358,22 @@
     display: block;
 }
 
-/* Updated Stripe Element Container */
+/* Payment Element Container */
+.payment-element-container {
+    border-radius: 8px;
+    background: #222222;
+    padding: 1rem;
+    min-height: 200px;
+    border: 2px solid #555555;
+    transition: border-color 0.2s ease;
+}
+
+.payment-element-container:focus-within {
+    border-color: #1786ff;
+    box-shadow: 0 0 0 3px rgba(23, 134, 255, 0.25);
+}
+
+/* Updated Stripe Element Container (Legacy) */
 .stripe-element-container {
     border: 2px solid #555555;
     border-radius: 8px;
