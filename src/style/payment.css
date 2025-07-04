@@ -369,11 +369,6 @@
     display: flex;
     align-items: center;
     position: relative;
-    
-    /* CSS Custom Properties for Stripe Elements */
-    --stripe-color-text: #ffffff;
-    --stripe-color-background: #222222;
-    --stripe-color-autofill: #ffffff;
 }
 
 .stripe-element-container:focus-within {
@@ -400,7 +395,9 @@
 }
 
 .stripe-element-container .StripeElement--webkit-autofill {
-    background: transparent !important;
+    color: #ffffff !important;
+    background-color: #222222 !important;
+    background: #222222 !important;
 }
 
 /* Remove the old card-element-container styles to avoid conflicts */
