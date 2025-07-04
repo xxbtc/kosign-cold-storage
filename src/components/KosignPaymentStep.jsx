@@ -97,6 +97,9 @@ const PaymentForm = ({ onSuccess, onError, totalShareholders }) => {
             empty: {
                 color: '#ffffff',
             },
+            autofill: {
+                color: '#ffffff',
+            },
         },
         disableLink: true,
     };

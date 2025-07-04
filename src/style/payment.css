@@ -499,19 +499,3 @@
     background-color: #222222 !important;
     border-color: #555555 !important;
 }
-
-/* Stripe Elements autofill styling */
-.stripe-element-container input:-webkit-autofill,
-.stripe-element-container input:-webkit-autofill:hover,
-.stripe-element-container input:-webkit-autofill:focus,
-.stripe-element-container input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px #222222 inset !important;
-    -webkit-text-fill-color: #ffffff !important;
-    background-color: #222222 !important;
-}
-
-/* Enhanced Stripe Elements autofill handling */
-.stripe-element-container .StripeElement--webkit-autofill {
-    background: #222222 !important;
-    color: #ffffff !important;
-}
