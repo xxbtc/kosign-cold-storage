@@ -30,7 +30,7 @@ const PaymentForm = ({ onSuccess, onError, totalShareholders }) => {
 
         try {
             // Create payment intent on backend with calculated amount
-            const response = await PaymentService.setupPayment(paymentAmount, totalShareholders);
+            const response = await PaymentService.setupPayment(totalShareholders, ''); // quantity=keys, coupon=empty
             
             if (!response.client_secret) {
                 throw new Error('Failed to create payment intent');
