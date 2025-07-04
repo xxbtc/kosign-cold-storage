@@ -91,6 +91,12 @@ const PaymentForm = ({ onSuccess, onError, totalShareholders }) => {
             invalid: {
                 color: '#f44336',
             },
+            complete: {
+                color: '#ffffff',
+            },
+            empty: {
+                color: '#ffffff',
+            },
         },
         disableLink: true,
     };
