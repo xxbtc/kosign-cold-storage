@@ -82,26 +82,40 @@ const PaymentForm = ({ onSuccess, onError, totalShareholders }) => {
             base: {
                 fontSize: '16px',
                 color: '#ffffff',
+                backgroundColor: '#222222',
                 '::placeholder': {
                     color: '#888888',
+                },
+                '::selection': {
+                    color: '#ffffff',
+                    backgroundColor: '#444444',
+                },
+                ':-webkit-autofill': {
+                    color: '#ffffff !important',
+                    backgroundColor: '#222222 !important',
                 },
                 fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
                 fontSmoothing: 'antialiased',
             },
             invalid: {
                 color: '#f44336',
+                backgroundColor: '#222222',
             },
             complete: {
                 color: '#ffffff',
+                backgroundColor: '#222222',
             },
             empty: {
                 color: '#ffffff',
+                backgroundColor: '#222222',
             },
             autofill: {
                 color: '#ffffff',
+                backgroundColor: '#222222',
             },
         },
         disableLink: true,
+        hidePostalCode: true,
     };
 
     return (

@@ -369,6 +369,11 @@
     display: flex;
     align-items: center;
     position: relative;
+    
+    /* CSS Custom Properties for Stripe Elements */
+    --stripe-color-text: #ffffff;
+    --stripe-color-background: #222222;
+    --stripe-color-autofill: #ffffff;
 }
 
 .stripe-element-container:focus-within {
