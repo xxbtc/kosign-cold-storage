@@ -11,7 +11,7 @@ import '../style/createPage.css';
 import '../style/forms.css';
 
 import Navbar from "../components/NavbarTop";
-import { QrReader } from 'react-qr-reader';
+
 
 import {AiOutlineQrcode} from 'react-icons/ai';
 import {ImKey} from 'react-icons/im';

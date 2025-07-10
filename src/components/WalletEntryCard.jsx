@@ -6,7 +6,7 @@ import { FaTrash, FaEye, FaEyeSlash as FaHide, FaCheck, FaExclamationTriangle, F
 let bip39;
 try {
     bip39 = require('bip39');
-    console.log('✅ bip39 library loaded successfully:', bip39);
+    // bip39 library loaded successfully
 } catch (error) {
     console.error('❌ Failed to load bip39 library:', error);
     bip39 = null;
@@ -588,7 +588,6 @@ function WalletEntryCard({
                        validation.type === 'invalid_checksum' ? 'danger' :
                        validation.type === 'partial_valid' ? 'info' : 'warning';
         
-        console.log('🎨 Badge variant for validation:', validation, '→ Variant:', variant);
         return variant;
     };
 
@@ -824,14 +823,6 @@ function WalletEntryCard({
                                      seedValidation.type === 'invalid_words' || 
                                      seedValidation.type === 'error' || 
                                      seedValidation.isValid) ? '#ffffff' : undefined;
-
-                                console.log('🎨 Badge styling debug:', {
-                                    type: seedValidation.type,
-                                    isValid: seedValidation.isValid,
-                                    backgroundColor,
-                                    color,
-                                    variant: getBadgeVariant(seedValidation)
-                                });
 
                                 return (
                                     <span 

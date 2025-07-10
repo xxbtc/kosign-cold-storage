@@ -13,7 +13,7 @@ import '../style/forms.css';
 import '../style/unlockPage.css';
 
 import Navbar from "../components/NavbarTop";
-import { QrReader } from 'react-qr-reader';
+
 
 import {AiOutlineQrcode} from 'react-icons/ai';
 
@@ -92,7 +92,7 @@ function UnlockPage() {
         const totalVaultQRs = metadata.data ? 1 : metadata.qrcodes;
         
         if (numOfQRsScanned >= totalVaultQRs) {
-            console.log(`Scanned ${numOfQRsScanned} of ${totalVaultQRs} vault QRs - transitioning to key scanning`);
+            // Scanned vault QRs - transitioning to key scanning
             setScanType('key');
         }
     }, [numOfQRsScanned, metadata]);
@@ -157,16 +157,14 @@ function UnlockPage() {
             
             // NEW: Check if this is a single QR code format (has data field)
             if (jsonObject.data) {
-                console.log('Detected new single QR format - setting cipher data immediately');
-                console.log('Single QR vault detected - cipher data length:', jsonObject.data.length);
+                            // Detected new single QR format - setting cipher data immediately
                 setCipherData(jsonObject.data);
                 // For single QR format, we've scanned all vault data
                 setNumOfQRsScanned(1);
                 // Skip to key scanning phase
                 setScanType('key');
             } else {
-                console.log('Detected legacy multi-QR format - expecting data shards');
-                console.log('Legacy vault detected - expected QR codes:', jsonObject.qrcodes);
+                            // Detected legacy multi-QR format - expecting data shards
                 // Legacy format - expect separate data shards
                 setNumOfQRsScanned(1);
             }
@@ -213,9 +211,7 @@ function UnlockPage() {
         const newScannedKeys = [...scannedKeys, data.ident];
         setScannedKeys(newScannedKeys);
         
-        console.log('Key scanned:', data.ident);
-        console.log('Total keys scanned:', newScannedKeys.length);
-        console.log('Threshold needed:', metadata?.threshold);
+        // Key scanned successfully
         
         setNumOfQRKEYSsScanned(numOfQRKEYSsScanned+1);
         setTimeout(() => setIsProcessing(false), 300);
@@ -230,7 +226,7 @@ function UnlockPage() {
                 error.name === 'NotReadableError' || 
                 error.name === 'OverconstrainedError') {
                 
-                console.log('Camera Error:', error);
+                // Camera error detected
                 
                 if (error.name === 'NotAllowedError') {
                     cameraManager.setCameraError('Camera permission denied. Please allow camera access and refresh the page.');

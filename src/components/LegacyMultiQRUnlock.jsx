@@ -1,7 +1,7 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { QrReader } from 'react-qr-reader';
+import ModernQRScanner from './ModernQRScanner';
 import { Oval } from 'react-loading-icons';
 import { FaExclamationTriangle, FaSyncAlt } from 'react-icons/fa';
 import VaultMetadata from './VaultMetadata';
@@ -46,7 +46,7 @@ const LegacyMultiQRUnlock = ({
                                 <span>Processing...</span>
                             </div>
                         ) : (
-                            <QrReader
+                            <ModernQRScanner
                                 key={`qr-scanner-legacy-${cameraManager.cameraFacing}-${cameraManager.cameraKey || 0}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
                                 constraints={getCameraConfig()}
@@ -65,6 +65,8 @@ const LegacyMultiQRUnlock = ({
                                     objectFit: 'cover',
                                     borderRadius: 12,
                                 }}
+                                cameraKey={cameraManager.cameraKey}
+                                isProcessing={isProcessing}
                             />
                         )}
                     </div>

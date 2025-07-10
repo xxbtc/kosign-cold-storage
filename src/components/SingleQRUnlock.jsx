@@ -1,7 +1,7 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { QrReader } from 'react-qr-reader';
+import ModernQRScanner from './ModernQRScanner';
 import { Oval } from 'react-loading-icons';
 import { FaExclamationTriangle, FaCheck, FaQrcode, FaKey, FaSyncAlt } from 'react-icons/fa';
 import '../style/singleQRUnlock.css';
@@ -119,7 +119,7 @@ const SingleQRUnlock = ({
                                 <span>Processing...</span>
                             </div>
                         ) : (
-                            <QrReader
+                            <ModernQRScanner
                                 key={`qr-scanner-single-${cameraManager.cameraFacing}-${cameraManager.cameraKey || 0}`}
                                 onResult={(result, error) => onScanResult(result?.text, error)}
                                 constraints={cameraManager.getCameraConfig()}
@@ -138,6 +138,10 @@ const SingleQRUnlock = ({
                                     objectFit: 'cover',
                                     borderRadius: 12,
                                 }}
+                                cameraKey={cameraManager.cameraKey}
+                                isProcessing={isProcessing}
+                                externalCameras={cameraManager.availableCameras}
+                                externalCameraReady={cameraManager.isInitialized}
                             />
                         )}
                     </div>
