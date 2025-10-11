@@ -1,0 +1,22 @@
+/* Layout styles for integrated navbar */
+
+/* Add padding to all pages to account for floating navbar */
+.layoutWrapper {
+    padding-top: 80px;
+}
+
+/* Homepage doesn't need extra padding since hero section handles it */
+.layoutWrapper:has(.home-page-navbar) {
+    padding-top: 0;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .layoutWrapper {
+        padding-top: 70px;
+    }
+    
+    .layoutWrapper:has(.home-page-navbar) {
+        padding-top: 0;
+    }
+}

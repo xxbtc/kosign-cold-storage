@@ -21,8 +21,7 @@ import {useReactToPrint} from 'react-to-print';
 import Html2PDF from 'html2pdf.js';
 import {Oval} from "react-loading-icons";
 import VaultDownloadSection from './VaultDownloadSection';
-import { ProFeatureService } from '../services/ProFeatureService';
-import KosignPaymentStep from './KosignPaymentStep';
+import { getCurrentLimits, clearProSession } from '../config/limits';
 import SecurityPreparationStep from './SecurityPreparationStep';
 import { useSensitiveMode } from '../contexts/SensitiveModeContext';
 
@@ -45,7 +44,7 @@ function CreateVault(props) {
     const [vaultName, setVaultName] = useState('');
     const [totalShareholders, setTotalShareholders] = useState(3);
     const [maxSecretChars, setMaxChars] = useState(() => {
-        const limits = ProFeatureService.getCurrentLimits();
+        const limits = getCurrentLimits();
         return limits.maxStorage;
     });
     const [maxDescriptionChars, setMaxDescriptionChars] = useState(135);
@@ -63,8 +62,6 @@ function CreateVault(props) {
     const refBackupKeyPDF   = useRef(null);
 
     const [showPDFBackupVault, setShowPDFBackupVault] = useState();
-    const [isPaymentComplete, setIsPaymentComplete] = useState(false);
-    const [totalCost, setTotalCost] = useState(0);
     const [isOnline, setIsOnline]   = useState(navigator.onLine);
     const [totalPages, setTotalPages] = useState();
 
@@ -76,20 +73,12 @@ function CreateVault(props) {
 
     const [vaultColors, setVaultColors] = useState([]);
 
-    // Add new state for pro upgrade flow
-    const [showProUpgrade, setShowProUpgrade] = useState(false);
-    const [licenseKey, setLicenseKey] = useState('');
-    const [isValidatingLicense, setIsValidatingLicense] = useState(false);
-    const [licenseError, setLicenseError] = useState('');
 
-    // Add state for license validation
-    const [isValidatingProStatus, setIsValidatingProStatus] = useState(false);
-
-    // Add effect to update limits when pro status changes
+    // Set application limits
     useEffect(() => {
-        const currentLimits = ProFeatureService.getCurrentLimits();
+        const currentLimits = getCurrentLimits();
         setMaxChars(currentLimits.maxStorage);
-    }, [showProUpgrade]);
+    }, []);
 
     const calculateHowManyPages = (value) => {
         // Single QR code vault - all data combined
@@ -226,7 +215,7 @@ function CreateVault(props) {
                 exitSensitiveMode();
             }
             // Clear pro session when component unmounts (vault creation complete or cancelled)
-            ProFeatureService.clearProSession();
+            clearProSession();
         };
     }, []); // Empty dependency array - only run on mount/unmount
 
@@ -248,32 +237,8 @@ function CreateVault(props) {
         }
     }, [wizardStep]);
 
-    // Auto-scroll to top when pro upgrade step shows
-    useEffect(() => {
-        if (showProUpgrade && window.scrollY > 100) {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-    }, [showProUpgrade]);
 
-    // Clear pro session when vault creation is complete (step 6)
-    useEffect(() => {
-        if (wizardStep === 6) {
-            // Vault creation is complete, clear the consumed pro session
-            console.log('Vault creation complete - clearing pro session');
-            ProFeatureService.clearProSession();
-        }
-    }, [wizardStep]);
 
-    useEffect(()=>{
-        let tmpTotalCost = (totalShareholders * global.costPerKey) + (global.setupCost) - (global.freeKeys*global.costPerKey);
-        if (tmpTotalCost<0) {
-            tmpTotalCost = 0;
-        }
-       setTotalCost(tmpTotalCost);
-    }, [totalShareholders]);
 
     useEffect (()=>{
      //   console.log('NAVIGATOR IS ', navigator.onLine);
@@ -305,35 +270,11 @@ function CreateVault(props) {
 
     }, []);
 
-    // Check if user is creating a vault that requires payment
-    const requiresPayment = () => {
-        return ProFeatureService.calculateCost(totalShareholders) > 0;
+    // Validate key limits
+    const exceedsKeyLimit = () => {
+        return totalShareholders > getCurrentLimits().maxShares;
     };
 
-    // Check if user exceeds free limits AND needs to upgrade
-    const exceedsFreeLimit = () => {
-        return totalShareholders > ProFeatureService.FREE_LIMITS.maxShares && !ProFeatureService.isProUserCached();
-    };
-
-    // Calculate the cost for display
-    const vaultCost = ProFeatureService.calculateCost(totalShareholders);
-
-    // Add validation when component mounts or when checking pro status
-    useEffect(() => {
-        const validateProStatus = async () => {
-            if (ProFeatureService.isProUserCached()) {
-                setIsValidatingProStatus(true);
-                const isValid = await ProFeatureService.isProUser();
-                if (!isValid) {
-                    // License was invalid, force re-render to show upgrade prompt
-                    setShowProUpgrade(totalShareholders > ProFeatureService.FREE_LIMITS.maxShares);
-                }
-                setIsValidatingProStatus(false);
-            }
-        };
-
-        validateProStatus();
-    }, [totalShareholders]);
 
     const continueWizard = async (forcepage) => {
         if (!agreeToTerms) {
@@ -346,76 +287,11 @@ function CreateVault(props) {
             return;
         }
 
-        // Check if user needs pro features for this vault
-        if (totalShareholders > ProFeatureService.FREE_LIMITS.maxShares) {
-            setIsValidatingProStatus(true);
-            
-            // Check what type of pro status we have
-            const hasActiveSession = ProFeatureService.hasActiveProSession();
-            const hasPendingLicense = localStorage.getItem('kosign_pro_pending') === 'true';
-            const pendingKey = localStorage.getItem('kosign_pro_pending_key');
-            
-            console.log('Pro status check:', { hasActiveSession, hasPendingLicense, pendingKey: !!pendingKey });
-            
-            if (hasPendingLicense && pendingKey) {
-                // User has a NEW license to consume (from recent purchase/activation)
-                console.log('Found pending license to consume');
-                
-                // Validate the pending license first
-                try {
-                    const { PaymentService } = await import('../services/PaymentService');
-                    const validationData = await PaymentService.validateLicense(pendingKey);
-                    
-                    if (!validationData.result) {
-                        setIsValidatingProStatus(false);
-                        alert('License is no longer valid. Please purchase a new license.');
-                        setShowProUpgrade(true);
-                        return;
-                    }
-                    
-                    const maxAllowedKeys = validationData.features?.max_shares || 1;
-                    if (totalShareholders > maxAllowedKeys) {
-                        setIsValidatingProStatus(false);
-                        alert(`Your license allows ${maxAllowedKeys} keys but you've configured ${totalShareholders} keys. Please reduce the number of keys or upgrade your license.`);
-                        return;
-                    }
-                } catch (error) {
-                    console.error('Error validating pending license:', error);
-                    setIsValidatingProStatus(false);
-                    alert('Failed to validate license. Please try again.');
-                    return;
-                }
-                
-                // Consume the pending license
-                console.log('Consuming pending license for', totalShareholders, 'keys...');
-                const consumeResult = await ProFeatureService.consumeLicense(totalShareholders);
-                setIsValidatingProStatus(false);
-                
-                if (!consumeResult.success) {
-                    console.error('Failed to consume license:', consumeResult.error);
-                    alert('Failed to activate license: ' + consumeResult.error);
-                    if (consumeResult.error.includes('allows') && consumeResult.error.includes('keys')) {
-                        return; // User needs to adjust their configuration
-                    }
-                    setShowProUpgrade(true);
-                    return;
-                }
-                
-                console.log('License consumed successfully - you can now create this vault offline');
-                
-            } else if (hasActiveSession) {
-                // User has an ACTIVE session from previous license consumption
-                console.log('Using existing active pro session');
-                setIsValidatingProStatus(false);
-                // No need to consume again - already paid and activated
-                
-            } else {
-                // User doesn't have any pro status - needs to purchase
-                console.log('No pro status found - showing upgrade prompt');
-                setIsValidatingProStatus(false);
-                setShowProUpgrade(true);
-                return;
-            }
+        // Check if user exceeds key limits
+        if (exceedsKeyLimit()) {
+            const maxKeys = getCurrentLimits().maxShares;
+            alert(`Maximum ${maxKeys} keys supported due to cryptographic library constraints. Please reduce the number of keys.`);
+            return;
         }
 
         //forcepage is just for testing purposes
@@ -445,13 +321,6 @@ function CreateVault(props) {
         setWizardStep(5); // Go to encryption step (shifted from 4 to 5)
     };
 
-    const onPaymentComplete = () => {
-        cookies.remove('kosign_sale_id');
-        cookies.remove('kosign_product_id');
-        setWizardStep(3);
-        setIsPaymentComplete(true);
-        setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
-    };
 
     const handlePrint = useReactToPrint({
         onPrintError: (error) => console.log(error),
@@ -526,56 +395,7 @@ function CreateVault(props) {
         await exporter.getPdf(true);
     };
 
-    const handleLicenseSubmit = async (e) => {
-        e.preventDefault();
-        
-        if (!licenseKey.trim()) {
-            setLicenseError('Please enter your license key');
-            return;
-        }
 
-        setIsValidatingLicense(true);
-        setLicenseError('');
-
-        try {
-            const result = await ProFeatureService.activateLicense(licenseKey.trim());
-            
-            if (result.success) {
-                setShowProUpgrade(false);
-                setLicenseKey('');
-                // Continue with the wizard - go to security check first
-                setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
-                setWizardStep(2); // Go to security check, not directly to step 3
-            } else {
-                setLicenseError(result.error);
-            }
-        } catch (err) {
-            setLicenseError('Failed to validate license key');
-        } finally {
-            setIsValidatingLicense(false);
-        }
-    };
-
-    const handleUpgradeClick = () => {
-        // Navigate to payment with current vault config
-        navigate('/payment', { 
-            state: { 
-                returnTo: '/create',
-                vaultConfig: {
-                    name: vaultName,
-                    shares: totalShareholders,
-                    consensus: consensus
-                }
-            }
-        });
-    };
-
-    const handleDowngradeToFree = () => {
-        const limits = ProFeatureService.getCurrentLimits();
-        setTotalShareholders(limits.maxShares);
-        setConsensus(Math.min(consensus, limits.maxShares));
-        setShowProUpgrade(false);
-    };
 
     if (props.isLoading) {
         return (
@@ -593,7 +413,7 @@ function CreateVault(props) {
                 <div>
 
                     <div style={{flex:1}}>
-                    {wizardStep === 1 && !showProUpgrade && (
+                    {wizardStep === 1 && (
                         <div className="wizard-step-container">
                             <div className="create-vault-header">
                                 <h1>Create a new vault</h1>
@@ -645,20 +465,8 @@ function CreateVault(props) {
                                                 variant={'primary'} 
                                                 size={'lg'}
                                                 onClick={() => continueWizard()}
-                                                disabled={isValidatingProStatus}
-                                                style={{
-                                                    background: requiresPayment() 
-                                                        ? 'linear-gradient(90deg, #1786ff 0%, #1260B3 100%)' // Bright blue
-                                                        : 'linear-gradient(90deg, #6c757d 0%, #495057 100%)', // Muted gray
-                                                    borderColor: requiresPayment() ? '#1786ff' : '#6c757d',
-                                                    borderWidth: '1px',
-                                                    borderStyle: 'solid'
-                                                }}
                                             >
-                                                {isValidatingProStatus 
-                                                    ? 'Activating License...' 
-                                                    : `Continue ${vaultCost > 0 ? `($${vaultCost})` : '(Free)'}`
-                                                }
+                                                Continue
                                             </Button>
                                             
                                             
@@ -669,37 +477,9 @@ function CreateVault(props) {
                         </div>
                     )}
 
-                    {/* Replace the entire Pro Upgrade Step with this */}
-                    {showProUpgrade && (        
-                        <KosignPaymentStep 
-                            totalShareholders={totalShareholders}
-                            onPaymentSuccess={(licenseKey) => {
-                                // License key is already stored in localStorage by the component
-                                setShowProUpgrade(false);
-                                // Update limits immediately after payment
-                                const currentLimits = ProFeatureService.getCurrentLimits();
-                                setMaxChars(currentLimits.maxStorage);
-                                // Continue with vault creation
-                                setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
-                                setWizardStep(2); // Go to security preparation first
-                            }}
-                            onLicenseActivated={() => {
-                                // New callback for manual license activation
-                                setShowProUpgrade(false);
-                                // Update limits immediately after license activation
-                                const currentLimits = ProFeatureService.getCurrentLimits();
-                                setMaxChars(currentLimits.maxStorage);
-                                setKeyAliasArray(EncryptionService.generateListOfCombinedWords(totalShareholders));
-                                setWizardStep(2); // Go to security preparation
-                            }}
-                            onBack={() => {
-                                setShowProUpgrade(false);
-                            }}
-                        />
-                    )}
                 </div>
 
-                {wizardStep === 2 && !showProUpgrade && (
+                {wizardStep === 2 && (
                     <SecurityPreparationStep
                         isOnline={isOnline}
                         onContinue={continueFromSecurity}

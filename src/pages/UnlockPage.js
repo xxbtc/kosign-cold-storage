@@ -623,15 +623,6 @@ function UnlockPage() {
                                     </div>
                                 )}
                                 
-                                <div className="info-card">
-                                    <div className="d-flex align-items-center justify-content-center">
-                                        <span className="me-2">🛠️</span>
-                                        <span className="me-2">This unlock utility is also available on</span>
-                                        <a href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'} rel="noopener noreferrer" className="github-link">
-                                            GitHub 
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

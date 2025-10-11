@@ -28,19 +28,21 @@ function HomepageFAQ(props) {
                             <h3 style={{margin: 0}}>About Kosign</h3>
                         </div>
                         <div style={{paddingRight:60, marginTop:40}}>
-                            Kosign provides the foundational security layer that makes all your other security tools actually secure. 
-                            Our passwordless, offline cold storage vaults are secured by distributed physical keys instead of master passwords.
-                            <br/><br/>
-                            Store crypto seeds, master passwords, 2FA recovery codes, and critical data without the circular 
-                            dependencies that plague modern security. Perfect for digital inheritance planning, emergency access, and long term storage.
+                            <strong>Kosign</strong> is an open-source tool for creating distributed paper vaults secured by threshold encryption. 
+                            Split your secrets across multiple keys, distribute to trusted people or locations, and recover with any subset (e.g., 3-of-5). 
+                            Perfect for cold storage of crypto seeds, master passwords, 2FA codes, and secure inheritance. 
+                            <strong> 100% open source, runs offline, works forever.</strong>
+                            
                             <div style={{marginTop:20}}>
+                                <FaXTwitter />&nbsp;
                                 <a className={'linkage'} href={'https://twitter.com/kosign_xyz'} target={'_blank'}>
-                                    <FaXTwitter /> &nbsp;@kosign_xyz
+                                     @kosign_xyz
                                 </a>
                             </div>
                             <div style={{marginTop:20}}>
+                                <BsEnvelope/>&nbsp;
                                 <a className={'linkage'} href={'mailto:support@kosign.xyz'} target={'_blank'}>
-                                    <BsEnvelope/> &nbsp;support@kosign.xyz
+                                    support@kosign.xyz
                                 </a>
                             </div>
                         </div>
@@ -64,14 +66,14 @@ function HomepageFAQ(props) {
                             <Accordion.Item eventKey="1" className={'accordionItem'}>
                                 <Accordion.Header>I have a hardware wallet, why do I need Kosign?</Accordion.Header>
                                 <Accordion.Body>
-                                    <p>Hardware wallets are excellent for <strong>daily security</strong>, but they have a massive blind spot: <strong>seed phrase backup</strong>.</p>
-                                    <p>Your expensive hardware wallet is worthless if:</p>
+                                    <p>Hardware wallets are excellent for <strong>transaction signing</strong>, but they have a massive blind spot: <strong>seed phrase backup</strong>.</p>
+                                    <p>Your hardware wallet is only as secure as your seed phrase backup:</p>
                                     <ul style={{margin:'1rem 0', paddingLeft:'1.5rem'}}>
-                                        <li>Someone finds your seed phrase written on paper → <strong>all funds stolen</strong></li>
-                                        <li>You lose your seed phrase in a fire/flood → <strong>all funds gone forever</strong></li>
-                                        <li>You make multiple backup copies → <strong>every copy multiplies your theft risk</strong></li>
+                                        <li><strong>Paper backup risks:</strong> Someone finds your seed phrase → all funds stolen</li>
+                                        <li><strong>Single point of failure:</strong> Fire/flood destroys your backup → funds gone forever</li>
+                                        <li><strong>Multiple copies problem:</strong> Each copy multiplies your theft risk</li>
                                     </ul>
-                                    <p>Kosign encrypts your seed phrase in distributed vaults, so you can safely make multiple copies for backup and inheritance without security risk.</p>
+                                    <p>Kosign encrypts your seed phrase in distributed vaults, so you can safely make multiple copies for backup and inheritance, greatly reducing your security risks.</p>
                                 </Accordion.Body>
                             </Accordion.Item>
                             
@@ -142,31 +144,30 @@ function HomepageFAQ(props) {
                             <Accordion.Item eventKey="6" className={'accordionItem'}>
                                 <Accordion.Header>Can I unlock my vault if the website is down?</Accordion.Header>
                                 <Accordion.Body>
-                                    <p>Yes! Kosign's unlock tool is <strong>completely open source</strong> and runs directly on your computer. It is designed to be future-proof (to the extent possible) and to last generations. Even if the website becomes unavailable one day, you can always access your vaults.</p>
-                                    <p>Open source unlock utility: <a className={'linkage'} href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>github.com/xxbtc/kosign-unlock</a></p>
+                                    <p><strong>Absolutely!</strong> This is one of the key benefits of Kosign being fully open source.</p>
+                                    <p>You can unlock your vaults in multiple ways:</p>
+                                    <ul style={{margin:'1rem 0', paddingLeft:'1.5rem'}}>
+                                        <li><strong>Download and run locally:</strong> Clone the entire Kosign app from <a className={'linkage'} href={'https://github.com/xxbtc/kosign'} target={'_blank'} rel="noreferrer">GitHub</a> and run it offline</li>
+                                        <li><strong>Future-proof design:</strong> Built to work for generations, even if the website no longer exists</li>
+                                    </ul>
+                                    <p>Your vaults are designed to outlast any single website or company - that's the power of open source.</p>
                                 </Accordion.Body>
                             </Accordion.Item>
                             
                             <Accordion.Item eventKey="7" className={'accordionItem'}>
                                 <Accordion.Header>Has Kosign been audited?</Accordion.Header>
                                 <Accordion.Body>
-                                    <p>Kosign's security is built on <strong>transparency and verifiability</strong> rather than traditional closed-door audits:</p>
-                                    
-                                    <p><strong>Open Source Foundation:</strong> The core unlock utility is completely open source at <a className={'linkage'} href={'https://github.com/xxbtc/kosign-unlock'} target={'_blank'}>github.com/xxbtc/kosign-unlock</a>, allowing anyone to inspect, verify, and audit the cryptographic implementation.</p>
-                                    
-                                    <p><strong>AI Security Assessment (Claude Sonnet 3.5):</strong> Independent analysis of Kosign's codebase reveals strong security fundamentals:</p>
+                                    <p>Kosign is <strong>100% open source:</strong> The entire codebase is available at <a className={'linkage'} href={'https://github.com/xxbtc/kosign'} target={'_blank'} rel="noreferrer">github.com/xxbtc/kosign</a>. Anyone can inspect, verify, and audit the cryptographic implementation - no black boxes or proprietary code.</p>   
+                                    <p><strong>Battle-tested cryptography:</strong> Kosign uses proven, industry-standard algorithms:</p>
                                     
                                     <ul style={{margin:'1rem 0', paddingLeft:'1.5rem'}}>
-                                        <li><strong>Industry-standard encryption:</strong> AES-256 in CTR mode with proper IV generation</li>
-                                        <li><strong>Strong key derivation:</strong> PBKDF2 with 100,000 iterations and SHA-256</li>
-                                        <li><strong>Proven secret sharing:</strong> Shamir's Secret Sharing for threshold cryptography</li>
-                                        <li><strong>Client-side security:</strong> All encryption/decryption happens locally in your browser</li>
-                                        <li><strong>Memory protection:</strong> Sensitive data is properly overwritten and cleared after use</li>
-                                        <li><strong>Version control:</strong> Vault format versioning ensures long-term compatibility</li>
+                                        <li><strong>AES-256 encryption</strong> - The same standard used by banks and governments</li>
+                                        <li><strong>PBKDF2 key derivation</strong> - 100,000+ iterations with SHA-256</li>
+                                        <li><strong>Shamir's Secret Sharing</strong> - Mathematically proven threshold cryptography</li>
+                                        <li><strong>Client-side only</strong> - All encryption happens in your browser, never on servers</li>
                                     </ul>
-                                    
-                                    <p><strong>Recommendation:</strong> The cryptographic implementation follows industry best practices and uses well-established algorithms. The open-source nature allows for continuous community review, which is often more thorough than one-time audits. For maximum security verification, technical users can review the source code directly.</p>
-                                    
+                            
+                                    <p>We encourage security researchers to review the code and welcome responsible disclosure of any issues.</p>        
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>

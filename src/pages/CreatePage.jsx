@@ -23,53 +23,21 @@ import LottieAnimationSuccess  from '../animations/97240-success'
 import {Oval} from 'react-loading-icons';
 
 import CreateVault from "../components/CreateVault";
-import {PaymentService} from "../services/PaymentService";
 import Footer from "../components/Footer";
 import Cookies from 'universal-cookie';
-import { ProFeatureService } from '../services/ProFeatureService';
 
 function CreatePage() {
     const navigate = useNavigate();
     const cookies = new Cookies();
 
-    const [paymentComplete, setPaymentComplete] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [showProAlert, setShowProAlert] = useState(false);
-
-    useEffect(() => {
-        // Check if user came from successful payment
-        const purchaseData = localStorage.getItem('kosign_pro_purchase');
-        if (purchaseData) {
-            try {
-                const data = JSON.parse(purchaseData);
-                if (data.licenseKey && !ProFeatureService.isProUser()) {
-                    // Auto-activate license if we have it from payment
-                    ProFeatureService.activateLicense(data.licenseKey).then(() => {
-                        setShowProAlert(true);
-                        localStorage.removeItem('kosign_pro_purchase'); // Clean up
-                    });
-                }
-            } catch (e) {
-                console.warn('Invalid purchase data', e);
-            }
-        }
-    }, []);
-
-    const handleUpgradeClick = () => {
-        navigate('/payment');
-    };
-
-    const handleLicenseActivated = (features) => {
-        setShowProAlert(true);
-    };
 
     return (
         <Layout>
             <Navbar loggedIn={false}/>
            
             <CreateVault 
-                isLoading={isLoading} 
-                paymentComplete={paymentComplete}
+                isLoading={isLoading}
             />
             
             <Footer/>

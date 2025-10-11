@@ -9,7 +9,6 @@ import {Button, Container, Row, Col} from 'react-bootstrap';
 import Navbar from '../components/NavbarTop';
 import Footer from '../components/Footer';
 import CreateVault from "../components/CreateVault";
-import {PaymentService} from "../services/PaymentService";
 
 import layerWaves from '../images/layer-waves.svg';
 import layerPeaks from '../images/wave-haikei.svg';
@@ -26,7 +25,7 @@ import HomepageUseCases from '../components/HomepageUseCases';
 import HomepageFAQ from '../components/HomepageFAQ';
 import HomepageReasons from '../components/HomepageReasons';
 import HomepageTestimonials from '../components/HomepageTestimonials';
-import HomepagePricing from '../components/HomepagePricing';
+
 import HomepageValueProp from '../components/HomepageValueProp';
 import HomepageThreatModeling from '../components/HomepageThreatModeling';
 import HomepageHowItWorks from '../components/HomepageHowItWorks';
@@ -35,19 +34,17 @@ import {FaCheck} from 'react-icons/fa';
 import Cookies from "universal-cookie";
 import {FaTwitter, FaMedium} from 'react-icons/fa';
 import HomepageReasonsNew from "../components/HomepageReasonsNew";
-import { AnalyticsService } from '../services/AnalyticsService';
 
 
 function Homepage(props) {
 
     const navigate      = useNavigate();
     const cookies       = new Cookies();
-    const pricingRef    = useRef(null);
     const paperStackRef = useRef(null);
 
     useEffect(() => {
         if (props.showPricing){
-            pricingRef.current.scrollIntoView();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
         }
         window.scrollTo(0, 0);
@@ -105,13 +102,13 @@ function Homepage(props) {
                             <div className="hero-badges">
                                 <div className="hero-badge-pill">✓ Open source</div>
                                 <div className="hero-badge-pill">✓ Non-custodial</div>
-                                <div className="hero-badge-pill">✓ 100% Offline</div>
+                                <div className="hero-badge-pill">✓ Offline Cold Storage</div>
                             </div>
                             <h1 className="hero-title">
                                 Foundational Vault for Digital Assets
                             </h1>
                             <p className="hero-subtitle">
-                                A paper wallet for your passwords, 2FA codes, and crypto — secured by threshold encryption and designed for inheritance.
+                                An offline paper vault for your passwords, 2FA codes, and crypto — secured by threshold encryption and designed for inheritance.
                             </p>
                             
                             {/* Social Proof Bullets */}
@@ -122,20 +119,20 @@ function Homepage(props) {
                                 </div>
                                 <div className="proof-bullet">
                                     <FaCheck className="proof-icon" />
-                                    <span>Social recovery & inheritance</span>
+                                    <span>100% Open source (run it on your own!)</span>
                                 </div>
                                 <div className="proof-bullet">
                                     <FaCheck className="proof-icon" />
-                                    <span>Open source unlock app</span>
+                                    <span>Social recovery & inheritance</span>
                                 </div>
                             </div>
 
                             <div className="hero-cta-group">
-                                <button className="hero-cta-primary" onClick={() => {
-                                    AnalyticsService.trackCTAClick('homepage_hero');
-                                    navigate('/create');
-                                }}>
-                                    Create Your Vault
+                                <button className="hero-cta-primary" onClick={() => navigate('/create')}>
+                                    Create a Vault
+                                </button>
+                                <button className="hero-cta-secondary" onClick={() => navigate('/unlock')}>
+                                    Unlock
                                 </button>
                             </div>
                         </Col>
@@ -178,8 +175,6 @@ function Homepage(props) {
                 </Container>
             </section>
 
-            {/* Pricing Section */}
-            <HomepagePricing pricingRef={pricingRef} />
 
             {/* <section className="testimonials-section">
                 <Container>
@@ -216,10 +211,7 @@ function Homepage(props) {
                                 Secure your passwords, crypto, and digital legacy in 10 minutes.
                             </p>
                             <div className="final-cta-buttons">
-                                <button className="final-cta-primary" onClick={() => {
-                                    AnalyticsService.trackCTAClick('homepage_final');
-                                    navigate('/create');
-                                }}>
+                                <button className="final-cta-primary"                                 onClick={() => navigate('/create')}>
                                     Create Your Vault Now
                                 </button>
                             </div>

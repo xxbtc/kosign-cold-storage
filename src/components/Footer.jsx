@@ -9,28 +9,18 @@ export default function Footer() {
             <nav className="footerNav">
                 <ul className="footerlist">
                     <li>
-                        <Link to={'/unlock'}>Unlock</Link>
-                    </li>
-                    <li>
-                        <Link to={'/pricing'}>Pricing</Link>
-                    </li>
-                    <li>
-                        <Link to={'/security'}>Security</Link>
-                    </li>
-                    <li>
                         <Link to={'/legal'}>Terms of Service</Link>
                     </li>
                     <li>
                         <Link to={'/privacy'}>Privacy Policy</Link>
                     </li>
                     <li>
-                        <a href={'https://kosignxyz.medium.com'} target={'_blank'} rel="noopener noreferrer">Blog</a>
+                    <a href="https://twitter.com/kosign_xyz" target="_blank" rel="noopener noreferrer" aria-label="X (formerly Twitter)">
+                    <FaXTwitter />
+                    </a>
                     </li>
                 </ul>
-                <div className="footerSocial">
-                    <a href="https://twitter.com/kosignxyz" target="_blank" rel="noopener noreferrer" aria-label="X (formerly Twitter)"><FaXTwitter /></a>
-                    <a href="https://kosignxyz.medium.com" target="_blank" rel="noopener noreferrer" aria-label="Medium"><FaMedium /></a>
-                </div>
+                
             </nav>
             <div className="footerCopyright">
                 &copy; {new Date().getFullYear()} Kosign. All rights reserved.

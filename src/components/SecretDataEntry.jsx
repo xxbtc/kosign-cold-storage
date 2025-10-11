@@ -9,7 +9,6 @@ import WalletEntryCard from './WalletEntryCard';
 import NoteEntryCard from './NoteEntryCard';
 import ApiKeyEntryCard from './ApiKeyEntryCard';
 import CustomEntryCard from './CustomEntryCard';
-import { ProFeatureService } from '../services/ProFeatureService';
 
 function SecretDataEntry({
     secretValue,

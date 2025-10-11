@@ -13,7 +13,6 @@ import { FaKey, FaUnlock } from 'react-icons/fa';
 import Lottie from "lottie-react-web";
 import LottieAnimationKey from "../animations/6370-keys";
 import Cookies from 'universal-cookie';
-import { ProFeatureService } from '../services/ProFeatureService';
 
 
 function CreateMintKeys(props) {
@@ -62,21 +61,6 @@ function CreateMintKeys(props) {
         cookies.set(cookieName, cookieValue, cookieOptions);
     };
 
-    // Helper function to get button styling
-    const getKeyButtonStyle = (num) => {
-        const cost = ProFeatureService.calculateCost(num);
-        const isActive = totalShareholders === num;
-        
-        if (isActive) {
-            return cost === 0 
-                ? { borderColor: '#4caf50', backgroundColor: 'rgba(76, 175, 80, 0.2)' } // Green for free
-                : { borderColor: '#1786ff', backgroundColor: 'rgba(23, 134, 255, 0.2)' }; // Blue for paid
-        }
-        
-        return cost === 0
-            ? { borderColor: 'rgba(76, 175, 80, 0.5)', backgroundColor: 'transparent' } // Green for free
-            : { borderColor: 'rgba(23, 134, 255, 0.5)', backgroundColor: 'transparent' }; // Blue for paid
-    };
 
     return (
         <div className="createMintKeysWrapper">
@@ -86,7 +70,7 @@ function CreateMintKeys(props) {
                 <div className="key-config-section">
                     <h6 className="config-question" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <FaKey style={{ color: '#4caf50', fontSize: '1.1rem' }} />
-                        How many keys do you need?
+                        How many keys do you need in total?
                     </h6>
                     
                     {/* Benefit explanation */}
@@ -101,28 +85,17 @@ function CreateMintKeys(props) {
                       We recommend creating 3 or more keys to ensure you can still access your vault if you lose a key.
                     </div>
 
-                     {/* Pricing information */}
-                     <div style={{
-                        textAlign: 'left',
-                        marginBottom: '1rem',
-                        fontSize: '0.8rem',
-                        color: '#b0b0b0'
-                    }}>
-                        $5 per key • First key free
-                    </div>
 
 
                     <div className="number-selector">
                         {Array.from({length: 20}, (_, i) => i + 1).map(num => {
-                            const cost = ProFeatureService.calculateCost(num);
                             return (
                                 <button
                                     key={num}
                                     type="button"
                                     className={`number-btn ${totalShareholders === num ? 'active' : ''}`}
                                     onClick={() => setShareholders(num)}
-                                    style={getKeyButtonStyle(num)}
-                                    title={cost === 0 ? `${num} key${num !== 1 ? 's' : ''} (Free)` : `${num} key${num !== 1 ? 's' : ''} ($${cost})`}
+                                    title={`${num} key${num !== 1 ? 's' : ''}`}
                                 >
                                     {num}
                                 </button>
@@ -166,7 +139,7 @@ function CreateMintKeys(props) {
                             textAlign: 'left',
                             color: '#b0b0b0'
                         }}>
-                            Lower threshold = more redundancy. Higher threshold = more security
+                            Lower number = easier to recover. Higher number = harder to steal.
                         </div>
                         <div className="number-selector">
                             {Array.from({length: totalShareholders - 1}, (_, i) => i + 2).map(num => (

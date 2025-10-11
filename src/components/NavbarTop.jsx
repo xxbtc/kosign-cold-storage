@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AnalyticsService } from '../services/AnalyticsService'
 import {
     Collapse,
     Navbar,
@@ -42,16 +41,13 @@ const NavbarTop = (props) => {
                                 <Link className={"nav-link" + (location.pathname === '/unlock' ? ' active' : '')} to={'/unlock'}>Unlock</Link>
                             </NavItem>
                             <NavItem className={'nav-item'}>
-                                <Link className={"nav-link" + (location.pathname === '/pricing' ? ' active' : '')} to={'/pricing'}>Pricing</Link>
-                            </NavItem>
-                            <NavItem className={'nav-item'}>
                                 <Link 
                                     className={
                                         "nav-link" +
                                         (location.pathname === '/create' ? ' active' : ' nav-link-cta')
                                     } 
                                     to={'/create'}
-                                    onClick={() => AnalyticsService.trackCTAClick('navbar')}
+                                    onClick={() => navigate('/create')}
                                 >
                                     Create Vault
                                 </Link>
