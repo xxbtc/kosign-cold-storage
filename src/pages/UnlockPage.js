@@ -353,24 +353,14 @@ function UnlockPage() {
                 returnClass = returnClass + ' activeQR ';
                 return returnClass;
             }
-           // return returnClass;
         }
 
         if (scanType==='key' && rowType==='key') {
             let returnClass = ' unlockrowItem ';
             returnClass = returnClass + ' unlockrowItemKey ';
-            //console.log('does ',metadata.keys[index].alias, 'equal ', scannedKeys);
             if (scannedKeys.includes(metadata.keys[index].alias)) {
                 return returnClass + ' unlockrowItemSuccess ';
             }
-            /*if (numOfQRKEYSsScanned-1>=index) {
-                returnClass = returnClass + ' unlockrowItemSuccess';
-                return returnClass;
-            }
-            if (index===numOfQRKEYSsScanned) {
-                returnClass = returnClass + ' activeQR';
-                return returnClass;
-            }*/
         }
 
         if (scanType==='key' && rowType==='vault') {
@@ -390,13 +380,6 @@ function UnlockPage() {
         }
         return returnClass;
     }
-
-    const InfoTooltip = ({ text }) => (
-        <span className="info-tooltip">
-            <FaInfoCircle className="ms-2" style={{ fontSize: 14, color: '#6c757d', cursor: 'help' }} />
-            <span className="tooltip-text">{text}</span>
-        </span>
-    );
 
     const cleanupSensitiveData = () => {
         // Overwrite sensitive data with random data before nulling
@@ -419,28 +402,6 @@ function UnlockPage() {
             setUnlockShares([]);
             setCipherData('');
         }, 0);
-    };
-
-    // Helper functions for dynamic progress calculation
-    const getTotalVaultQRs = () => {
-        if (!metadata) return 1;
-        return metadata.data ? 1 : metadata.qrcodes;
-    };
-
-    const getTotalQRsNeeded = () => {
-        if (!metadata) return 1;
-        const vaultQRs = metadata.data ? 1 : metadata.qrcodes;
-        return vaultQRs + metadata.threshold;
-    };
-
-    const getCurrentProgress = () => {
-        if (!metadata) return 0;
-        return numOfQRsScanned + numOfQRKEYSsScanned;
-    };
-
-    const getVaultFormatInfo = () => {
-        if (!metadata) return 'Unknown';
-        return metadata.data ? 'Single QR Format' : 'Legacy Multi-QR Format';
     };
 
     // NEW: Vault format detection and manual override
@@ -467,57 +428,6 @@ function UnlockPage() {
                 <Navbar />
                 <div className={'pageWrapper'}>
                     <div className="unlock-layout">
-                        {/* Left Sidebar with Process Flow
-                        <div className="unlock-sidebar">
-                            <div className="sidebar-header">
-                                <div className="sidebar-logo">
-                                    <FaLockOpen className="sidebar-icon" />
-                                </div>
-                            </div>
-                            
-                            <div className="process-flow">
-                                <div className="flow-step completed">
-                                    <div className="step-indicator"><FaCheck /></div>
-                                    <div className="step-content">
-                                        <h4>Preparation</h4>
-                                        <p>Gather your vault and keys for scanning</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flow-step completed">
-                                    <div className="step-indicator"><FaCheck /></div>
-                                    <div className="step-content">
-                                        <h4>Scan Vault</h4>
-                                        <p>Scan QR codes from your paper vault</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flow-step completed">
-                                    <div className="step-indicator"><FaCheck /></div>
-                                    <div className="step-content">
-                                        <h4>Scan Keys</h4>
-                                        <p>Scan required unlock keys</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flow-step completed active">
-                                    <div className="step-indicator"><FaCheck /></div>
-                                    <div className="step-content">
-                                        <h4>Access Vault</h4>
-                                        <p>View your decrypted vault contents</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div className="sidebar-footer">
-                                <div className="help-section">
-                                    <FaInfoCircle className="help-icon" />
-                                    <span>Need help?</span>
-                                </div>
-                            </div>
-                        </div> */}
-                        
-                        {/* Main Content Area */}
                         <div className="unlock-main-content">
                             <div className="content-container">
                                 <UnlockedVault 

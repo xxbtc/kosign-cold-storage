@@ -10,6 +10,7 @@ import paperVault from "../images/paper-vault-example.jpg";
 import paperKey from "../images/paper-key-example.jpg";
 import Layout from "../components/Layout";
 import Footer from "../components/Footer";
+import AISummarySection from "../components/AISummarySection";
 import NavbarTop from "../components/NavbarTop";
 import Cookies from 'universal-cookie';
 
@@ -406,6 +407,7 @@ function HomePageNew(props) {
                 </Container>
             </section>
 
+            <AISummarySection />
             <Footer />
         </Layout>
     );

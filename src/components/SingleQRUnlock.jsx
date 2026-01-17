@@ -147,7 +147,7 @@ const SingleQRUnlock = ({
                     </div>
                 </Col>
 
-                                <Col lg={7} md={6} className="progress-column-desktop d-none d-md-block">
+                <Col lg={7} md={6} className="progress-column-desktop d-none d-md-block">
                      {/* Desktop instruction bar - hidden on mobile */}
                      <div className="current-action">
                          <Oval stroke={'#1786ff'} strokeWidth={15} className={'loading'} />

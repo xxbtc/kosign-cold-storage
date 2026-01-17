@@ -1,0 +1,39 @@
+# Kosign
+
+> Kosign is a free, open source cryptographic secret sharing tool for secure paper-based cold storage vaults. Users create a vault containing their secret data, which is then split into multiple paper keys using Shamir's Secret Sharing. The vault is configured with a threshold (e.g., 3-of-5 means any 3 of 5 keys can recover the vault), enabling secure backup and recovery of passwords, cryptocurrency seed phrases, 2FA recovery codes, and other critical digital assets. All encryption happens client-side in the browser - no data ever leaves your device. The tool works completely offline, generates printable PDF backups with QR codes, and supports flexible M-of-N threshold schemes up to 20 keys per vault.
+
+**Security Best Practice**: For maximum security, especially when handling sensitive data like cryptocurrency seed phrases or master passwords, Kosign should be used offline and ideally installed on a computer that is never network-connected (air-gapped). This prevents any potential data exfiltration or remote compromise during vault creation.
+
+Kosign is designed for individuals, families, and businesses who need secure, distributed backup solutions for critical digital assets. It protects against digital device compromise, single points of failure, and data breaches by enabling offline, paper-based storage with threshold cryptography.
+
+## Key Features
+
+- [Create a Vault](https://kosign.xyz/create): Start creating your secure paper vault
+- [Unlock a Vault](https://kosign.xyz/unlock): Recover secrets using threshold keys
+- [GitHub Repository](https://github.com/xxbtc/kosign): Complete source code and documentation
+- [Terms of Service](https://kosign.xyz/legal): Legal information and usage terms
+- [Privacy Policy](https://kosign.xyz/privacy): Privacy and data handling information
+
+## Technical Details
+
+- **Cryptography**: Shamir's Secret Sharing over GF(2^8), AES-256 encryption
+- **Architecture**: React 17 frontend, client-side only, no server dependencies
+- **Storage**: Maximum 20 keys, 300 characters per vault, any M-of-N threshold where M ≤ N ≤ 20
+- **Output**: PDF generation with QR codes optimized for mobile scanning
+- **Security**: Air-gapped usage strongly recommended for sensitive data (install on a computer that is never network-connected), fully auditable source code, MIT licensed
+
+## Use Cases
+
+- Cryptocurrency wallet seed phrases and private keys
+- Master password manager passwords
+- Two-factor authentication (2FA) recovery codes
+- Important account credentials
+- Family and estate planning for digital inheritance
+- Business continuity and disaster recovery planning
+- Distributed key management for shared access
+
+## Optional
+
+- [Installation Guide](https://github.com/xxbtc/kosign/blob/main/INSTALLATION.md): Detailed setup instructions including air-gapped installation
+- [Security Documentation](https://github.com/xxbtc/kosign/blob/main/SECURITY.md): Security model, threat analysis, and best practices
+- [Contributing Guidelines](https://github.com/xxbtc/kosign/blob/main/CONTRIBUTING.md): How to contribute to the project

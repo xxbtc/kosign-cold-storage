@@ -294,7 +294,7 @@ const ModernQRScanner = ({
     const scannerConstraints = buildScannerConstraints();
     
     return (
-        <div className={`modern-qr-scanner ${className}`} style={{ position: 'relative', ...containerStyle }}>
+        <div className={`modern-qr-scanner`} style={{ position: 'relative', ...containerStyle }}>
             {/* Camera Controls */}
             <div className="camera-controls" style={{
                 position: 'absolute',

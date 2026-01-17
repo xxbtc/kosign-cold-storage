@@ -1,0 +1,53 @@
+/* AI Summary Section */
+.aiSummarySection {
+  background: #111111;
+  padding: 2rem 1rem;
+  border-top: 1px solid #333333;
+  width: 100%;
+  text-align: center;
+}
+
+.aiSummaryTitle {
+  color: #b0b0b0;
+  font-size: 0.98rem;
+  margin-bottom: 1rem;
+  font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+.aiSummaryLinks {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.aiSummaryLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.aiSummaryLink svg {
+  width: 28px;
+  height: 28px;
+  transition: all 0.3s ease;
+  color: #ffffff;
+}
+
+.aiSummaryLink:hover svg {
+  transform: scale(1.15);
+  opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+  .aiSummaryLinks {
+    gap: 1.5rem;
+  }
+  .aiSummaryLink svg {
+    width: 24px;
+    height: 24px;
+  }
+}

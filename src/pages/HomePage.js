@@ -8,6 +8,7 @@ import {Button, Container, Row, Col} from 'react-bootstrap';
 
 import Navbar from '../components/NavbarTop';
 import Footer from '../components/Footer';
+import AISummarySection from '../components/AISummarySection';
 import CreateVault from "../components/CreateVault";
 
 import layerWaves from '../images/layer-waves.svg';
@@ -224,6 +225,7 @@ function Homepage(props) {
                 </Container>
             </section>
 
+            <AISummarySection />
             <Footer />
         </Layout>
     );

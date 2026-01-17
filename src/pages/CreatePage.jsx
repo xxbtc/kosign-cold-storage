@@ -24,6 +24,7 @@ import {Oval} from 'react-loading-icons';
 
 import CreateVault from "../components/CreateVault";
 import Footer from "../components/Footer";
+import AISummarySection from "../components/AISummarySection";
 import Cookies from 'universal-cookie';
 
 function CreatePage() {
@@ -40,6 +41,7 @@ function CreatePage() {
                 isLoading={isLoading}
             />
             
+            <AISummarySection />
             <Footer/>
         </Layout>
     )
