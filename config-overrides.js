@@ -25,6 +25,7 @@ module.exports = function override(config, env) {
         test: /\.(js|mjs|jsx)$/,
         enforce: 'pre',
         loader: require.resolve('source-map-loader'),
+        exclude: /node_modules/,
         resolve: {
             fullySpecified: false,
         },
