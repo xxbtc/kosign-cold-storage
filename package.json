@@ -21,6 +21,9 @@
     "open-source"
   ],
   "author": "Kosign Team",
+  "engines": {
+    "node": ">=24.x"
+  },
   "dependencies": {
     "@react-pdf/renderer": "^3.1.9",
     "@testing-library/jest-dom": "^5.16.2",
